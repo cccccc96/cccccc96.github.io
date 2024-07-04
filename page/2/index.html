@@ -160,100 +160,6 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market10/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/market/market10/" class="post-title-link" itemprop="url">【开发】营销抽奖系统开发记录10 - 简历</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="简历"><a href="#简历" class="headerlink" title="简历"></a>简历</h2><p>项目名称： 营销平台 - 幸运大转盘</p>
-<p><a target="_blank" rel="noopener" href="http://116.198.234.247/?userId=xiaofuge&activityId=100301">http://116.198.234.247/?userId=xiaofuge&amp;activityId=100301</a></p>
-<p>核心技术：SpringBoot、MyBatis、MySQL、Redis、Kafka、React</p>
-<p>项目描述：该项目是我参考字节掘金中幸运抽奖模块开发的一个幸运大转盘抽奖系统。该系统支持多种营销策略，如：用户积分，积分兑换抽奖次数，返利等；也支持各类差异化抽奖流程，如：消耗积分指定抽奖范围、抽奖N次解锁奖品等各类抽奖玩法。该系统采用DDD架构进行设计，将整个系统划分为抽奖活动、抽奖策略、奖品、积分、返利这五个领域。同时设计中运用到了责任链模式、组合模式、工厂模式等多种设计模式，提高了代码的可扩展性，并对抽奖的计算和秒杀做了设计的优化，可以支撑单机 4c8g 服务器 1000 TPS 的吞吐量，抽奖接口响应时长<code>160毫秒</code>左右。</p>
-<p>核心职责</p>
-<ul>
-<li><p>为了缩短抽奖响应时间，使用 Redis 缓存奖品概率占比，以空间换时间，实现O(1)时间复杂度 的抽奖算法。</p>
-</li>
-<li><p>根据不同的抽奖玩法，设计整体抽奖策略。在抽奖流程的抽象上，分为抽奖前和抽奖后，如抽奖前的人群判断、抽奖后兜底奖励等。设计模版模式定义抽奖流程，抽奖前调用责任链完成抽奖，抽奖后的动作使用组合模式的规则树进行动态处理。</p>
-</li>
-<li><p>抽奖是一种峰值流量高的业务场景，针对抽奖活动库存和奖品库存的扣减：采用了 Redis decr 分段消费和加锁兜底的设计，同时对于消费成功的库存，异步队列方式 + 定时任务更新库存。当库存扣减为0时，采用MQ对数据库库存清零并清空队列。减轻数据库压力并确保数据最终一致性。</p>
-</li>
-<li><p>针对打卡返利、积分兑换活动、抽奖下发奖品等流程，采用MQ，将积分支付和活动账户充值、抽奖和奖品下发等流程，进行解藕。并且通过task表进行补偿，确保消息成功消费。</p>
-</li>
-<li><p>对于用户账户、用户活动订单、积分返利订单等库表，采取分库分表的方式</p>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1223,6 +1129,95 @@
 <p>示例</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">openAiSession.completions(request, <span class="keyword">new</span> <span class="title class_">EventSourceListener</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onEvent</span><span class="params">(EventSource eventSource, <span class="meta">@Nullable</span> String id, <span class="meta">@Nullable</span> String type, String data)</span> &#123;</span><br><span class="line">                <span class="type">ChatCompletionResponse</span> <span class="variable">response</span> <span class="operator">=</span> JSON.parseObject(data, ChatCompletionResponse.class);</span><br><span class="line">                log.info(<span class="string">&quot;测试结果 onEvent czh：&#123;&#125;&quot;</span>, type);</span><br><span class="line">                log.info(<span class="string">&quot;测试结果 onEvent：&#123;&#125;&quot;</span>, response.getData());</span><br><span class="line">                <span class="comment">// type 消息类型，add 增量，finish 结束，error 错误，interrupted 中断</span></span><br><span class="line">                <span class="keyword">if</span> (EventType.finish.getCode().equals(type)) &#123;</span><br><span class="line">                    ChatCompletionResponse.<span class="type">Meta</span> <span class="variable">meta</span> <span class="operator">=</span> JSON.parseObject(response.getMeta(), ChatCompletionResponse.Meta.class);</span><br><span class="line">                    log.info(<span class="string">&quot;[输出结束] Tokens &#123;&#125;&quot;</span>, JSON.toJSONString(meta));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onClosed</span><span class="params">(EventSource eventSource)</span> &#123;</span><br><span class="line">                log.info(<span class="string">&quot;对话完成&quot;</span>);</span><br><span class="line">                countDownLatch.countDown();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onFailure</span><span class="params">(EventSource eventSource, <span class="meta">@Nullable</span> Throwable t, <span class="meta">@Nullable</span> Response response)</span> &#123;</span><br><span class="line">                log.info(<span class="string">&quot;对话异常&quot;</span>);</span><br><span class="line">                countDownLatch.countDown();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
 
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/openai/openai10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/openai/openai10/" class="post-title-link" itemprop="url">【开发】AI问答助手项目记录10 - 简历</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/AI%E9%97%AE%E7%AD%94%E5%8A%A9%E6%89%8B/" itemprop="url" rel="index"><span itemprop="name">AI问答助手</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>智能AI问答助手 </p>
+<p> 主要技术:Spring Boot、MyBatis、Redis、RabbitMQ、OKHttp3、React、TypeScript</p>
+<ol>
+<li><p>对接微信公众号 SDK，使用从微信公众号获取验证码的方式进行授权登录，使用JWT进行token校验</p>
+</li>
+<li><p>使用OKHttp3封装ChatGLM和openai的Java SDK，使用流式异步响应式框架开发应答接口，对接相关大模型</p>
+</li>
+<li><p>采用责任链模式实现规则过滤，包含敏感词、白名单、频次限制、账户状态、账户额度等</p>
+</li>
+<li><p>对接支付宝沙箱支付，实现商品支付功能，用户能购买大模型额度。同时使用Kafka进行异步发货，结合定时任务扫描实现超时关单、掉单补偿。</p>
+</li>
+</ol>
 
       
     </div>
