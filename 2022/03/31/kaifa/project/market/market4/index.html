@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="两种抽奖算法时间 or 空间第一种抽奖算法：循环对比  例如：”A:0.1;B:0.2;C:0.7”  计算出随机数 ：  例如：0.25   根据奖品的概率依次遍历，知道概率达到奖品的范围：  例如：先遍历A，不在0.1； 再遍历B，在(0.1+0.2&#x3D;0.3)的范围内，得到B奖品   时间O(n) ，空间O(1)   第二种抽奖算法：索引获取  例如：”A:0.1;B:0.2;C:0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【开发】营销抽奖系统开发记录4 - Domain1_抽奖策略 具体实现">
+<meta property="og:url" content="http://example.com/2022/03/31/kaifa/project/market/market4/index.html">
+<meta property="og:site_name" content="czh的学习小站">
+<meta property="og:description" content="两种抽奖算法时间 or 空间第一种抽奖算法：循环对比  例如：”A:0.1;B:0.2;C:0.7”  计算出随机数 ：  例如：0.25   根据奖品的概率依次遍历，知道概率达到奖品的范围：  例如：先遍历A，不在0.1； 再遍历B，在(0.1+0.2&#x3D;0.3)的范围内，得到B奖品   时间O(n) ，空间O(1)   第二种抽奖算法：索引获取  例如：”A:0.1;B:0.2;C:0">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628102840907.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628163520288.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628174750154.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628204228690.png">
+<meta property="article:published_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:modified_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:author" content="蔡正海">
+<meta property="article:tag" content="开发">
+<meta property="article:tag" content="营销抽奖项目">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628102840907.png">
+
+
+<link rel="canonical" href="http://example.com/2022/03/31/kaifa/project/market/market4/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/03/31/kaifa/project/market/market4/","path":"2022/03/31/kaifa/project/market/market4/","title":"【开发】营销抽奖系统开发记录4 - Domain1_抽奖策略 具体实现"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【开发】营销抽奖系统开发记录4 - Domain1_抽奖策略 具体实现 | czh的学习小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">czh的学习小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">自律</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E6%8A%BD%E5%A5%96%E7%AE%97%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">两种抽奖算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E9%97%B4-or-%E7%A9%BA%E9%97%B4"><span class="nav-number">1.1.</span> <span class="nav-text">时间 or 空间</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Service1-%E2%80%93-%E6%8A%BD%E5%A5%96%E8%A3%85%E9%85%8D-%EF%BC%88Redis%E9%A2%84%E7%83%AD%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">Service1 – 抽奖装配 （Redis预热）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Service2-%E2%80%93-%E6%8A%BD%E5%A5%96%E5%89%8D%E7%BD%AE%E8%A7%84%E5%88%99"><span class="nav-number">3.</span> <span class="nav-text">Service2 – 抽奖前置规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Service3-%E2%80%93-%E6%8A%BD%E5%A5%96%E5%90%8E%E7%BD%AE%E8%A7%84%E5%88%99"><span class="nav-number">4.</span> <span class="nav-text">Service3 – 抽奖后置规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E5%88%AB%E5%9C%B0%EF%BC%8C%E4%B8%8D%E8%B6%85%E5%8D%96%E5%BA%93%E5%AD%98%E8%A7%84%E5%88%99%E5%AE%9E%E7%8E%B0"><span class="nav-number">5.</span> <span class="nav-text">特别地，不超卖库存规则实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%B2%E8%81%94%E6%8A%BD%E5%A5%96%E8%A7%84%E5%88%99"><span class="nav-number">6.</span> <span class="nav-text">串联抽奖规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API"><span class="nav-number">7.</span> <span class="nav-text">API</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蔡正海"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">蔡正海</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【开发】营销抽奖系统开发记录4 - Domain1_抽奖策略 具体实现 | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【开发】营销抽奖系统开发记录4 - Domain1_抽奖策略 具体实现
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="两种抽奖算法"><a href="#两种抽奖算法" class="headerlink" title="两种抽奖算法"></a>两种抽奖算法</h2><h3 id="时间-or-空间"><a href="#时间-or-空间" class="headerlink" title="时间 or 空间"></a>时间 or 空间</h3><p><strong>第一种抽奖算法：循环对比</strong></p>
+<ul>
+<li><p>例如：”A:0.1;B:0.2;C:0.7”</p>
+</li>
+<li><p>计算出随机数 ：</p>
+<ul>
+<li>例如：0.25</li>
+</ul>
+</li>
+<li><p>根据奖品的概率依次遍历，知道概率达到奖品的范围：</p>
+<ul>
+<li>例如：先遍历A，不在0.1；</li>
+<li>再遍历B，在(0.1+0.2&#x3D;0.3)的范围内，得到B奖品</li>
+</ul>
+</li>
+<li><p>时间O(n) ，空间O(1)</p>
+</li>
+</ul>
+<p><strong>第二种抽奖算法：索引获取</strong></p>
+<ul>
+<li>例如：”A:0.1;B:0.2;C:0.7”</li>
+<li>奖品提前放到List&#x2F;Map中：【A,B,B,C,C,C,C,C,C,C】</li>
+<li>计算出随机数</li>
+<li>通过List直接拿到对应的奖品</li>
+<li>时间O(1) ，空间O(n)</li>
+</ul>
+<p><strong>选择</strong></p>
+<ul>
+<li>对于抽奖这样的高并发场景，无疑是第二种索引获取更实用，保证接口的更快响应</li>
+<li>但是也有些极端场景，例如奖品概率为0.000001，这时候空间上的开销就过大了。</li>
+</ul>
+<h2 id="Service1-–-抽奖装配-（Redis预热）"><a href="#Service1-–-抽奖装配-（Redis预热）" class="headerlink" title="Service1 – 抽奖装配 （Redis预热）"></a>Service1 – 抽奖装配 （Redis预热）</h2><p><strong>全量概率</strong></p>
+<p>对于第二种抽奖算法，提前构造奖品概率索引Map，放入Redis中。构造的方式也很简单，根据概率的最小精度，确认Map大小，依次遍历奖品，累加概率，存入Map。</p>
+<p><strong>权重概率</strong></p>
+<p>与普通概率类似，区别在于会配置不同的权重会对应不同的奖品列表，根据指定的奖品列表，构造奖品索引概率Map，放入Redis中。</p>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628102840907.png" alt="image-20240628102840907" style="zoom:50%;" />
+
+<p>预热上图中的全量概率奖品查找表和权重概率奖品查找表</p>
+<h2 id="Service2-–-抽奖前置规则"><a href="#Service2-–-抽奖前置规则" class="headerlink" title="Service2 – 抽奖前置规则"></a>Service2 – 抽奖前置规则</h2><p>主要根据用户特性进行校验</p>
+<ul>
+<li>黑名单</li>
+<li>积分额度大小</li>
+<li>默认抽奖规则</li>
+</ul>
+<p>实现方式：责任链</p>
+<p>也就是说，我们把所有前置规则实现（Bean），再根据mysql中策略的规则设定，将用到bean串成一个链表。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 链表节点</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ILogicChain</span> &#123;</span><br><span class="line">    DefaultChainFactory.StrategyAwardVO <span class="title function_">logic</span><span class="params">(String userId, Long strategyId)</span>;</span><br><span class="line">    ILogicChain <span class="title function_">appendNext</span><span class="params">(ILogicChain next)</span>;</span><br><span class="line">    ILogicChain <span class="title function_">next</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 链表节点实现</span></span><br><span class="line"><span class="meta">@Component(&quot;rule_blacklist&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BlackListLogicChain</span> <span class="keyword">extends</span> <span class="title class_">AbstractLogicChain</span></span><br><span class="line"><span class="meta">@Component(&quot;default&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DefaultLogicChain</span> <span class="keyword">extends</span> <span class="title class_">AbstractLogicChain</span></span><br><span class="line"><span class="meta">@Component(&quot;rule_weight&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RuleWeightLogicChain</span> <span class="keyword">extends</span> <span class="title class_">AbstractLogicChain</span></span><br><span class="line">  </span><br><span class="line"><span class="comment">// 3. 工厂，根据mysql动态构造责任链</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DefaultChainFactory</span> &#123;</span><br><span class="line">	<span class="comment">// spring注入</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, ILogicChain&gt; logicChainGroup;</span><br><span class="line">  <span class="comment">// 查询当前策略的rules，构造责任链</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>注意，这里使用单例模式是有问题的：</p>
+<p>一开始规则实现的bean是默认的单例模式，因此动态生成责任链会有并发问题。假设策略1的规则(rule1,rule2,rule3)，bean1-&gt;bean2-&gt;bean3；后面又来了策略2的规则(rule2,rule4,rule6)，那么bean2-&gt;bean4-&gt;bean6。那么策略1的规则就被覆盖了</p>
+<p>因此后面修改为原型模式，@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)</p>
+</blockquote>
+<h2 id="Service3-–-抽奖后置规则"><a href="#Service3-–-抽奖后置规则" class="headerlink" title="Service3 – 抽奖后置规则"></a>Service3 – 抽奖后置规则</h2><p>执行完抽奖算法之后，我们拿到了奖品，需要进行抽奖后置规则计算，例如库存校验规则、抽奖次数校验规则，兜底奖励规则。</p>
+<p>打个比方：先进行次数校验，如果满足，进入库存校验；反之，进入兜底奖励。</p>
+<p>显然，这是一个分支结构，所以用规则树模型。</p>
+<p>之前，我们已经定义了库表结构，所以我们首先把规则树模型结构从mysql中读进来。</p>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628163520288.png" alt="image-20240628163520288" style="zoom: 33%;" />
+
+<p>实现起来，与抽奖前置规则类似，只是树形结构比起链表结构实现稍微复杂一些。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 树形节点</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ILogicTreeNode</span> &#123;</span><br><span class="line">  logic()</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="comment">// 2. 节点实现</span></span><br><span class="line"><span class="meta">@Component(&quot;rule_lock&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RuleLockLogicTreeNode</span> <span class="keyword">implements</span> <span class="title class_">ILogicTreeNode</span>&#123;</span><br><span class="line">  logic()&#123;</span><br><span class="line">    <span class="comment">// 查询用户抽奖次数，并计算</span></span><br><span class="line">    <span class="comment">// 返回结果【满足？不满足？】</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Component(&quot;rule_luck_award&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RuleLuckAwardLogicTreeNode</span> <span class="keyword">implements</span> <span class="title class_">ILogicTreeNode</span> </span><br><span class="line">......</span><br><span class="line">  </span><br><span class="line"><span class="comment">// 3. 查询用户抽奖次数</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DecisionTreeEngine</span> <span class="keyword">implements</span> <span class="title class_">IDecisionTreeEngine</span> &#123;</span><br><span class="line">		<span class="comment">// 注入bean</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, ILogicTreeNode&gt; logicTreeNodeGroup;</span><br><span class="line">		<span class="comment">// 从数据库中读取的规则树模型</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> RuleTreeVO ruleTreeVO;</span><br><span class="line">  	<span class="comment">// 执行规则树</span></span><br><span class="line">    process()&#123;</span><br><span class="line">      <span class="comment">// 从根节点走到叶子节点</span></span><br><span class="line">      <span class="keyword">while</span>(node)&#123;</span><br><span class="line">        <span class="comment">// 执行logic函数，根据计算值选择走哪条边</span></span><br><span class="line">        value = node.logic();</span><br><span class="line">        node=next(node,value)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br></pre></td></tr></table></figure>
+
+<h2 id="特别地，不超卖库存规则实现"><a href="#特别地，不超卖库存规则实现" class="headerlink" title="特别地，不超卖库存规则实现"></a>特别地，不超卖库存规则实现</h2><p>“库表”这个库表属性非常，在高并发场景下，非常容易多个请求直接打到这一行上面。</p>
+<p>比如数据库表有一条记录是库存，如果是通过锁这一条表记录更新库存为10、9、8的话，就会出现大量的用户在应用用获得数据库的连接后，等待前一个用户更新完库表记录后释放锁，让下一个用户进入在扣减。</p>
+<p>这样随着用户参与量的增加，就会有非常多的用户处于等待状态，而等待的用户是持久数据库的连接的，这个连接资源非常宝贵，你占用了应用中其他的请求就进不来，最终导致一个请求要几分钟才能得到响应。【前台的用户越着急，越疯狂点击，直至越来越卡到崩溃】</p>
+<p>所以，我们需要把这个扣减的动作放到缓存里</p>
+<ol>
+<li>decr扣减库存</li>
+<li>使用setnx加锁兜底，防止超卖【decr是原子操作，正常情况是不会有问题的，但是可能有情况，运营手动修改库存】</li>
+<li>同时将扣减动作放入MQ，缓慢修改mysql库存</li>
+</ol>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628174750154.png" alt="image-20240628174750154" style="zoom: 50%;" />
+
+<h2 id="串联抽奖规则"><a href="#串联抽奖规则" class="headerlink" title="串联抽奖规则"></a>串联抽奖规则</h2><p>至此，我们就可以实现一个基本的抽奖流程</p>
+<ul>
+<li>输入：用户id，活动id</li>
+<li>执行抽奖（包含相关抽奖过滤）</li>
+<li>输出：奖品</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628204228690.png" alt="image-20240628204228690"></p>
+<h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><ol>
+<li>策略装配，将策略信息装配到缓存中；&#x2F;api&#x2F;v1&#x2F;raffle&#x2F;strategy_armory</li>
+<li>查询奖品列表；&#x2F;api&#x2F;v1&#x2F;raffle&#x2F;query_raffle_award_list</li>
+<li>随机抽奖接口；&#x2F;api&#x2F;v1&#x2F;raffle&#x2F;random_raffle</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BC%80%E5%8F%91/" rel="tag"># 开发</a>
+              <a href="/tags/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96%E9%A1%B9%E7%9B%AE/" rel="tag"># 营销抽奖项目</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/project/market/market8/" rel="prev" title="【开发】营销抽奖系统开发记录8 - Domain5_积分">
+                  <i class="fa fa-angle-left"></i> 【开发】营销抽奖系统开发记录8 - Domain5_积分
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/project/market/market5/" rel="next" title="【开发】营销抽奖系统开发记录5 - Domain2_抽奖活动">
+                  【开发】营销抽奖系统开发记录5 - Domain2_抽奖活动 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2022 - 2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蔡正海</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="btor2murphi btor2：定义在bitvec和array环境上的电路网表格式murphi：定义在explict-state上的guarded rule，只有整数常量和explict-state，没有bit级别的           环境，更没有bitvec和array的环境。  btor2murphi需要做的主要是两件事：     1. 实现一个底层的bitvec和array环境">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Research】btor2murphi">
+<meta property="og:url" content="http://example.com/2022/03/31/keyan/btor2murphi%2079e51e42e73945c2b5fb5f36386d8719/index.html">
+<meta property="og:site_name" content="czh的学习小站">
+<meta property="og:description" content="btor2murphi btor2：定义在bitvec和array环境上的电路网表格式murphi：定义在explict-state上的guarded rule，只有整数常量和explict-state，没有bit级别的           环境，更没有bitvec和array的环境。  btor2murphi需要做的主要是两件事：     1. 实现一个底层的bitvec和array环境">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/btor2murphi%2079e51e42e73945c2b5fb5f36386d8719/Untitled.png">
+<meta property="og:image" content="http://example.com/btor2murphi%2079e51e42e73945c2b5fb5f36386d8719/Untitled%201.png">
+<meta property="article:published_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:modified_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:author" content="蔡正海">
+<meta property="article:tag" content="科研">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/btor2murphi%2079e51e42e73945c2b5fb5f36386d8719/Untitled.png">
+
+
+<link rel="canonical" href="http://example.com/2022/03/31/keyan/btor2murphi%2079e51e42e73945c2b5fb5f36386d8719/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/03/31/keyan/btor2murphi%2079e51e42e73945c2b5fb5f36386d8719/","path":"2022/03/31/keyan/btor2murphi 79e51e42e73945c2b5fb5f36386d8719/","title":"【Research】btor2murphi"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【Research】btor2murphi | czh的学习小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">czh的学习小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">自律</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#btor2murphi"><span class="nav-number">1.</span> <span class="nav-text">btor2murphi</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-btor%E5%8F%8Amurphi%E6%AF%94%E8%BE%83"><span class="nav-number">1.1.</span> <span class="nav-text">1 btor及murphi比较</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-btor"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 btor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-murphi"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 murphi</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%BD%AC%E6%8D%A2%E7%AD%96%E7%95%A5"><span class="nav-number">1.2.</span> <span class="nav-text">2 转换策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-bitvec%E5%92%8Carray%E7%8E%AF%E5%A2%83%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%92%8C%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 bitvec和array环境的自定义和底层实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-btor2%E7%9A%84next-init-constraint-bad%E8%BD%AC%E5%8C%96%E4%B8%BAbtor2%E7%9A%84%E8%A7%84%E5%88%99%E9%9B%86%E5%BD%A2%E5%BC%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 btor2的next&#x2F;init&#x2F;constraint&#x2F;bad转化为btor2的规则集形式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%89%B9%E5%88%AB%E8%AF%B4%E6%98%8E"><span class="nav-number">1.3.</span> <span class="nav-text">3 特别说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-murphi%E4%B8%ADarray%E7%9A%84%E9%99%90%E5%88%B6"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 murphi中array的限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-murphi%E4%B8%ADfunction%E7%9A%84%E9%99%90%E5%88%B6"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 murphi中function的限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-murphi%E4%B8%ADconst%E7%9A%84%E9%99%90%E5%88%B6"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 murphi中const的限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-murphi%E4%B8%ADruleset%E5%8F%82%E6%95%B0%E7%9A%84%E9%99%90%E5%88%B6"><span class="nav-number">1.3.4.</span> <span class="nav-text">3.4 murphi中ruleset参数的限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-bad%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%9B%B4%E6%8E%A5%E6%94%BE%E5%9C%A8invariant%E9%87%8C%EF%BC%9F"><span class="nav-number">1.3.5.</span> <span class="nav-text">3.5 bad为什么不直接放在invariant里？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%9B%AE%E5%89%8D%E6%97%A0%E6%B3%95%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98-%E5%A4%A7%E7%94%B5%E8%B7%AF"><span class="nav-number">1.4.</span> <span class="nav-text">4 目前无法解决的问题(大电路)</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蔡正海"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">蔡正海</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/keyan/btor2murphi%2079e51e42e73945c2b5fb5f36386d8719/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【Research】btor2murphi | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【Research】btor2murphi
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%A7%91%E7%A0%94/" itemprop="url" rel="index"><span itemprop="name">科研</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="btor2murphi"><a href="#btor2murphi" class="headerlink" title="btor2murphi"></a>btor2murphi</h1><blockquote>
+<p>btor2：定义在bitvec和array环境上的电路网表格式<br>murphi：定义在explict-state上的guarded rule，只有整数常量和explict-state，没有bit级别的           环境，更没有bitvec和array的环境。</p>
+</blockquote>
+<p>btor2murphi需要做的主要是两件事：<br>     1. 实现一个底层的bitvec和array环境<br>     2. 将btor2的next&#x2F;init&#x2F;constraint&#x2F;bad转化为btor2的规则集形式</p>
+<blockquote>
+</blockquote>
+<h2 id="1-btor及murphi比较"><a href="#1-btor及murphi比较" class="headerlink" title="1 btor及murphi比较"></a>1 btor及murphi比较</h2><h3 id="1-1-btor"><a href="#1-1-btor" class="headerlink" title="1.1 btor"></a>1.1 btor</h3><p>btor主体由以下几个部分组成，核心的系统迁移由next表达</p>
+<ul>
+<li>input：输入信号，只与当前时刻有关</li>
+<li>state：寄存器信号，由当前时刻的输入信号和上一时刻的寄存器信号指定，通过next标识</li>
+<li>init：寄存器信号（state）的初始值</li>
+<li>next：btor迁移系统的核心，形式：$NextState_i:&#x3D;f_i(States,inputs)$</li>
+<li>constraints: 每个时刻的信号必须满足的约束</li>
+<li>bad：不变式，bad对应的值必须为false</li>
+</ul>
+<h3 id="1-2-murphi"><a href="#1-2-murphi" class="headerlink" title="1.2 murphi"></a>1.2 murphi</h3><p>murphi主体由以下几个部分组成</p>
+<ul>
+<li>type：变量类型，已有的是整数类型和数组类型（在此基础之上进行bitvec和array类型的自定义）</li>
+<li>Var：变量，形式：$var_name : type_name$</li>
+<li>startstate：变量初始化</li>
+<li>ruleset：murphi迁移系统的核心，<ul>
+<li>形式：ruleset 参数 Do guard → action</li>
+<li>在本工具中，“参数”指定为输入信号；“guard”不用，默认为true；“action”指定为“next”对应的迁移关系</li>
+</ul>
+</li>
+<li>invariant：不变式，对应btor中的“bad”</li>
+<li>Function：自定义函数，用来进行bitvec和array运算的底层实现</li>
+</ul>
+<h2 id="2-转换策略"><a href="#2-转换策略" class="headerlink" title="2 转换策略"></a>2 转换策略</h2><h3 id="2-1-bitvec和array环境的自定义和底层实现"><a href="#2-1-bitvec和array环境的自定义和底层实现" class="headerlink" title="2.1 bitvec和array环境的自定义和底层实现"></a>2.1 bitvec和array环境的自定义和底层实现</h3><p><strong>类型定义</strong></p>
+<p>给定某bitvec，长度为$i$<br>给定某array，索引为长度为$i$的bitvec，元素为长度为$j$的bitvec</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bitvec_i : array [0..i-1] of boolean</span><br><span class="line">array_i_j : array [0..（2^i）-1] of bitvec_j</span><br></pre></td></tr></table></figure>
+
+<p><strong>运算符定义</strong></p>
+<p>以无符号小于运算 为例</p>
+<p>在murphi中以array of boolean 的形式进行操作。</p>
+<p>例如计算a&lt;b，我们需要计算a-b是否小于0，a-b等价于a+b的补码，然后比较结果只需要check一下符号位的正负</p>
+<p><img src="/btor2murphi%2079e51e42e73945c2b5fb5f36386d8719/Untitled.png" alt="Untitled"></p>
+<p><img src="/btor2murphi%2079e51e42e73945c2b5fb5f36386d8719/Untitled%201.png" alt="Untitled"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Function ult_1(a:bitvec_1;b:bitvec_1): bitvec_1;</span><br><span class="line">    Var carry : bitvec_2;</span><br><span class="line">    Var Not_b : bitvec_1;</span><br><span class="line">    Var res : bitvec_1;</span><br><span class="line">    Begin</span><br><span class="line">        Not_b := not_1(b);</span><br><span class="line">        carry[0] := true;</span><br><span class="line">        For i:1..1 Do</span><br><span class="line">            carry[i]:=(a[i-1]&amp;Not_b[i-1]) | ( ((!a[i-1]&amp;Not_b[i-1])|(a[i-1]&amp;!Not_b[i-1])) &amp; carry[i-1]);</span><br><span class="line">        End;</span><br><span class="line">        res[0] := (carry[1]=true)?false:true;</span><br><span class="line">        return res;</span><br><span class="line">    End;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-btor2的next-init-constraint-bad转化为btor2的规则集形式"><a href="#2-2-btor2的next-init-constraint-bad转化为btor2的规则集形式" class="headerlink" title="2.2 btor2的next&#x2F;init&#x2F;constraint&#x2F;bad转化为btor2的规则集形式"></a>2.2 btor2的next&#x2F;init&#x2F;constraint&#x2F;bad转化为btor2的规则集形式</h3><p>各个部分的转化关系如下：</p>
+<p>sort(btor) → type(murphi)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">btor: 1 sort bitvec 1</span><br><span class="line">murphi: bitvec_1 : array [0..0] of boolean;</span><br></pre></td></tr></table></figure>
+
+<p>state&#x2F;bad&#x2F;const(btor) → var(murphi)</p>
+<p>btor中的寄存器信号，bad节点，const，全部变为murphi中的全局变量</p>
+<p>op(btor) → fucntion(murphi)</p>
+<p>btor中的各种运算符，变为murphi中的function</p>
+<p>init(btor) → startstate(murphi)</p>
+<p>btor中对寄存器吸纳后的初始化，在murphi中的startstate体现，这个十分自然。特别地，btor允许初始值未知，murphi中我还是对这些未知的寄存器信号全部置为0</p>
+<p>input(btor) →ruleset的参数(murphi)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruleset clk_:int_2;flag_fail_:int_2;in_data_:int_2;in_rd_:int_2;in_rd_addr_:int_2;in_wr_:int_2;in_wr_addr_:int_2;rst_n_:int_2;node55_:int_2;node92_:int_2;node93_:int_2;node94_:int_2;node99_:int_2;node100_:int_2;node101_:int_2 Do</span><br></pre></td></tr></table></figure>
+
+<p><strong>constrain&#x2F;next&#x2F;bad(btor)→rule(murphi) 这是最重要的一部分</strong></p>
+<ol>
+<li>声明局部变量：包含btor里的中间node节点，输入信号节点，左值</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Var </span><br><span class="line">	中间Nodes</span><br><span class="line">	inputs</span><br><span class="line">	NxtStates</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>输入信号计算，将参数里的整形转为bitvec类型</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">in_rd := int2binary_2(in_rd_);</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>中间节点计算 ，就是网表结构的计算</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">node16 :=  not_1(node12) ;</span><br><span class="line">node17 :=  and_1(node14, node16) ;</span><br><span class="line">node18 :=  and_1(in_wr, in_rd) ;</span><br><span class="line">node22 :=  concat_31_1(node20, node18) ;</span><br><span class="line">node23 :=  redor_32(node22) ;</span><br><span class="line">。。。</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>“next”和“constraint”和“bad”的转化</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">我们遵循这样的规则</span><br><span class="line">if constraint then</span><br><span class="line">		next</span><br><span class="line">		bad节点计算</span><br><span class="line"></span><br><span class="line">关于左值右值，似乎btor已经帮我们杜绝了“前面的变量赋值改变了，后面的变量赋值又用到了前面的变量”这种情况。</span><br><span class="line">If node27[0]&amp;node35[0]&amp;node39[0]&amp;node43[0] then</span><br><span class="line">        Nxtnode31 := node13;</span><br><span class="line">				。。。</span><br><span class="line">        node31 := Nxtnode31;</span><br><span class="line">        。。。</span><br><span class="line">        badNode := node17;</span><br><span class="line">    End;</span><br></pre></td></tr></table></figure>
+
+<p>bad(btor) →invariant(murphi)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">invariant badNode[0]=false;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-特别说明"><a href="#3-特别说明" class="headerlink" title="3 特别说明"></a>3 特别说明</h2><p>由于murphi的本身语法限制，为了能让murphi跑通，转化过程中进行了一些特别的设定或者说弯路，所以有些地方看上去转换不是很直接。</p>
+<h3 id="3-1-murphi中array的限制"><a href="#3-1-murphi中array的限制" class="headerlink" title="3.1 murphi中array的限制"></a>3.1 murphi中array的限制</h3><p>array中的索引只能为整形</p>
+<p>因此在bitvec和array的类型定义时：</p>
+<ul>
+<li>bitvec的定义非常直观，array [0..len-1] of boolean ， 一个布尔数组，数组的长度</li>
+<li>而array无法像btor里定义的那样，索引位无法定义为bitvec类型，只能定义为整形。因此，对于一个”array bitvec_with_len_i bitvec_with_len_j“，我们在转换时，人工将索引位转换为整形，即 “0..2^i-1” ，并且定义一个binary2int函数。在我们需要对array进行操作时，调用binary2int，将bitvec转换为整形后，再对array进行操作</li>
+</ul>
+<h3 id="3-2-murphi中function的限制"><a href="#3-2-murphi中function的限制" class="headerlink" title="3.2 murphi中function的限制"></a>3.2 murphi中function的限制</h3><p>直观上来说，我们定义一个关于bitvec的函数，传入的参数应该是一个bitvec，然后在函数内部获取bitvec的长度，但是在.m文件中很难直接做到这点。因此我们为出现的不同bitvec的同一函数给出对应的function。</p>
+<p>例如btor中出现了1位bitvec的and操作和2位bitvec的and操作，我们分别进行定义：</p>
+<p>Function and_1(a:bitvec_1;b:bitvec_1): bitvec_1;</p>
+<p>Function and_2(a:bitvec_2;b:bitvec_2): bitvec_2;</p>
+<h3 id="3-3-murphi中const的限制"><a href="#3-3-murphi中const的限制" class="headerlink" title="3.3 murphi中const的限制"></a>3.3 murphi中const的限制</h3><p>murphi中虽然有const，但是只有整形常量，所以为了方便，我们将btor中的常量以Var的形式存储，并且在startstate中初始化</p>
+<h3 id="3-4-murphi中ruleset参数的限制"><a href="#3-4-murphi中ruleset参数的限制" class="headerlink" title="3.4 murphi中ruleset参数的限制"></a>3.4 murphi中ruleset参数的限制</h3><p>ruleset参数只能为整形，不能为自定义类型。换句话说，只能写成，”ruleset input:0..n”，而不能写成“ruleset input:bitvec_n” ，因此我们只能绕一圈来写。</p>
+<p>首先需要定义int2binary函数(将整形转为bitvec)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ruleset input_:0..2^i-1 Do</span><br><span class="line">	Var input:bitvec_i;</span><br><span class="line">	input:=int2binary(input_)</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-5-bad为什么不直接放在invariant里？"><a href="#3-5-bad为什么不直接放在invariant里？" class="headerlink" title="3.5 bad为什么不直接放在invariant里？"></a>3.5 bad为什么不直接放在invariant里？</h3><p>直观上来说，bad其实就是一串嵌套表达式，直接放在invariant里就行了。但是murphi不支持function的嵌套，因此只能把badnode当做一个变量，在rule里每次都算一下bad是不是false。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rule</span><br><span class="line">	badNode:=...</span><br><span class="line"></span><br><span class="line">invariant: badNode==false</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-目前无法解决的问题-大电路"><a href="#4-目前无法解决的问题-大电路" class="headerlink" title="4 目前无法解决的问题(大电路)"></a>4 目前无法解决的问题(大电路)</h2><p>4.1 以2*2的memory为例，ruleset的参数过多，能从.m编译到c++，但是运行报错</p>
+<p>4.2 以hwmvcc&#x2F;beem&#x2F;block为例， 无法从.m编译到c++，还没有定位到错误，可能是局部变量过多。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%A7%91%E7%A0%94/" rel="tag"># 科研</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/project/market/market1/" rel="prev" title="【开发】营销抽奖系统开发记录1 - 理清基本的营销场景">
+                  <i class="fa fa-angle-left"></i> 【开发】营销抽奖系统开发记录1 - 理清基本的营销场景
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/31/keyan/STE%20&%20SVA%20c7ffe06c60e64d2785d19e5636448aa9/" rel="next" title="【Research】STE & SVA">
+                  【Research】STE & SVA <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2022 - 2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蔡正海</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

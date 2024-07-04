@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Pono 3 - IC3 Bit-level IC3 implementation using the IC3Base abstract base class  实现好了 IC3Base 中的 纯虚函数。Bit-level 的 IC3 验证。 get_model_ic3formula12345678910111213141516171819IC3Formula IC3::get_model_ic3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Research】pono 3 - IC3">
+<meta property="og:url" content="http://example.com/2023/03/31/keyan/Pono%203%20-%20IC3%208d5d54f3c75e4d73b7c2921bc010c1d2/index.html">
+<meta property="og:site_name" content="czh的学习小站">
+<meta property="og:description" content="Pono 3 - IC3 Bit-level IC3 implementation using the IC3Base abstract base class  实现好了 IC3Base 中的 纯虚函数。Bit-level 的 IC3 验证。 get_model_ic3formula12345678910111213141516171819IC3Formula IC3::get_model_ic3">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-03-31T11:01:35.000Z">
+<meta property="article:modified_time" content="2023-03-31T11:01:35.000Z">
+<meta property="article:author" content="蔡正海">
+<meta property="article:tag" content="科研">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2023/03/31/keyan/Pono%203%20-%20IC3%208d5d54f3c75e4d73b7c2921bc010c1d2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/03/31/keyan/Pono%203%20-%20IC3%208d5d54f3c75e4d73b7c2921bc010c1d2/","path":"2023/03/31/keyan/Pono 3 - IC3 8d5d54f3c75e4d73b7c2921bc010c1d2/","title":"【Research】pono 3 - IC3"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【Research】pono 3 - IC3 | czh的学习小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">czh的学习小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">自律</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Pono-3-IC3"><span class="nav-number">1.</span> <span class="nav-text">Pono 3 - IC3</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#get-model-ic3formula"><span class="nav-number">1.1.</span> <span class="nav-text">get_model_ic3formula</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#predecessor-generalization"><span class="nav-number">1.2.</span> <span class="nav-text">predecessor_generalization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#check-ts"><span class="nav-number">1.3.</span> <span class="nav-text">check_ts()</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蔡正海"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">蔡正海</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/31/keyan/Pono%203%20-%20IC3%208d5d54f3c75e4d73b7c2921bc010c1d2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【Research】pono 3 - IC3 | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【Research】pono 3 - IC3
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%A7%91%E7%A0%94/" itemprop="url" rel="index"><span itemprop="name">科研</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="Pono-3-IC3"><a href="#Pono-3-IC3" class="headerlink" title="Pono 3 - IC3"></a>Pono 3 - IC3</h1><blockquote>
+<p>Bit-level IC3 implementation using the IC3Base abstract base class</p>
+</blockquote>
+<p>实现好了 IC3Base 中的 纯虚函数。Bit-level 的 IC3 验证。</p>
+<h2 id="get-model-ic3formula"><a href="#get-model-ic3formula" class="headerlink" title="get_model_ic3formula"></a>get_model_ic3formula</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">IC3Formula <span class="title">IC3::get_model_ic3formula</span><span class="params">()</span> <span class="type">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">// expecting all solving in IC3 to be done at context level &gt; 0</span></span><br><span class="line">  <span class="comment">// so if we&#x27;re getting a model we should not be at context 0</span></span><br><span class="line">  <span class="built_in">assert</span>(solver_context_);</span><br><span class="line"></span><br><span class="line">  <span class="type">const</span> UnorderedTermSet &amp; statevars = ts_.<span class="built_in">statevars</span>();</span><br><span class="line">  TermVec children;</span><br><span class="line">  children.<span class="built_in">reserve</span>(statevars.<span class="built_in">size</span>());</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">const</span> <span class="keyword">auto</span> &amp;sv : ts_.<span class="built_in">statevars</span>()) &#123;</span><br><span class="line">    <span class="keyword">if</span> (solver_-&gt;<span class="built_in">get_value</span>(sv) == solver_true_) &#123;</span><br><span class="line">      children.<span class="built_in">push_back</span>(sv);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      children.<span class="built_in">push_back</span>(solver_-&gt;<span class="built_in">make_term</span>(Not, sv));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">ic3formula_conjunction</span>(children);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>遍历 statevars，从 solver 中 get_value，然后结果就是一个公式，放入一个 合取 公式中。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">IC3Formula <span class="title">IC3Base::ic3formula_conjunction</span><span class="params">(<span class="type">const</span> TermVec &amp; c)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">assert</span>(c.<span class="built_in">size</span>());</span><br><span class="line">  Term term = c.<span class="built_in">at</span>(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">size_t</span> i = <span class="number">1</span>; i &lt; c.<span class="built_in">size</span>(); ++i) &#123;</span><br><span class="line">    term = solver_-&gt;<span class="built_in">make_term</span>(And, term, c[i]);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">IC3Formula</span>(term, c, <span class="literal">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>构造 TermVec 得到的析取公式。</p>
+<h2 id="predecessor-generalization"><a href="#predecessor-generalization" class="headerlink" title="predecessor_generalization"></a>predecessor_generalization</h2><p>接下来是对 model 的 generalization， pred 传入的是 model，c 是 bad，i 是 fontier_idx()</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">IC3::predecessor_generalization</span><span class="params">(<span class="type">size_t</span> i,</span></span></span><br><span class="line"><span class="params"><span class="function">                                     <span class="type">const</span> Term &amp; c,</span></span></span><br><span class="line"><span class="params"><span class="function">                                     IC3Formula &amp; pred)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">// <span class="doctag">TODO:</span> change this so we don&#x27;t have to depend on the solver context to be</span></span><br><span class="line">  <span class="comment">// sat</span></span><br><span class="line">  <span class="built_in">assert</span>(i &gt; <span class="number">0</span>);</span><br><span class="line">  <span class="built_in">assert</span>(!pred.disjunction); <span class="comment">// assign is conjunction</span></span><br><span class="line"></span><br><span class="line">  <span class="type">const</span> UnorderedTermSet &amp; statevars = ts_.<span class="built_in">statevars</span>();</span><br><span class="line">  TermVec input_lits = <span class="built_in">get_input_values</span>(); <span class="comment">// input values</span></span><br><span class="line">  TermVec next_lits = <span class="built_in">get_next_state_values</span>(); <span class="comment">// next state values</span></span><br><span class="line">  <span class="type">const</span> TermVec &amp; cube_lits = pred.children; <span class="comment">// vars values</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (i == <span class="number">1</span>) &#123; <span class="comment">// generalization is to cut the states that can&#x27;t reach</span></span><br><span class="line">    <span class="comment">// don&#x27;t need to generalize if i == 1</span></span><br><span class="line">    <span class="comment">// the predecessor is an initial state</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  Term formula = <span class="built_in">make_and</span>(input_lits); <span class="comment">// inputs</span></span><br><span class="line">  <span class="keyword">if</span> (ts_.<span class="built_in">is_deterministic</span>()) &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">NOTE:</span> need to use full trans, not just trans_label_ here</span></span><br><span class="line">    <span class="comment">//       because we are passing it to the reducer_</span></span><br><span class="line">    formula = solver_-&gt;<span class="built_in">make_term</span>(And, formula, ts_.<span class="built_in">trans</span>()); <span class="comment">// inputs and trans</span></span><br><span class="line">    formula =</span><br><span class="line">        solver_-&gt;<span class="built_in">make_term</span>(And, formula, solver_-&gt;<span class="built_in">make_term</span>(Not, ts_.<span class="built_in">next</span>(c))); <span class="comment">// inputs and trans and not bad&#x27;</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    formula = solver_-&gt;<span class="built_in">make_term</span>(And, formula, <span class="built_in">make_and</span>(next_lits)); <span class="comment">// inputs and next lit</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// preimage formula</span></span><br><span class="line">    <span class="comment">// <span class="doctag">NOTE:</span> because this will be negated, it is important to use the</span></span><br><span class="line">    <span class="comment">// whole frame and trans, not just the labels</span></span><br><span class="line">    <span class="comment">// because label is: trans_label_ -&gt; trans</span></span><br><span class="line">    <span class="comment">// so if it is negated, that doesn&#x27;t force trans to be false</span></span><br><span class="line">    <span class="comment">// the implication could be more efficient than iff so we want to leave it</span></span><br><span class="line">    <span class="comment">// that way</span></span><br><span class="line">    Term pre_formula = <span class="built_in">get_frame_term</span>(i - <span class="number">1</span>); <span class="comment">// fi-1</span></span><br><span class="line">    pre_formula = solver_-&gt;<span class="built_in">make_term</span>(And, pre_formula, ts_.<span class="built_in">trans</span>()); <span class="comment">// fi-1 and trans</span></span><br><span class="line">    pre_formula =</span><br><span class="line">        solver_-&gt;<span class="built_in">make_term</span>(And, pre_formula, solver_-&gt;<span class="built_in">make_term</span>(Not, c)); <span class="comment">// fi-1 and trans and not bad</span></span><br><span class="line">    pre_formula = solver_-&gt;<span class="built_in">make_term</span>(And, pre_formula, ts_.<span class="built_in">next</span>(c)); <span class="comment">// fi-1 and trans and bad&#x27;</span></span><br><span class="line">    formula =</span><br><span class="line">        solver_-&gt;<span class="built_in">make_term</span>(And, formula, solver_-&gt;<span class="built_in">make_term</span>(Not, pre_formula)); <span class="comment">// input and next lit and Not(Fi-1 and trans and bad&#x27;)</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// <span class="doctag">TODO:</span> consider adding functional pre-image here</span></span><br><span class="line">  <span class="comment">//       not sure if it makes sense to have at the boolean level</span></span><br><span class="line"></span><br><span class="line">  TermVec red_cube_lits, rem_cube_lits;</span><br><span class="line">  reducer_.<span class="built_in">reduce_assump_unsatcore</span>(</span><br><span class="line">      formula, cube_lits, red_cube_lits, &amp;rem_cube_lits); <span class="comment">// inputs and cube and trans and Not(bad)&#x27;. let it unsat, get the subset of cube</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// should need some assumptions</span></span><br><span class="line">  <span class="comment">// formula should not be unsat on its own</span></span><br><span class="line">  <span class="built_in">assert</span>(red_cube_lits.<span class="built_in">size</span>() &gt; <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  pred = <span class="built_in">ic3formula_conjunction</span>(red_cube_lits); <span class="comment">// update pred (is a conjunction formula.</span></span><br><span class="line">  <span class="comment">// expecting a Cube here</span></span><br><span class="line">  <span class="built_in">assert</span>(!pred.disjunction); <span class="comment">// conjunction</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的 get  input value，从求解器中拿到 model 中 input 的赋值：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">TermVec <span class="title">IC3Base::get_input_values</span><span class="params">()</span> <span class="type">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  TermVec out_inputs;</span><br><span class="line">  out_inputs.<span class="built_in">reserve</span>(ts_.<span class="built_in">inputvars</span>().<span class="built_in">size</span>());</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">const</span> <span class="keyword">auto</span> &amp; iv : ts_.<span class="built_in">inputvars</span>()) &#123;</span><br><span class="line">    out_inputs.<span class="built_in">push_back</span>(solver_-&gt;<span class="built_in">make_term</span>(Equal, iv, solver_-&gt;<span class="built_in">get_value</span>(iv)));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> out_inputs;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>获取对 next states 的赋值：？ used for undeterministic TS</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">TermVec <span class="title">IC3Base::get_next_state_values</span><span class="params">()</span> <span class="type">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  TermVec out_nexts;</span><br><span class="line">  out_nexts.<span class="built_in">reserve</span>(ts_.<span class="built_in">statevars</span>().<span class="built_in">size</span>());</span><br><span class="line">  Term nv;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">const</span> <span class="keyword">auto</span> &amp; sv : ts_.<span class="built_in">statevars</span>()) &#123;</span><br><span class="line">    nv = ts_.<span class="built_in">next</span>(sv);</span><br><span class="line">    out_nexts.<span class="built_in">push_back</span>(solver_-&gt;<span class="built_in">make_term</span>(Equal, nv, solver_-&gt;<span class="built_in">get_value</span>(nv)));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> out_nexts;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="check-ts"><a href="#check-ts" class="headerlink" title="check_ts()"></a>check_ts()</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">IC3::check_ts</span><span class="params">()</span> <span class="type">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">const</span> <span class="keyword">auto</span> &amp;sv : ts_.<span class="built_in">statevars</span>()) &#123;</span><br><span class="line">    <span class="keyword">if</span> (sv-&gt;<span class="built_in">get_sort</span>() != boolsort_) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="built_in">PonoException</span>(<span class="string">&quot;Got non-boolean state variable in bit-level IC3: &quot;</span></span><br><span class="line">                          + sv-&gt;<span class="built_in">to_string</span>());</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="type">const</span> <span class="keyword">auto</span> &amp;iv : ts_.<span class="built_in">inputvars</span>()) &#123;</span><br><span class="line">    <span class="keyword">if</span> (iv-&gt;<span class="built_in">get_sort</span>() != boolsort_) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="built_in">PonoException</span>(<span class="string">&quot;Got non-boolean input variable in bit-level IC3: &quot;</span></span><br><span class="line">                          + iv-&gt;<span class="built_in">to_string</span>());</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>要求变量都是 boolsort。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%A7%91%E7%A0%94/" rel="tag"># 科研</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/03/31/keyan/pono%201%20-%20%E4%BB%8E%E4%B8%80%E4%B8%AA%E6%B5%8B%E8%AF%95%E5%87%BA%E5%8F%91%EF%BC%8Cpono%20%E5%9C%A8%E5%81%9A%E4%BB%80%E4%B9%88%20ffd2579350f7433d9dd34304b198f411/" rel="prev" title="【Research】pono 1 - 从一个测试出发，pono 在做什么">
+                  <i class="fa fa-angle-left"></i> 【Research】pono 1 - 从一个测试出发，pono 在做什么
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2022 - 2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蔡正海</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

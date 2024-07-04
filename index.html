@@ -84,7 +84,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
   </ul>
 </nav>
 
@@ -123,18 +123,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">9</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -160,7 +160,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/06/24/ccccc/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/leetcode/algorithm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -178,11 +178,20 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/06/24/ccccc/" class="post-title-link" itemprop="url">ccccc</a>
+          <a href="/2022/03/31/leetcode/algorithm/" class="post-title-link" itemprop="url">每日一题</a>
         </h2>
 
         <div class="post-meta-container">
           <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">每日一题</span></a>
+        </span>
+    </span>
 
   
 </div>
@@ -194,68 +203,35 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p><img src="/2024/06/24/ccccc/qrcode.jpg"></p>
+          <h2 id="每日一题"><a href="#每日一题" class="headerlink" title="每日一题"></a>每日一题</h2><blockquote>
+<p>3.无重复字符的最长子串</p>
+<ol start="93">
+<li>复原 IP 地址</li>
+<li>字符串相加<br>LCR 181. 字符串中的单词反转</li>
+<li>三数之和</li>
+<li>组合总和</li>
+<li>组合总和 II</li>
+<li>数组中的第K个最大元素</li>
+<li>二分查找</li>
+<li>买卖股票的最佳时机</li>
+<li>最大子数组和</li>
+<li>有效的括号<br>LCR 090. 打家劫舍 II</li>
+<li>比较版本号</li>
+<li>轮转数组</li>
+<li>二叉树中的最大路径和</li>
+<li>删除排序链表中的重复元素 II</li>
+<li>最长回文子串</li>
+<li>LRU缓存机制<br>1120：子树的最大平均值</li>
+<li>斐波那契数</li>
+</ol>
+</blockquote>
+<h3 id="无重复字符的最长子串"><a href="#无重复字符的最长子串" class="headerlink" title="无重复字符的最长子串"></a>无重复字符的最长子串</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 经典的滑动窗口</span></span><br><span class="line">left = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> right==<span class="number">0</span>; right&lt;=length;right++)&#123;</span><br><span class="line">  更新right条件</span><br><span class="line">    <span class="keyword">while</span>(不满足条件)&#123;</span><br><span class="line">      left++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-      
-    </div>
+<h3 id="复原-IP-地址"><a href="#复原-IP-地址" class="headerlink" title="复原 IP 地址"></a>复原 IP 地址</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 经典回溯，别忘了判定首项为0</span><br><span class="line"></span><br><span class="line">dfs(int i)&#123;</span><br><span class="line">	for(int j=0;j&lt;3;j++)&#123;</span><br><span class="line">	  更新path</span><br><span class="line">	  dfs(i+1)</span><br><span class="line">	  回溯path</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    
-    
-    
+<h3 id="字符串相加"><a href="#字符串相加" class="headerlink" title="字符串相加"></a>字符串相加</h3><p>弱智题</p>
+<h3 id="字符串中的单词反转"><a href="#字符串中的单词反转" class="headerlink" title="字符串中的单词反转"></a>字符串中的单词反转</h3><p>同向双指针</p>
 
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2019/03/31/ch/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/03/31/ch/" class="post-title-link" itemprop="url">ch</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          
       
     </div>
 
@@ -299,7 +275,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/03/31/hello-world/" class="post-title-link" itemprop="url">Hexo+NexT拥抱舒爽</a>
+          <a href="/2019/03/31/hello-world/" class="post-title-link" itemprop="url">总 - 我的博客</a>
         </h2>
 
         <div class="post-meta-container">
@@ -310,7 +286,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/xc/" itemprop="url" rel="index"><span itemprop="name">xc</span></a>
+          <a href="/categories/%E6%80%BB%E8%A7%88/" itemprop="url" rel="index"><span itemprop="name">总览</span></a>
         </span>
     </span>
 
@@ -324,15 +300,8 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>dsdsdds</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/03/31/hello-world/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h2 id="学习小记"><a href="#学习小记" class="headerlink" title="学习小记"></a>学习小记</h2><p>记录项目开发过程、技术学习笔记、科研笔记</p>
+<h3 id="分类1-开发"><a href="#分类1-开发" class="headerlink" title="分类1 开发"></a>分类1 开发</h3><h3 id="分类2-科研"><a href="#分类2-科研" class="headerlink" title="分类2 科研"></a>分类2 科研</h3>
       
     </div>
 
@@ -358,7 +327,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2019/03/31/hello-world2/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -376,7 +345,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/03/31/hello-world2/" class="post-title-link" itemprop="url">Hexo+NexT拥抱舒爽</a>
+          <a href="/2022/03/31/kaifa/project/market/market9/" class="post-title-link" itemprop="url">【开发】营销抽奖系统开发记录9 - 最终核心api</a>
         </h2>
 
         <div class="post-meta-container">
@@ -387,7 +356,15 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Hexo/" itemprop="url" rel="index"><span itemprop="name">Hexo</span></a>
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
         </span>
     </span>
 
@@ -401,15 +378,17 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>dsdsdsd</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/03/31/hello-world2/">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <p>营销系统里主要包含五个领域：</p>
+<ul>
+<li>活动 activity</li>
+<li>奖品 award</li>
+<li>积分 credit</li>
+<li>返利 rebate</li>
+<li>策略 strategy</li>
+</ul>
+<p>包含的几个核心api如下：</p>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240701193910631.png" alt="image-20240701193910631"></p>
+
       
     </div>
 
@@ -427,6 +406,778 @@
 
 
 
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/market/market8/" class="post-title-link" itemprop="url">【开发】营销抽奖系统开发记录8 - Domain5_积分</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="积分-领域"><a href="#积分-领域" class="headerlink" title="积分 - 领域"></a>积分 - 领域</h2><p>积分在本项目中取代钱的作用，积分是衔接营销场景中各个功能模块的一个非常重要的手段，主要是打卡获得积分，抽奖获得积分，积分兑换抽奖次数sku。</p>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240701185132402.png" alt="image-20240701185132402" style="zoom:50%;" />
+
+<h3 id="核心接口1-交易策略"><a href="#核心接口1-交易策略" class="headerlink" title="核心接口1 交易策略"></a>核心接口1 交易策略</h3><p>这里的交易只有一种商品sku（抽奖额度sku）</p>
+<p>涉及到两种交易策略</p>
+<ul>
+<li>签到赠送积分 – 无支付 （较为简单，直接写入订单，修改抽奖额度，就结束了）</li>
+<li>积分兑换  – 有支付 （较为复杂，除了写入订单，修改抽奖额度，还需要考虑积分账户的扣减）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ITradePolicy</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">trade</span><span class="params">(CreateQuotaOrderAggregate createQuotaOrderAggregate)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service(&quot;credit_pay_trade&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CreditPayTradePolicy</span> <span class="keyword">implements</span> <span class="title class_">ITradePolicy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">trade</span><span class="params">(CreateQuotaOrderAggregate createQuotaOrderAggregate)</span> &#123;</span><br><span class="line">        createQuotaOrderAggregate.setOrderState(OrderStateVO.wait_pay);</span><br><span class="line">        activityRepository.doSaveCreditPayOrder(createQuotaOrderAggregate);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service(&quot;rebate_no_pay_trade&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RebateNoPayTradePolicy</span> <span class="keyword">implements</span> <span class="title class_">ITradePolicy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">trade</span><span class="params">(CreateQuotaOrderAggregate createQuotaOrderAggregate)</span> &#123;</span><br><span class="line">        <span class="comment">// 不需要支付则修改订单金额为0，状态为完成，直接给用户账户充值</span></span><br><span class="line">        createQuotaOrderAggregate.setOrderState(OrderStateVO.completed);</span><br><span class="line">        createQuotaOrderAggregate.getActivityOrderEntity().setPayAmount(BigDecimal.ZERO);</span><br><span class="line">        activityRepository.doSaveNoPayOrder(createQuotaOrderAggregate);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="核心接口2-订单出货"><a href="#核心接口2-订单出货" class="headerlink" title="核心接口2 订单出货"></a>核心接口2 订单出货</h2><p>更新订单状态操作，是对订单从支付态更改为发货完成态。在数据库表更新的时候，有一个前置的判断，订单状态必须为 wait_pay 才能更新为 completed 否则不能更新。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IRaffleActivityAccountQuotaService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 订单出货 - 积分充值</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> deliveryOrderEntity 出货单实体对象</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">updateOrder</span><span class="params">(DeliveryOrderEntity deliveryOrderEntity)</span>;</span><br><span class="line">    </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line">dbRouter.doRouter(deliveryOrderEntity.getUserId());</span><br><span class="line"><span class="comment">// 编程式事务</span></span><br><span class="line">transactionTemplate.execute(status -&gt; &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 1. 更新订单</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">updateCount</span> <span class="operator">=</span> raffleActivityOrderDao.updateOrderCompleted(raffleActivityOrderReq);</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">1</span> != updateCount) &#123;</span><br><span class="line">            status.setRollbackOnly();</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 2. 更新账户 - 总</span></span><br><span class="line">        <span class="type">RaffleActivityAccount</span> <span class="variable">raffleActivityAccountRes</span> <span class="operator">=</span> raffleActivityAccountDao.queryAccountByUserId(raffleActivityAccount);</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> == raffleActivityAccountRes) &#123;</span><br><span class="line">            raffleActivityAccountDao.insert(raffleActivityAccount);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            raffleActivityAccountDao.updateAccountQuota(raffleActivityAccount);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 4. 更新账户 - 月</span></span><br><span class="line">        raffleActivityAccountMonthDao.addAccountQuota(raffleActivityAccountMonth);</span><br><span class="line">        <span class="comment">// 5. 更新账户 - 日</span></span><br><span class="line">        raffleActivityAccountDayDao.addAccountQuota(raffleActivityAccountDay);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (DuplicateKeyException e) &#123;</span><br><span class="line">        status.setRollbackOnly();</span><br><span class="line">        log.error(<span class="string">&quot;更新订单记录，完成态，唯一索引冲突 userId: &#123;&#125; outBusinessNo: &#123;&#125;&quot;</span>, deliveryOrderEntity.getUserId(), deliveryOrderEntity.getOutBusinessNo(), e);</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">AppException</span>(ResponseCode.INDEX_DUP.getCode(), e);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="核心接口3-交易支付"><a href="#核心接口3-交易支付" class="headerlink" title="核心接口3 交易支付"></a>核心接口3 交易支付</h2><p>交易支付这部分，需要与发货解耦，不在交易中直接对另外的库表进行一个事务的处理。因为如果将来积分要拆分为独立系统的时候，太重的事务耦合就不好拆分了，而用 MQ 解耦流程，就可以很方便的完成系统模块的拆分。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line"><span class="comment">// 发送消息【在事务外执行，如果失败还有任务补偿】</span></span><br><span class="line">eventPublisher.publish(task.getTopic(), task.getMessage());</span><br><span class="line"><span class="comment">// 更新数据库记录，task 任务表</span></span><br><span class="line">taskDao.updateTaskSendMessageCompleted(task);</span><br><span class="line">log.info(<span class="string">&quot;调整账户积分记录，发送MQ消息完成 userId: &#123;&#125; orderId:&#123;&#125; topic: &#123;&#125;&quot;</span>, userId, creditOrderEntity.getOrderId(), task.getTopic());</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">log.error(<span class="string">&quot;调整账户积分记录，发送MQ消息失败 userId: &#123;&#125; topic: &#123;&#125;&quot;</span>, userId, task.getTopic());</span><br><span class="line">taskDao.updateTaskSendMessageFail(task);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>监听积分支付成功消息后，使用发货单实体对象为入参，调用订单变更操作，完成积分充值。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/market/market7/" class="post-title-link" itemprop="url">【开发】营销抽奖系统开发记录7 - Domain4_返利</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="返利-领域"><a href="#返利-领域" class="headerlink" title="返利 - 领域"></a>返利 - 领域</h2><p>用户的行为动作返利，是一种日常的活动类型。比如；你在某个平台创建了新账号，就会给你发一堆的开户优惠券，这些都是日常的返利活动。</p>
+<p>日常的返利会根据用户所完成的行为动作来触达，这包括；打卡、签到、连签、支付、开户、交易、信贷、拉新等各类的动作（本项目中暂时只包含打卡）。</p>
+<h3 id="新增两个返利的库表，之前没有考虑到"><a href="#新增两个返利的库表，之前没有考虑到" class="headerlink" title="新增两个返利的库表，之前没有考虑到"></a>新增两个返利的库表，之前没有考虑到</h3><p>行为返利配置表（行为类型、返利类型、返利具体值等）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `daily_behavior_rebate` (</span><br><span class="line">  `id` <span class="type">int</span> unsigned <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT COMMENT <span class="string">&#x27;自增ID&#x27;</span>,</span><br><span class="line">  `behavior_type` <span class="type">varchar</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;行为类型（sign 签到、openai_pay 支付）&#x27;</span>,</span><br><span class="line">  `rebate_desc` <span class="type">varchar</span>(<span class="number">128</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;返利描述&#x27;</span>,</span><br><span class="line">  `rebate_type` <span class="type">varchar</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;返利类型（sku 活动库存充值商品、integral 用户活动积分）&#x27;</span>,</span><br><span class="line">  `rebate_config` <span class="type">varchar</span>(<span class="number">32</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;返利配置&#x27;</span>,</span><br><span class="line">  `state` <span class="type">varchar</span>(<span class="number">12</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;状态（open 开启、close 关闭）&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `update_time` datetime <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="built_in">CURRENT_TIMESTAMP</span> COMMENT <span class="string">&#x27;更新时间&#x27;</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`id`),</span><br><span class="line">  KEY `idx_behavior_type` (`behavior_type`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB AUTO_INCREMENT<span class="operator">=</span><span class="number">3</span> <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4 <span class="keyword">COLLATE</span><span class="operator">=</span>utf8mb4_0900_ai_ci COMMENT<span class="operator">=</span><span class="string">&#x27;日常行为返利活动配置&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>返利订单表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `user_behavior_rebate_order_000` (</span><br><span class="line">  `id` <span class="type">int</span> unsigned <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT COMMENT <span class="string">&#x27;自增ID&#x27;</span>,</span><br><span class="line">  `user_id` <span class="type">varchar</span>(<span class="number">32</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;用户ID&#x27;</span>,</span><br><span class="line">  `order_id` <span class="type">varchar</span>(<span class="number">12</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;订单ID&#x27;</span>,</span><br><span class="line">  `behavior_type` <span class="type">varchar</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;行为类型（sign 签到）&#x27;</span>,</span><br><span class="line">  `rebate_desc` <span class="type">varchar</span>(<span class="number">128</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;返利描述&#x27;</span>,</span><br><span class="line">  `rebate_type` <span class="type">varchar</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;返利类型（sku 活动库存充值商品、integral 用户活动积分）&#x27;</span>,</span><br><span class="line">  `rebate_config` <span class="type">varchar</span>(<span class="number">32</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;返利配置【sku值，积分值】&#x27;</span>,</span><br><span class="line">  `out_business_no` <span class="type">varchar</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;业务仿重ID - 外部透传，方便查询使用&#x27;</span>,</span><br><span class="line">  `biz_id` <span class="type">varchar</span>(<span class="number">128</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;业务ID - 拼接的唯一值。拼接 out_business_no + 自身枚举&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `update_time` datetime <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="built_in">CURRENT_TIMESTAMP</span> COMMENT <span class="string">&#x27;更新时间&#x27;</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`id`),</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `uq_order_id` (`order_id`),</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `uq_biz_id` (`biz_id`),</span><br><span class="line">  KEY `idx_user_id` (`user_id`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4 <span class="keyword">COLLATE</span><span class="operator">=</span>utf8mb4_0900_ai_ci COMMENT<span class="operator">=</span><span class="string">&#x27;用户行为返利流水订单表&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="核心接口"><a href="#核心接口" class="headerlink" title="核心接口"></a>核心接口</h2><p>把用户的行为动作，根据配置，创建出聚合对象，之后写账入库即可。</p>
+<p>同时，发送MQ “send_rebate”：后续的积分增加，账户额度增加，调用“activity”和“credit”领域的服务接口即可</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/market/market6/" class="post-title-link" itemprop="url">【开发】营销抽奖系统开发记录6 - Domain3_奖品</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="奖品-领域"><a href="#奖品-领域" class="headerlink" title="奖品 - 领域"></a>奖品 - 领域</h2><p>一整个抽奖过程先从活动账户额度充值、活动参与、抽奖执行【策略】，之后就是<strong>中奖记录写入和后续的发奖</strong>。</p>
+<p>所以奖品领域主要管理<strong>中奖记录写入和后续的发奖</strong>，当然还有奖品库存扣减、奖品列表查询等等。</p>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240701143126949.png" alt="image-20240701143126949" style="zoom:50%;" />
+
+<h2 id="核心功能-saveUserAwardRecord"><a href="#核心功能-saveUserAwardRecord" class="headerlink" title="核心功能 - saveUserAwardRecord"></a>核心功能 - saveUserAwardRecord</h2><p>输入：奖品信息（已经执行完抽奖策略，得到了应得的奖品）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">        dbRouter.doRouter(userId);</span><br><span class="line">        transactionTemplate.execute(status -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">// 写入记录</span></span><br><span class="line">                userAwardRecordDao.insert(userAwardRecord);</span><br><span class="line">                <span class="comment">// 写入任务</span></span><br><span class="line">                taskDao.insert(task);</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (DuplicateKeyException e) &#123;</span><br><span class="line">                status.setRollbackOnly();</span><br><span class="line">                log.error(<span class="string">&quot;写入中奖记录，唯一索引冲突 userId: &#123;&#125; activityId: &#123;&#125; awardId: &#123;&#125;&quot;</span>, userId, activityId, awardId, e);</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">AppException</span>(ResponseCode.INDEX_DUP.getCode(), e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        dbRouter.clear();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 发送消息【在事务外执行，如果失败还有任务补偿】</span></span><br><span class="line">        eventPublisher.publish(task.getTopic(), task.getMessage());</span><br><span class="line">        <span class="comment">// 更新数据库记录，task 任务表</span></span><br><span class="line">        taskDao.updateTaskSendMessageCompleted(task);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        log.error(<span class="string">&quot;写入中奖记录，发送MQ消息失败 userId: &#123;&#125; topic: &#123;&#125;&quot;</span>, userId, task.getTopic());</span><br><span class="line">        taskDao.updateTaskSendMessageFail(task);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>奖品记录和任务是一个事务下提交，提交完事务以后，顺序的执行发送奖品的 MQ 消息，消息发送完成后更新数据库记录。</li>
+<li>MQ部分需要保证消费成功，在 SendMessageTaskJob 任务补偿中会扫描库表的 task 表来发送 MQ 消息。</li>
+</ol>
+<p>消息监听（发奖的解藕）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">listener</span><span class="params">(String message)</span> &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    log.info(<span class="string">&quot;监听用户奖品发送消息，发奖开始 topic: &#123;&#125; message: &#123;&#125;&quot;</span>, topic, message);</span><br><span class="line">    BaseEvent.EventMessage&lt;SendAwardMessageEvent.SendAwardMessage&gt; eventMessage = JSON.parseObject(message, <span class="keyword">new</span> <span class="title class_">TypeReference</span>&lt;BaseEvent.EventMessage&lt;SendAwardMessageEvent.SendAwardMessage&gt;&gt;() &#123;</span><br><span class="line">    &#125;.getType());</span><br><span class="line">    SendAwardMessageEvent.<span class="type">SendAwardMessage</span> <span class="variable">sendAwardMessage</span> <span class="operator">=</span> eventMessage.getData();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 发放奖品</span></span><br><span class="line">    <span class="type">DistributeAwardEntity</span> <span class="variable">distributeAwardEntity</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DistributeAwardEntity</span>();</span><br><span class="line">    distributeAwardEntity.setUserId(sendAwardMessage.getUserId());</span><br><span class="line">    distributeAwardEntity.setOrderId(sendAwardMessage.getOrderId());</span><br><span class="line">    distributeAwardEntity.setAwardId(sendAwardMessage.getAwardId());</span><br><span class="line">    distributeAwardEntity.setAwardConfig(sendAwardMessage.getAwardConfig());</span><br><span class="line">    awardService.distributeAward(distributeAwardEntity);</span><br><span class="line"></span><br><span class="line">    log.info(<span class="string">&quot;监听用户奖品发送消息，发奖完成 topic: &#123;&#125; message: &#123;&#125;&quot;</span>, topic, message);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    log.error(<span class="string">&quot;监听用户奖品发送消息，消费失败 topic: &#123;&#125; message: &#123;&#125;&quot;</span>, topic, message);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>定时任务扫描task表，重新发送MQ消息，确保MQ消息消费成功</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">exec</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 获取分库数量</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">dbCount</span> <span class="operator">=</span> dbRouter.dbCount();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 逐个库扫描表【每个库一个任务表】</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">dbIdx</span> <span class="operator">=</span> <span class="number">1</span>; dbIdx &lt;= dbCount; dbIdx++) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">finalDbIdx</span> <span class="operator">=</span> dbIdx;</span><br><span class="line">            executor.execute(() -&gt; &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    dbRouter.setDBKey(finalDbIdx);</span><br><span class="line">                    dbRouter.setTBKey(<span class="number">0</span>);</span><br><span class="line">                    List&lt;TaskEntity&gt; taskEntities = taskService.queryNoSendMessageTaskList();</span><br><span class="line">                    <span class="keyword">if</span> (taskEntities.isEmpty()) <span class="keyword">return</span>;</span><br><span class="line">                    <span class="comment">// 发送MQ消息</span></span><br><span class="line">                    <span class="keyword">for</span> (TaskEntity taskEntity : taskEntities) &#123;</span><br><span class="line">                        executor.execute(() -&gt; &#123;</span><br><span class="line">                            <span class="keyword">try</span> &#123;</span><br><span class="line">                                taskService.sendMessage(taskEntity);</span><br><span class="line">                                taskService.updateTaskSendMessageCompleted(taskEntity.getUserId(), taskEntity.getMessageId());</span><br><span class="line">                            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                                taskService.updateTaskSendMessageFail(taskEntity.getUserId(), taskEntity.getMessageId());</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    dbRouter.clear();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        log.error(<span class="string">&quot;定时任务，扫描MQ任务表发送消息失败。&quot;</span>, e);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        dbRouter.clear();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/market/market5/" class="post-title-link" itemprop="url">【开发】营销抽奖系统开发记录5 - Domain2_抽奖活动</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="抽奖活动-领域"><a href="#抽奖活动-领域" class="headerlink" title="抽奖活动 - 领域"></a>抽奖活动 - 领域</h2><p>用户抽奖的业务流程分为；给自己的活动账户添加额度（购买、兑换、打卡），领取活动（扣减互动账户额度）、执行抽奖策略、抽奖结果落库。</p>
+<p>前两天完成了“抽奖策略”部分的领域代码，那么在“计算用户能拿到什么奖品”前，还需要干两件事</p>
+<ul>
+<li>管理用户的账户抽奖额度</li>
+<li>领取抽奖活动，生成抽奖活动流水单，扣减账户额度</li>
+</ul>
+<p>所以“抽奖活动”领域主要做两个Service：账户额度，参与活动</p>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240629171939807.png" alt="image-20240629171939807"></p>
+<h2 id="抽奖活动-库表设计"><a href="#抽奖活动-库表设计" class="headerlink" title="抽奖活动 - 库表设计"></a>抽奖活动 - 库表设计</h2><p>每个抽奖活动次数可以看成一个sku（活动id，策略id，库存），同时还需要定义用户的活动账号，以及订单库表</p>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628213842268.png" alt="image-20240628213842268" style="zoom:33%;" />
+
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628214241373.png" alt="image-20240628214241373" style="zoom:50%;" />
+
+<h3 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h3><p>对于用户账号信息，只分库；对于用户订单信息，分库分表</p>
+<h2 id="Service1-参与活动"><a href="#Service1-参与活动" class="headerlink" title="Service1 参与活动"></a>Service1 参与活动</h2><p>参与活动可以看作商品sku下单，只是这个sku是活动次数。</p>
+<p>所以，现在主要实现两个service</p>
+<ol>
+<li>下单规则校验（责任链设计模式实现）</li>
+<li>完成下单事务（这个单是抽奖活动次数sku）</li>
+</ol>
+<h3 id="Service1-接口1-下单规则校验"><a href="#Service1-接口1-下单规则校验" class="headerlink" title="Service1-接口1 下单规则校验"></a>Service1-接口1 下单规则校验</h3><p>校验库存，活动是否在有效期内，活动是否开启，采用责任链模式（不过这个比较简单，可能也用不着责任链模式），和之前的抽奖前置规则一样</p>
+<h3 id="Service1-接口2-用户点击抽奖按钮，创建抽奖订单（更新额度，写入用户抽奖订单）"><a href="#Service1-接口2-用户点击抽奖按钮，创建抽奖订单（更新额度，写入用户抽奖订单）" class="headerlink" title="Service1-接口2 用户点击抽奖按钮，创建抽奖订单（更新额度，写入用户抽奖订单）"></a>Service1-接口2 用户点击抽奖按钮，创建抽奖订单（更新额度，写入用户抽奖订单）</h3><p>更新 raffle_activity_account（账户抽奖次数）</p>
+<p>更新 user_raffle_order（用户抽奖订单）</p>
+<ul>
+<li>step1 构建订单聚合对象</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 用户ID</span><br><span class="line"> */</span><br><span class="line">private String userId;</span><br><span class="line">/**</span><br><span class="line"> * 活动ID</span><br><span class="line"> */</span><br><span class="line">private Long activityId;</span><br><span class="line">/**</span><br><span class="line"> * 账户总额度</span><br><span class="line"> */</span><br><span class="line">private ActivityAccountEntity activityAccountEntity;</span><br><span class="line">/**</span><br><span class="line"> * 账户月额度</span><br><span class="line"> */</span><br><span class="line">private ActivityAccountMonthEntity activityAccountMonthEntity;</span><br><span class="line">/**</span><br><span class="line"> * 账户日额度</span><br><span class="line"> */</span><br><span class="line">private ActivityAccountDayEntity activityAccountDayEntity;</span><br><span class="line">/**</span><br><span class="line"> * 抽奖单实体</span><br><span class="line"> */</span><br><span class="line">private UserRaffleOrderEntity userRaffleOrderEntity;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>step2 事务</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">// 统一切换路由，以下事务内的所有操作，都走一个路由</span></span><br><span class="line">    dbRouter.doRouter(userId);</span><br><span class="line">    transactionTemplate.execute(status -&gt; &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 1. 更新总账户</span></span><br><span class="line">            <span class="comment">// 2. 创建或更新月（日）账户，未更新成功则回滚</span></span><br><span class="line">            <span class="comment">// 3. 写入参与活动订单（UserRaffleOrder）</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (DuplicateKeyException e) &#123; <span class="comment">// 订单放重id，造成回滚</span></span><br><span class="line">            status.setRollbackOnly();</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">AppException</span>(ResponseCode.INDEX_DUP.getCode(), e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    dbRouter.clear();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Service2-抽奖活动账户额度"><a href="#Service2-抽奖活动账户额度" class="headerlink" title="Service2 抽奖活动账户额度"></a>Service2 抽奖活动账户额度</h2><p>用户通过某种行为（签到、积分），换取抽奖次数，那么主要干两件事</p>
+<h3 id="Service2-接口1-扣减活动“库存”"><a href="#Service2-接口1-扣减活动“库存”" class="headerlink" title="Service2-接口1 扣减活动“库存”"></a>Service2-接口1 扣减活动“库存”</h3><p>设计到库存，和之前的奖品库存扣减类似，用缓存进行decr，用setnx兜底，写入MQ趋势更新库存</p>
+<h3 id="Service2-接口2-每日签到送抽奖次数额度（后续加上积分）"><a href="#Service2-接口2-每日签到送抽奖次数额度（后续加上积分）" class="headerlink" title="Service2-接口2 每日签到送抽奖次数额度（后续加上积分）"></a>Service2-接口2 每日签到送抽奖次数额度（后续加上积分）</h3><p>直接更新活动账户里的抽奖次数额度，直接写入订单，如果存在唯一索引冲突，就回滚</p>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240629173834767.png" alt="image-20240629173834767" style="zoom: 50%;" />
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/market/market4/" class="post-title-link" itemprop="url">【开发】营销抽奖系统开发记录4 - Domain1_抽奖策略 具体实现</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="两种抽奖算法"><a href="#两种抽奖算法" class="headerlink" title="两种抽奖算法"></a>两种抽奖算法</h2><h3 id="时间-or-空间"><a href="#时间-or-空间" class="headerlink" title="时间 or 空间"></a>时间 or 空间</h3><p><strong>第一种抽奖算法：循环对比</strong></p>
+<ul>
+<li><p>例如：”A:0.1;B:0.2;C:0.7”</p>
+</li>
+<li><p>计算出随机数 ：</p>
+<ul>
+<li>例如：0.25</li>
+</ul>
+</li>
+<li><p>根据奖品的概率依次遍历，知道概率达到奖品的范围：</p>
+<ul>
+<li>例如：先遍历A，不在0.1；</li>
+<li>再遍历B，在(0.1+0.2&#x3D;0.3)的范围内，得到B奖品</li>
+</ul>
+</li>
+<li><p>时间O(n) ，空间O(1)</p>
+</li>
+</ul>
+<p><strong>第二种抽奖算法：索引获取</strong></p>
+<ul>
+<li>例如：”A:0.1;B:0.2;C:0.7”</li>
+<li>奖品提前放到List&#x2F;Map中：【A,B,B,C,C,C,C,C,C,C】</li>
+<li>计算出随机数</li>
+<li>通过List直接拿到对应的奖品</li>
+<li>时间O(1) ，空间O(n)</li>
+</ul>
+<p><strong>选择</strong></p>
+<ul>
+<li>对于抽奖这样的高并发场景，无疑是第二种索引获取更实用，保证接口的更快响应</li>
+<li>但是也有些极端场景，例如奖品概率为0.000001，这时候空间上的开销就过大了。</li>
+</ul>
+<h2 id="Service1-–-抽奖装配-（Redis预热）"><a href="#Service1-–-抽奖装配-（Redis预热）" class="headerlink" title="Service1 – 抽奖装配 （Redis预热）"></a>Service1 – 抽奖装配 （Redis预热）</h2><p><strong>全量概率</strong></p>
+<p>对于第二种抽奖算法，提前构造奖品概率索引Map，放入Redis中。构造的方式也很简单，根据概率的最小精度，确认Map大小，依次遍历奖品，累加概率，存入Map。</p>
+<p><strong>权重概率</strong></p>
+<p>与普通概率类似，区别在于会配置不同的权重会对应不同的奖品列表，根据指定的奖品列表，构造奖品索引概率Map，放入Redis中。</p>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628102840907.png" alt="image-20240628102840907" style="zoom:50%;" />
+
+<p>预热上图中的全量概率奖品查找表和权重概率奖品查找表</p>
+<h2 id="Service2-–-抽奖前置规则"><a href="#Service2-–-抽奖前置规则" class="headerlink" title="Service2 – 抽奖前置规则"></a>Service2 – 抽奖前置规则</h2><p>主要根据用户特性进行校验</p>
+<ul>
+<li>黑名单</li>
+<li>积分额度大小</li>
+<li>默认抽奖规则</li>
+</ul>
+<p>实现方式：责任链</p>
+<p>也就是说，我们把所有前置规则实现（Bean），再根据mysql中策略的规则设定，将用到bean串成一个链表。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 链表节点</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ILogicChain</span> &#123;</span><br><span class="line">    DefaultChainFactory.StrategyAwardVO <span class="title function_">logic</span><span class="params">(String userId, Long strategyId)</span>;</span><br><span class="line">    ILogicChain <span class="title function_">appendNext</span><span class="params">(ILogicChain next)</span>;</span><br><span class="line">    ILogicChain <span class="title function_">next</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 链表节点实现</span></span><br><span class="line"><span class="meta">@Component(&quot;rule_blacklist&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BlackListLogicChain</span> <span class="keyword">extends</span> <span class="title class_">AbstractLogicChain</span></span><br><span class="line"><span class="meta">@Component(&quot;default&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DefaultLogicChain</span> <span class="keyword">extends</span> <span class="title class_">AbstractLogicChain</span></span><br><span class="line"><span class="meta">@Component(&quot;rule_weight&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RuleWeightLogicChain</span> <span class="keyword">extends</span> <span class="title class_">AbstractLogicChain</span></span><br><span class="line">  </span><br><span class="line"><span class="comment">// 3. 工厂，根据mysql动态构造责任链</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DefaultChainFactory</span> &#123;</span><br><span class="line">	<span class="comment">// spring注入</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, ILogicChain&gt; logicChainGroup;</span><br><span class="line">  <span class="comment">// 查询当前策略的rules，构造责任链</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>注意，这里使用单例模式是有问题的：</p>
+<p>一开始规则实现的bean是默认的单例模式，因此动态生成责任链会有并发问题。假设策略1的规则(rule1,rule2,rule3)，bean1-&gt;bean2-&gt;bean3；后面又来了策略2的规则(rule2,rule4,rule6)，那么bean2-&gt;bean4-&gt;bean6。那么策略1的规则就被覆盖了</p>
+<p>因此后面修改为原型模式，@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)</p>
+</blockquote>
+<h2 id="Service3-–-抽奖后置规则"><a href="#Service3-–-抽奖后置规则" class="headerlink" title="Service3 – 抽奖后置规则"></a>Service3 – 抽奖后置规则</h2><p>执行完抽奖算法之后，我们拿到了奖品，需要进行抽奖后置规则计算，例如库存校验规则、抽奖次数校验规则，兜底奖励规则。</p>
+<p>打个比方：先进行次数校验，如果满足，进入库存校验；反之，进入兜底奖励。</p>
+<p>显然，这是一个分支结构，所以用规则树模型。</p>
+<p>之前，我们已经定义了库表结构，所以我们首先把规则树模型结构从mysql中读进来。</p>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628163520288.png" alt="image-20240628163520288" style="zoom: 33%;" />
+
+<p>实现起来，与抽奖前置规则类似，只是树形结构比起链表结构实现稍微复杂一些。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 树形节点</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ILogicTreeNode</span> &#123;</span><br><span class="line">  logic()</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="comment">// 2. 节点实现</span></span><br><span class="line"><span class="meta">@Component(&quot;rule_lock&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RuleLockLogicTreeNode</span> <span class="keyword">implements</span> <span class="title class_">ILogicTreeNode</span>&#123;</span><br><span class="line">  logic()&#123;</span><br><span class="line">    <span class="comment">// 查询用户抽奖次数，并计算</span></span><br><span class="line">    <span class="comment">// 返回结果【满足？不满足？】</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Component(&quot;rule_luck_award&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RuleLuckAwardLogicTreeNode</span> <span class="keyword">implements</span> <span class="title class_">ILogicTreeNode</span> </span><br><span class="line">......</span><br><span class="line">  </span><br><span class="line"><span class="comment">// 3. 查询用户抽奖次数</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DecisionTreeEngine</span> <span class="keyword">implements</span> <span class="title class_">IDecisionTreeEngine</span> &#123;</span><br><span class="line">		<span class="comment">// 注入bean</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, ILogicTreeNode&gt; logicTreeNodeGroup;</span><br><span class="line">		<span class="comment">// 从数据库中读取的规则树模型</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> RuleTreeVO ruleTreeVO;</span><br><span class="line">  	<span class="comment">// 执行规则树</span></span><br><span class="line">    process()&#123;</span><br><span class="line">      <span class="comment">// 从根节点走到叶子节点</span></span><br><span class="line">      <span class="keyword">while</span>(node)&#123;</span><br><span class="line">        <span class="comment">// 执行logic函数，根据计算值选择走哪条边</span></span><br><span class="line">        value = node.logic();</span><br><span class="line">        node=next(node,value)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br></pre></td></tr></table></figure>
+
+<h2 id="特别地，不超卖库存规则实现"><a href="#特别地，不超卖库存规则实现" class="headerlink" title="特别地，不超卖库存规则实现"></a>特别地，不超卖库存规则实现</h2><p>“库表”这个库表属性非常，在高并发场景下，非常容易多个请求直接打到这一行上面。</p>
+<p>比如数据库表有一条记录是库存，如果是通过锁这一条表记录更新库存为10、9、8的话，就会出现大量的用户在应用用获得数据库的连接后，等待前一个用户更新完库表记录后释放锁，让下一个用户进入在扣减。</p>
+<p>这样随着用户参与量的增加，就会有非常多的用户处于等待状态，而等待的用户是持久数据库的连接的，这个连接资源非常宝贵，你占用了应用中其他的请求就进不来，最终导致一个请求要几分钟才能得到响应。【前台的用户越着急，越疯狂点击，直至越来越卡到崩溃】</p>
+<p>所以，我们需要把这个扣减的动作放到缓存里</p>
+<ol>
+<li>decr扣减库存</li>
+<li>使用setnx加锁兜底，防止超卖【decr是原子操作，正常情况是不会有问题的，但是可能有情况，运营手动修改库存】</li>
+<li>同时将扣减动作放入MQ，缓慢修改mysql库存</li>
+</ol>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628174750154.png" alt="image-20240628174750154" style="zoom: 50%;" />
+
+<h2 id="串联抽奖规则"><a href="#串联抽奖规则" class="headerlink" title="串联抽奖规则"></a>串联抽奖规则</h2><p>至此，我们就可以实现一个基本的抽奖流程</p>
+<ul>
+<li>输入：用户id，活动id</li>
+<li>执行抽奖（包含相关抽奖过滤）</li>
+<li>输出：奖品</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628204228690.png" alt="image-20240628204228690"></p>
+<h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><ol>
+<li>策略装配，将策略信息装配到缓存中；&#x2F;api&#x2F;v1&#x2F;raffle&#x2F;strategy_armory</li>
+<li>查询奖品列表；&#x2F;api&#x2F;v1&#x2F;raffle&#x2F;query_raffle_award_list</li>
+<li>随机抽奖接口；&#x2F;api&#x2F;v1&#x2F;raffle&#x2F;random_raffle</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/market/market3/" class="post-title-link" itemprop="url">【开发】营销抽奖系统开发记录3 - Domain1_抽奖策略 库表设计</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="抽奖策略-–-领域"><a href="#抽奖策略-–-领域" class="headerlink" title="抽奖策略 – 领域"></a>抽奖策略 – 领域</h2><p>“抽奖策略”领域，当用户点击抽奖按钮，后台如何计算用户该拿到什么奖品。</p>
+<p>最简单的：不同的奖品定义了不同的概率，我们取这个区间的随机数，定位到奖品。</p>
+<p>再复杂一点：增加抽奖规则，例如10连抽会有保底，黑号了抽不到奖</p>
+<p>考虑抽奖前、后需要执行的策略如下</p>
+<ol>
+<li>用户黑名单</li>
+<li>用户积分权重（不同权重给到不同奖品）</li>
+<li>库存是否满足</li>
+<li>用户抽奖次数（某些奖品只有用户达到抽奖次数才会给）</li>
+<li>兜底奖品（不管怎么样至少会给一点积分）</li>
+</ol>
+<h2 id="库表"><a href="#库表" class="headerlink" title="库表"></a>库表</h2><p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240627222455179.png" alt="image-20240627222455179"></p>
+<p>Strategy</p>
+<ul>
+<li>策略id</li>
+</ul>
+<p>Award</p>
+<ul>
+<li>奖品id</li>
+</ul>
+<p>Strategy_rule</p>
+<ul>
+<li>策略id</li>
+<li>规则类型</li>
+<li>规则值</li>
+</ul>
+<p>Strategy_award</p>
+<ul>
+<li>策略id</li>
+<li>奖品id</li>
+<li>规则树模型</li>
+<li>概率</li>
+<li>总库存</li>
+<li>剩余库存</li>
+</ul>
+<p>rule_tree&#x2F;rule_tree_node&#x2F;rule_tree_line</p>
+<ul>
+<li>根节点&#x2F;每个节点&#x2F;每条边</li>
+<li>也就是每个节点都是一个规则，根据计算都会算出一个值，根据这个值来选择边</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/market/market2/" class="post-title-link" itemprop="url">【开发】营销抽奖系统开发记录2 - DDD vs MVC</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="贫血模型和充血模型"><a href="#贫血模型和充血模型" class="headerlink" title="贫血模型和充血模型"></a>贫血模型和充血模型</h2><p>关于DDD和MVC的讨论，总是离不开这两个模型。在软件开发中，尤其是</p>
+<h3 id="贫血模型"><a href="#贫血模型" class="headerlink" title="贫血模型"></a>贫血模型</h3><p>数据访问层主要包含数据，而不包含业务逻辑（也就是只做getter&#x2F;setter）。业务逻辑只在service层中出现。</p>
+<h3 id="充血模型"><a href="#充血模型" class="headerlink" title="充血模型"></a>充血模型</h3><p>将业务逻辑和数据操作放在同一层处理，这种设计模式可以更好地处理复杂的业务逻辑和数据操作，因为业务逻辑和数据操作在同一层处理，可以减少代码的冗余和提高代码的复用性。</p>
+<h2 id="为什么选DDD，比起MVC好在哪里"><a href="#为什么选DDD，比起MVC好在哪里" class="headerlink" title="为什么选DDD，比起MVC好在哪里"></a>为什么选DDD，比起MVC好在哪里</h2><p>下图，展示了MVC这种贫血对象<strong>腐化</strong>的根本，就是<strong>对象、服务、组件的交叉混乱</strong>使用。</p>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240625173423002.png" alt="image-20240625173423002"></p>
+<h3 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h3><p>首先对于MVC而言：</p>
+<ol>
+<li>一个dao层操作数据库</li>
+<li>接着是domain层里的po、vo、enum这些贫血对象（贫血，也就是只有对象，没有操作的逻辑）。</li>
+<li>然后是service，http</li>
+</ol>
+<p>会产生什么问题？</p>
+<ol>
+<li>第一个service在domain里定义好了一个vo贫血对象， </li>
+<li>serivce里也经常会发生平行的调用，我要实现一个东西，发现另一个service实现好了，那么直接拿去用了</li>
+<li>不区分业务服务和基础功能</li>
+</ol>
+<p>总结一下，就是服务和服务，服务和对象之间，横向，外部，交叉怎么调用都行。很混乱，没有定义出一些约束和规范。因此能快速实现需求，但是对大项目的后期维护造成了困难。</p>
+<h3 id="DDD"><a href="#DDD" class="headerlink" title="DDD"></a>DDD</h3><p>所以，DDD相较于MVC最大的改变就是由<strong>贫血模型</strong>转变为<strong>充血模型</strong>，把你对应的仓储服务、对象、服务都写到你自己的分包模块下。你要修改，就改自己领域模块下的，不能改别人的。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
 
 </div>
   </main>
@@ -436,7 +1187,7 @@
 
   <div class="copyright">
     &copy; 
-    <span itemprop="copyrightYear">2024</span>
+    <span itemprop="copyrightYear">2022 - 2024</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>

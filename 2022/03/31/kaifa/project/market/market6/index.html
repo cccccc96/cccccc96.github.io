@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="奖品 - 领域一整个抽奖过程先从活动账户额度充值、活动参与、抽奖执行【策略】，之后就是中奖记录写入和后续的发奖。 所以奖品领域主要管理中奖记录写入和后续的发奖，当然还有奖品库存扣减、奖品列表查询等等。   核心功能 - saveUserAwardRecord输入：奖品信息（已经执行完抽奖策略，得到了应得的奖品） 1234567891011121314151617181920212223242526">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【开发】营销抽奖系统开发记录6 - Domain3_奖品">
+<meta property="og:url" content="http://example.com/2022/03/31/kaifa/project/market/market6/index.html">
+<meta property="og:site_name" content="czh的学习小站">
+<meta property="og:description" content="奖品 - 领域一整个抽奖过程先从活动账户额度充值、活动参与、抽奖执行【策略】，之后就是中奖记录写入和后续的发奖。 所以奖品领域主要管理中奖记录写入和后续的发奖，当然还有奖品库存扣减、奖品列表查询等等。   核心功能 - saveUserAwardRecord输入：奖品信息（已经执行完抽奖策略，得到了应得的奖品） 1234567891011121314151617181920212223242526">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240701143126949.png">
+<meta property="article:published_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:modified_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:author" content="蔡正海">
+<meta property="article:tag" content="开发">
+<meta property="article:tag" content="营销抽奖项目">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240701143126949.png">
+
+
+<link rel="canonical" href="http://example.com/2022/03/31/kaifa/project/market/market6/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/03/31/kaifa/project/market/market6/","path":"2022/03/31/kaifa/project/market/market6/","title":"【开发】营销抽奖系统开发记录6 - Domain3_奖品"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【开发】营销抽奖系统开发记录6 - Domain3_奖品 | czh的学习小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">czh的学习小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">自律</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A5%96%E5%93%81-%E9%A2%86%E5%9F%9F"><span class="nav-number">1.</span> <span class="nav-text">奖品 - 领域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD-saveUserAwardRecord"><span class="nav-number">2.</span> <span class="nav-text">核心功能 - saveUserAwardRecord</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蔡正海"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">蔡正海</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【开发】营销抽奖系统开发记录6 - Domain3_奖品 | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【开发】营销抽奖系统开发记录6 - Domain3_奖品
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="奖品-领域"><a href="#奖品-领域" class="headerlink" title="奖品 - 领域"></a>奖品 - 领域</h2><p>一整个抽奖过程先从活动账户额度充值、活动参与、抽奖执行【策略】，之后就是<strong>中奖记录写入和后续的发奖</strong>。</p>
+<p>所以奖品领域主要管理<strong>中奖记录写入和后续的发奖</strong>，当然还有奖品库存扣减、奖品列表查询等等。</p>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240701143126949.png" alt="image-20240701143126949" style="zoom:50%;" />
+
+<h2 id="核心功能-saveUserAwardRecord"><a href="#核心功能-saveUserAwardRecord" class="headerlink" title="核心功能 - saveUserAwardRecord"></a>核心功能 - saveUserAwardRecord</h2><p>输入：奖品信息（已经执行完抽奖策略，得到了应得的奖品）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">        dbRouter.doRouter(userId);</span><br><span class="line">        transactionTemplate.execute(status -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">// 写入记录</span></span><br><span class="line">                userAwardRecordDao.insert(userAwardRecord);</span><br><span class="line">                <span class="comment">// 写入任务</span></span><br><span class="line">                taskDao.insert(task);</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (DuplicateKeyException e) &#123;</span><br><span class="line">                status.setRollbackOnly();</span><br><span class="line">                log.error(<span class="string">&quot;写入中奖记录，唯一索引冲突 userId: &#123;&#125; activityId: &#123;&#125; awardId: &#123;&#125;&quot;</span>, userId, activityId, awardId, e);</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">AppException</span>(ResponseCode.INDEX_DUP.getCode(), e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        dbRouter.clear();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 发送消息【在事务外执行，如果失败还有任务补偿】</span></span><br><span class="line">        eventPublisher.publish(task.getTopic(), task.getMessage());</span><br><span class="line">        <span class="comment">// 更新数据库记录，task 任务表</span></span><br><span class="line">        taskDao.updateTaskSendMessageCompleted(task);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        log.error(<span class="string">&quot;写入中奖记录，发送MQ消息失败 userId: &#123;&#125; topic: &#123;&#125;&quot;</span>, userId, task.getTopic());</span><br><span class="line">        taskDao.updateTaskSendMessageFail(task);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>奖品记录和任务是一个事务下提交，提交完事务以后，顺序的执行发送奖品的 MQ 消息，消息发送完成后更新数据库记录。</li>
+<li>MQ部分需要保证消费成功，在 SendMessageTaskJob 任务补偿中会扫描库表的 task 表来发送 MQ 消息。</li>
+</ol>
+<p>消息监听（发奖的解藕）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">listener</span><span class="params">(String message)</span> &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    log.info(<span class="string">&quot;监听用户奖品发送消息，发奖开始 topic: &#123;&#125; message: &#123;&#125;&quot;</span>, topic, message);</span><br><span class="line">    BaseEvent.EventMessage&lt;SendAwardMessageEvent.SendAwardMessage&gt; eventMessage = JSON.parseObject(message, <span class="keyword">new</span> <span class="title class_">TypeReference</span>&lt;BaseEvent.EventMessage&lt;SendAwardMessageEvent.SendAwardMessage&gt;&gt;() &#123;</span><br><span class="line">    &#125;.getType());</span><br><span class="line">    SendAwardMessageEvent.<span class="type">SendAwardMessage</span> <span class="variable">sendAwardMessage</span> <span class="operator">=</span> eventMessage.getData();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 发放奖品</span></span><br><span class="line">    <span class="type">DistributeAwardEntity</span> <span class="variable">distributeAwardEntity</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DistributeAwardEntity</span>();</span><br><span class="line">    distributeAwardEntity.setUserId(sendAwardMessage.getUserId());</span><br><span class="line">    distributeAwardEntity.setOrderId(sendAwardMessage.getOrderId());</span><br><span class="line">    distributeAwardEntity.setAwardId(sendAwardMessage.getAwardId());</span><br><span class="line">    distributeAwardEntity.setAwardConfig(sendAwardMessage.getAwardConfig());</span><br><span class="line">    awardService.distributeAward(distributeAwardEntity);</span><br><span class="line"></span><br><span class="line">    log.info(<span class="string">&quot;监听用户奖品发送消息，发奖完成 topic: &#123;&#125; message: &#123;&#125;&quot;</span>, topic, message);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    log.error(<span class="string">&quot;监听用户奖品发送消息，消费失败 topic: &#123;&#125; message: &#123;&#125;&quot;</span>, topic, message);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>定时任务扫描task表，重新发送MQ消息，确保MQ消息消费成功</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">exec</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 获取分库数量</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">dbCount</span> <span class="operator">=</span> dbRouter.dbCount();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 逐个库扫描表【每个库一个任务表】</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">dbIdx</span> <span class="operator">=</span> <span class="number">1</span>; dbIdx &lt;= dbCount; dbIdx++) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">finalDbIdx</span> <span class="operator">=</span> dbIdx;</span><br><span class="line">            executor.execute(() -&gt; &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    dbRouter.setDBKey(finalDbIdx);</span><br><span class="line">                    dbRouter.setTBKey(<span class="number">0</span>);</span><br><span class="line">                    List&lt;TaskEntity&gt; taskEntities = taskService.queryNoSendMessageTaskList();</span><br><span class="line">                    <span class="keyword">if</span> (taskEntities.isEmpty()) <span class="keyword">return</span>;</span><br><span class="line">                    <span class="comment">// 发送MQ消息</span></span><br><span class="line">                    <span class="keyword">for</span> (TaskEntity taskEntity : taskEntities) &#123;</span><br><span class="line">                        executor.execute(() -&gt; &#123;</span><br><span class="line">                            <span class="keyword">try</span> &#123;</span><br><span class="line">                                taskService.sendMessage(taskEntity);</span><br><span class="line">                                taskService.updateTaskSendMessageCompleted(taskEntity.getUserId(), taskEntity.getMessageId());</span><br><span class="line">                            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                                taskService.updateTaskSendMessageFail(taskEntity.getUserId(), taskEntity.getMessageId());</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    dbRouter.clear();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        log.error(<span class="string">&quot;定时任务，扫描MQ任务表发送消息失败。&quot;</span>, e);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        dbRouter.clear();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BC%80%E5%8F%91/" rel="tag"># 开发</a>
+              <a href="/tags/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96%E9%A1%B9%E7%9B%AE/" rel="tag"># 营销抽奖项目</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/project/market/market5/" rel="prev" title="【开发】营销抽奖系统开发记录5 - Domain2_抽奖活动">
+                  <i class="fa fa-angle-left"></i> 【开发】营销抽奖系统开发记录5 - Domain2_抽奖活动
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/project/market/market3/" rel="next" title="【开发】营销抽奖系统开发记录3 - Domain1_抽奖策略 库表设计">
+                  【开发】营销抽奖系统开发记录3 - Domain1_抽奖策略 库表设计 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2022 - 2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蔡正海</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="整体结构引言目前的大模型不管是chatgpt，还是国内的类似kimi都需要开发一个系统界面，便于用户的使用。 AI问答助手应该实现两个核心逻辑：一个是各类大模型的对接；一个是用户的聊天系统，包含用户登陆、鉴权。 用户登陆鉴权我们先处理第一步，用户如何进行登陆鉴权。我们选择通过微信公众号验证码的方式登陆。 第一步，公众号接入要用公众号验证码的方式登陆，我们首先得从公众号拿到验证码。公众号的配置和实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【开发】AI问答助手项目记录1 - 用户登陆鉴权">
+<meta property="og:url" content="http://example.com/2022/03/31/kaifa/project/openai/openai1/index.html">
+<meta property="og:site_name" content="czh的学习小站">
+<meta property="og:description" content="整体结构引言目前的大模型不管是chatgpt，还是国内的类似kimi都需要开发一个系统界面，便于用户的使用。 AI问答助手应该实现两个核心逻辑：一个是各类大模型的对接；一个是用户的聊天系统，包含用户登陆、鉴权。 用户登陆鉴权我们先处理第一步，用户如何进行登陆鉴权。我们选择通过微信公众号验证码的方式登陆。 第一步，公众号接入要用公众号验证码的方式登陆，我们首先得从公众号拿到验证码。公众号的配置和实现">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240703233559214.png">
+<meta property="article:published_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:modified_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:author" content="蔡正海">
+<meta property="article:tag" content="开发">
+<meta property="article:tag" content="AI问答助手">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240703233559214.png">
+
+
+<link rel="canonical" href="http://example.com/2022/03/31/kaifa/project/openai/openai1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/03/31/kaifa/project/openai/openai1/","path":"2022/03/31/kaifa/project/openai/openai1/","title":"【开发】AI问答助手项目记录1 - 用户登陆鉴权"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【开发】AI问答助手项目记录1 - 用户登陆鉴权 | czh的学习小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">czh的学习小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">自律</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">整体结构引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E7%99%BB%E9%99%86%E9%89%B4%E6%9D%83"><span class="nav-number">2.</span> <span class="nav-text">用户登陆鉴权</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%8C%E5%85%AC%E4%BC%97%E5%8F%B7%E6%8E%A5%E5%85%A5"><span class="nav-number">2.1.</span> <span class="nav-text">第一步，公众号接入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AA%8C%E7%AD%BE"><span class="nav-number">2.1.1.</span> <span class="nav-text">验签</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E8%AF%B7%E6%B1%82%EF%BC%88%E5%A4%84%E7%90%86%E9%AA%8C%E8%AF%81%E7%A0%81%EF%BC%89"><span class="nav-number">2.1.2.</span> <span class="nav-text">消息请求（处理验证码）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%8C%E7%94%A8%E6%88%B7%E6%8B%BF%E5%88%B0%E9%AA%8C%E8%AF%81%E7%A0%81%E5%90%8E%E8%BE%93%E5%85%A5"><span class="nav-number">3.</span> <span class="nav-text">第二步，用户拿到验证码后输入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Token%E5%92%8Ccookie%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%88%E5%BE%85%E7%9C%8B%EF%BC%89"><span class="nav-number">4.</span> <span class="nav-text">Token和cookie的区别（待看）</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蔡正海"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">蔡正海</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/openai/openai1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【开发】AI问答助手项目记录1 - 用户登陆鉴权 | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【开发】AI问答助手项目记录1 - 用户登陆鉴权
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/AI%E9%97%AE%E7%AD%94%E5%8A%A9%E6%89%8B/" itemprop="url" rel="index"><span itemprop="name">AI问答助手</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="整体结构引言"><a href="#整体结构引言" class="headerlink" title="整体结构引言"></a>整体结构引言</h2><p>目前的大模型不管是chatgpt，还是国内的类似kimi都需要开发一个系统界面，便于用户的使用。</p>
+<p>AI问答助手应该实现两个核心逻辑：一个是各类大模型的对接；一个是用户的聊天系统，包含用户登陆、鉴权。</p>
+<h2 id="用户登陆鉴权"><a href="#用户登陆鉴权" class="headerlink" title="用户登陆鉴权"></a>用户登陆鉴权</h2><p>我们先处理第一步，用户如何进行登陆鉴权。我们选择通过微信公众号验证码的方式登陆。</p>
+<h3 id="第一步，公众号接入"><a href="#第一步，公众号接入" class="headerlink" title="第一步，公众号接入"></a>第一步，公众号接入</h3><p>要用公众号验证码的方式登陆，我们首先得从公众号拿到验证码。公众号的配置和实现还是比较固定的：验签和请求应答。（当然，别忘了在公众号官网的配置页面里把请求地址设置好）</p>
+<h4 id="验签"><a href="#验签" class="headerlink" title="验签"></a>验签</h4><p>这个流程是固定的，网上直接找份代码就行。其实就是</p>
+<ol>
+<li>公众号端传来的参数：时间戳、随机数、签名。</li>
+<li>将时间戳、随机数、和本机保存的token一起做一个SHA-1</li>
+<li>最后和签名比较</li>
+</ol>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240703233559214.png" alt="image-20240703233559214" style="zoom:50%;" />
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">@GetMapping(produces = &quot;text/plain;charset=utf-8&quot;)</span><br><span class="line">public String validate(@PathVariable String appid,</span><br><span class="line">                       @RequestParam(value = &quot;signature&quot;, required = false) String signature,</span><br><span class="line">                       @RequestParam(value = &quot;timestamp&quot;, required = false) String timestamp,</span><br><span class="line">                       @RequestParam(value = &quot;nonce&quot;, required = false) String nonce,</span><br><span class="line">                       @RequestParam(value = &quot;echostr&quot;, required = false) String echostr) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        log.info(&quot;微信公众号验签信息&#123;&#125;开始 [&#123;&#125;, &#123;&#125;, &#123;&#125;, &#123;&#125;]&quot;, appid, signature, timestamp, nonce, echostr);</span><br><span class="line">        if (StringUtils.isAnyBlank(signature, timestamp, nonce, echostr)) &#123;</span><br><span class="line">            throw new IllegalArgumentException(&quot;请求参数非法，请核实!&quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        boolean check = weiXinValidateService.checkSign(signature, timestamp, nonce);</span><br><span class="line">        log.info(&quot;微信公众号验签信息&#123;&#125;完成 check：&#123;&#125;&quot;, appid, check);</span><br><span class="line">        if (!check) &#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">        return echostr;</span><br><span class="line">    &#125; catch (Exception e) &#123;</span><br><span class="line">        log.error(&quot;微信公众号验签信息&#123;&#125;失败 [&#123;&#125;, &#123;&#125;, &#123;&#125;, &#123;&#125;]&quot;, appid, signature, timestamp, nonce, echostr, e);</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="消息请求（处理验证码）"><a href="#消息请求（处理验证码）" class="headerlink" title="消息请求（处理验证码）"></a>消息请求（处理验证码）</h4><p>用户发一个消息，我们要生成一个随机数（验证码）返回给用户的同时，保存进Redis。用于后续用户在网页端输入验证码，我们要进行确认，验证码是否有效。</p>
+<p>当我们接收到公众号发来的请求</p>
+<ul>
+<li>生成验证码</li>
+<li>openid和验证码 进行缓存</li>
+<li>返回给公众号验证码</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生成验证码</span></span><br><span class="line"><span class="type">String</span> <span class="variable">code</span> <span class="operator">=</span> repository.genCode(userBehaviorMessageEntity.getOpenId());</span><br><span class="line"></span><br><span class="line"><span class="comment">// 反馈信息[文本]</span></span><br><span class="line"><span class="type">MessageTextEntity</span> <span class="variable">res</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MessageTextEntity</span>();</span><br><span class="line">res.setToUserName(userBehaviorMessageEntity.getOpenId());</span><br><span class="line">res.setFromUserName(originalId);</span><br><span class="line">res.setCreateTime(String.valueOf(System.currentTimeMillis() / <span class="number">1000L</span>));</span><br><span class="line">res.setMsgType(<span class="string">&quot;text&quot;</span>);</span><br><span class="line">res.setContent(String.format(<span class="string">&quot;您的验证码为：%s 有效期%d分钟！&quot;</span>, code, <span class="number">3</span>));</span><br><span class="line"><span class="keyword">return</span> XmlUtil.beanToXml(res);</span><br></pre></td></tr></table></figure>
+
+<p>（验证码防重）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">public String genCode(String openId) &#123;</span><br><span class="line">        // 获取值</span><br><span class="line">        String isExitCode = redisService.getValue(Key + &quot;_&quot; + openId);</span><br><span class="line">        if (StringUtils.isNotBlank(isExitCode)) return isExitCode;</span><br><span class="line">        // 生成值</span><br><span class="line">        RLock lock = redisService.getLock(Key);</span><br><span class="line">        try &#123;</span><br><span class="line">            lock.lock(15, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line">            String code = RandomStringUtils.randomNumeric(4);</span><br><span class="line">            // 防重校验&amp;重新生成</span><br><span class="line">            for (int i = 0; i &lt; 10 &amp;&amp; StringUtils.isNotBlank(redisService.getValue(Key + &quot;_&quot; + code)); i++) &#123;</span><br><span class="line">                if (i &lt; 3) &#123;</span><br><span class="line">                    code = RandomStringUtils.randomNumeric(4);</span><br><span class="line">                &#125; else if (i &lt; 5) &#123;</span><br><span class="line">                    code = RandomStringUtils.randomNumeric(5);</span><br><span class="line">                &#125; else if (i &lt; 9) &#123;</span><br><span class="line">                    code = RandomStringUtils.randomNumeric(6);</span><br><span class="line">                    log.warn(&quot;验证码重复，生成6位字符串验证码 &#123;&#125; &#123;&#125;&quot;, openId, code);</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    return &quot;您的验证码获取失败，请重新回复405获取。&quot;;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            // 存储值【3分钟有效期】</span><br><span class="line">            redisService.setValue(Key + &quot;_&quot; + code, openId, 3 * 60 * 1000);</span><br><span class="line">            redisService.setValue(Key + &quot;_&quot; + openId, code);</span><br><span class="line"></span><br><span class="line">            return code;</span><br><span class="line">        &#125; finally &#123;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="第二步，用户拿到验证码后输入"><a href="#第二步，用户拿到验证码后输入" class="headerlink" title="第二步，用户拿到验证码后输入"></a>第二步，用户拿到验证码后输入</h2><p>用户输入验证码，点击确认，发送一个auth请求，我们拿到请求后，就可以根据验证码进行确认。</p>
+<ul>
+<li>检查验证码（是否在缓存中）</li>
+<li>jwt生成token并返回（根据openid生成token）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> AuthStateEntity <span class="title function_">doLogin</span><span class="params">(String code)</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 校验判断，非成功则直接返回</span></span><br><span class="line">    <span class="type">AuthStateEntity</span> <span class="variable">authStateEntity</span> <span class="operator">=</span> <span class="built_in">this</span>.checkCode(code);</span><br><span class="line">    <span class="keyword">if</span> (!authStateEntity.getCode().equals(AuthTypeVO.A0000.getCode())) &#123;</span><br><span class="line">        <span class="keyword">return</span> authStateEntity;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 获取 Token 并返回</span></span><br><span class="line">    Map&lt;String, Object&gt; chaim = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">    chaim.put(<span class="string">&quot;openId&quot;</span>, authStateEntity.getOpenId());</span><br><span class="line">    <span class="type">String</span> <span class="variable">token</span> <span class="operator">=</span> encode(authStateEntity.getOpenId(), <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span> * <span class="number">1000</span>, chaim);</span><br><span class="line">    authStateEntity.setToken(token);</span><br><span class="line">    log.info(<span class="string">&quot;encode token : &#123;&#125;&quot;</span>,token);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> authStateEntity;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>验证码去缓存中确认</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> AuthStateEntity <span class="title function_">checkCode</span><span class="params">(String code)</span> &#123;</span><br><span class="line">    log.info(<span class="string">&quot;codeCache ： &#123;&#125;&quot;</span>, JSON.toJSONString(codeCache.asMap()));</span><br><span class="line">    <span class="comment">// 获取验证码校验</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">openId</span> <span class="operator">=</span> codeCache.getIfPresent(code);</span><br><span class="line">    <span class="keyword">if</span> (StringUtils.isBlank(openId))&#123;</span><br><span class="line">        log.info(<span class="string">&quot;鉴权，用户输入的验证码不存在 &#123;&#125;&quot;</span>, code);</span><br><span class="line">        <span class="keyword">return</span> AuthStateEntity.builder()</span><br><span class="line">                .code(AuthTypeVO.A0001.getCode())</span><br><span class="line">                .info(AuthTypeVO.A0001.getInfo())</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">     <span class="comment">// 移除缓存Key值</span></span><br><span class="line">    codeCache.invalidate(openId);</span><br><span class="line">    codeCache.invalidate(code);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 验证码校验成功</span></span><br><span class="line">    <span class="keyword">return</span> AuthStateEntity.builder()</span><br><span class="line">            .code(AuthTypeVO.A0000.getCode())</span><br><span class="line">            .info(AuthTypeVO.A0000.getInfo())</span><br><span class="line">            .openId(openId)</span><br><span class="line">            .build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>jwt 编码（用openid进行编码）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 这里就是产生jwt字符串的地方</span></span><br><span class="line"><span class="comment"> * jwt字符串包括三个部分</span></span><br><span class="line"><span class="comment"> * 1. header</span></span><br><span class="line"><span class="comment"> * -当前字符串的类型，一般都是“JWT”</span></span><br><span class="line"><span class="comment"> * -哪种算法加密，“HS256”或者其他的加密算法</span></span><br><span class="line"><span class="comment"> * 所以一般都是固定的，没有什么变化</span></span><br><span class="line"><span class="comment"> * 2. payload</span></span><br><span class="line"><span class="comment"> * 一般有四个最常见的标准字段（下面有）</span></span><br><span class="line"><span class="comment"> * iat：签发时间，也就是这个jwt什么时候生成的</span></span><br><span class="line"><span class="comment"> * jti：JWT的唯一标识</span></span><br><span class="line"><span class="comment"> * iss：签发人，一般都是username或者userId</span></span><br><span class="line"><span class="comment"> * exp：过期时间</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> String <span class="title function_">encode</span><span class="params">(String issuer, <span class="type">long</span> ttlMillis, Map&lt;String, Object&gt; claims)</span> &#123;</span><br><span class="line">    <span class="comment">// iss签发人，ttlMillis生存时间，claims是指还想要在jwt中存储的一些非隐私信息</span></span><br><span class="line">    <span class="keyword">if</span> (claims == <span class="literal">null</span>) &#123;</span><br><span class="line">        claims = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">long</span> <span class="variable">nowMillis</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">    <span class="type">JwtBuilder</span> <span class="variable">builder</span> <span class="operator">=</span> Jwts.builder()</span><br><span class="line">            <span class="comment">// 荷载部分</span></span><br><span class="line">            .setClaims(claims)</span><br><span class="line">            <span class="comment">// 这个是JWT的唯一标识，一般设置成唯一的，这个方法可以生成唯一标识</span></span><br><span class="line">            .setId(UUID.randomUUID().toString())<span class="comment">//2.</span></span><br><span class="line">            <span class="comment">// 签发时间</span></span><br><span class="line">            .setIssuedAt(<span class="keyword">new</span> <span class="title class_">Date</span>(nowMillis))</span><br><span class="line">            <span class="comment">// 签发人，也就是JWT是给谁的（逻辑上一般都是username或者userId）</span></span><br><span class="line">            .setSubject(issuer)</span><br><span class="line">            .signWith(SignatureAlgorithm.HS256, base64EncodedSecretKey);<span class="comment">//这个地方是生成jwt使用的算法和秘钥</span></span><br><span class="line">    <span class="keyword">if</span> (ttlMillis &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">expMillis</span> <span class="operator">=</span> nowMillis + ttlMillis;</span><br><span class="line">        <span class="type">Date</span> <span class="variable">exp</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>(expMillis);<span class="comment">// 4. 过期时间，这个也是使用毫秒生成的，使用当前时间+前面传入的持续时间生成</span></span><br><span class="line">        builder.setExpiration(exp);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> builder.compact();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Token和cookie的区别（待看）"><a href="#Token和cookie的区别（待看）" class="headerlink" title="Token和cookie的区别（待看）"></a>Token和cookie的区别（待看）</h2>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BC%80%E5%8F%91/" rel="tag"># 开发</a>
+              <a href="/tags/AI%E9%97%AE%E7%AD%94%E5%8A%A9%E6%89%8B/" rel="tag"># AI问答助手</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/project/openai/openai10/" rel="prev" title="【开发】AI问答助手项目记录10 - 简历">
+                  <i class="fa fa-angle-left"></i> 【开发】AI问答助手项目记录10 - 简历
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/project/market/market9/" rel="next" title="【开发】营销抽奖系统开发记录9 - 最终核心api">
+                  【开发】营销抽奖系统开发记录9 - 最终核心api <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2022 - 2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蔡正海</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="总流程虽然线程池的参数配置有一些规范，但实际场景中，线程池的参数并不好一次就配置好。同时需要做监控处理，知道整个线程的消耗情况，所以需要动态线程池。 核心流程如下：  线程池核心信息的获取，核心线程数、最大线程数、活跃线程数、队列类型、队列任务数、队列剩余可用任务数 设计 Redis 版本的注册中心，通过 SDK 上报方式到 Redis 注册中心，做统一的管理，让各个接入动态线程池的组件都能统一管">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【开发】动态线程池组件记录2 - 动态线程池的实现">
+<meta property="og:url" content="http://example.com/2022/03/31/kaifa/project/Dynamic-thread-pool/market2/index.html">
+<meta property="og:site_name" content="czh的学习小站">
+<meta property="og:description" content="总流程虽然线程池的参数配置有一些规范，但实际场景中，线程池的参数并不好一次就配置好。同时需要做监控处理，知道整个线程的消耗情况，所以需要动态线程池。 核心流程如下：  线程池核心信息的获取，核心线程数、最大线程数、活跃线程数、队列类型、队列任务数、队列剩余可用任务数 设计 Redis 版本的注册中心，通过 SDK 上报方式到 Redis 注册中心，做统一的管理，让各个接入动态线程池的组件都能统一管">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702173453723.png">
+<meta property="article:published_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:modified_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:author" content="蔡正海">
+<meta property="article:tag" content="开发">
+<meta property="article:tag" content="动态线程池组件">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702173453723.png">
+
+
+<link rel="canonical" href="http://example.com/2022/03/31/kaifa/project/Dynamic-thread-pool/market2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/03/31/kaifa/project/Dynamic-thread-pool/market2/","path":"2022/03/31/kaifa/project/Dynamic-thread-pool/market2/","title":"【开发】动态线程池组件记录2 - 动态线程池的实现"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【开发】动态线程池组件记录2 - 动态线程池的实现 | czh的学习小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">czh的学习小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">自律</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">总流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B1-%E5%A6%82%E4%BD%95%E9%87%87%E9%9B%86%E5%BA%94%E7%94%A8%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B%E6%B1%A0%E4%BF%A1%E6%81%AF"><span class="nav-number">1.1.</span> <span class="nav-text">流程1 如何采集应用中的线程池信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B2-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%95%B0%E6%8D%AE%E4%B8%8A%E6%8A%A5"><span class="nav-number">1.2.</span> <span class="nav-text">流程2 线程池数据上报</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B3-%E8%AE%A2%E9%98%85%E5%8F%91%E5%B8%83%E6%B6%88%E6%81%AF%EF%BC%8C%E5%8F%98%E6%9B%B4%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="nav-number">1.3.</span> <span class="nav-text">流程3 订阅发布消息，变更线程池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B4-%E7%AE%A1%E7%90%86%E7%AB%AF%E5%B7%A5%E7%A8%8B%E6%90%AD%E5%BB%BA"><span class="nav-number">1.4.</span> <span class="nav-text">流程4 管理端工程搭建</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蔡正海"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">蔡正海</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/Dynamic-thread-pool/market2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【开发】动态线程池组件记录2 - 动态线程池的实现 | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【开发】动态线程池组件记录2 - 动态线程池的实现
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">动态线程池组件</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="总流程"><a href="#总流程" class="headerlink" title="总流程"></a>总流程</h1><p>虽然线程池的参数配置有一些规范，但实际场景中，线程池的参数并不好一次就配置好。同时需要做监控处理，知道整个线程的消耗情况，所以需要动态线程池。</p>
+<p>核心流程如下：</p>
+<ul>
+<li>线程池核心信息的获取，核心线程数、最大线程数、活跃线程数、队列类型、队列任务数、队列剩余可用任务数</li>
+<li>设计 Redis 版本的注册中心，通过 SDK 上报方式到 Redis 注册中心，做统一的管理，让各个接入动态线程池的组件都能统一管理。</li>
+<li>通过Redis 的发布订阅能力，通过推送指定的主题，让对应的应用上的 sdk 监听和处置线程池。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702173453723.png" alt="image-20240702173453723"></p>
+<h2 id="流程1-如何采集应用中的线程池信息"><a href="#流程1-如何采集应用中的线程池信息" class="headerlink" title="流程1 如何采集应用中的线程池信息"></a>流程1 如何采集应用中的线程池信息</h2><p>首先，我们需要一个接口，能实现线程池的配置查询和配置更新</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IDynamicThreadPoolService</span> &#123;</span><br><span class="line"></span><br><span class="line">    List&lt;ThreadPoolConfigEntity&gt; <span class="title function_">queryThreadPoolList</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    ThreadPoolConfigEntity <span class="title function_">queryThreadPoolConfigByName</span><span class="params">(String threadPoolName)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">updateThreadPoolConfig</span><span class="params">(ThreadPoolConfigEntity threadPoolConfigEntity)</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其次，我们需要构建一个bean对象将上述接口注入进应用中。</p>
+<ul>
+<li>拿到应用的applicationContext和所有threadPoolExecutor</li>
+<li>构造DynamicThreadPoolService</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean(&quot;dynamicThreadPollService&quot;)</span></span><br><span class="line"><span class="keyword">public</span> DynamicThreadPoolService <span class="title function_">dynamicThreadPollService</span><span class="params">(ApplicationContext applicationContext, Map&lt;String, ThreadPoolExecutor&gt; threadPoolExecutorMap, RedissonClient redissonClient)</span> &#123;</span><br><span class="line">    applicationName = applicationContext.getEnvironment().getProperty(<span class="string">&quot;spring.application.name&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (StringUtils.isBlank(applicationName)) &#123;</span><br><span class="line">        applicationName = <span class="string">&quot;缺省的&quot;</span>;</span><br><span class="line">        logger.warn(<span class="string">&quot;动态线程池，启动提示。SpringBoot 应用未配置 spring.application.name 无法获取到应用名称！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取缓存数据，设置本地线程池配置</span></span><br><span class="line">    Set&lt;String&gt; threadPoolKeys = threadPoolExecutorMap.keySet();</span><br><span class="line">    <span class="keyword">for</span> (String threadPoolKey : threadPoolKeys) &#123;</span><br><span class="line">        <span class="type">ThreadPoolConfigEntity</span> <span class="variable">threadPoolConfigEntity</span> <span class="operator">=</span> redissonClient.&lt;ThreadPoolConfigEntity&gt;getBucket(RegistryEnumVO.THREAD_POOL_CONFIG_PARAMETER_LIST_KEY.getKey() + <span class="string">&quot;_&quot;</span> + applicationName + <span class="string">&quot;_&quot;</span> + threadPoolKey).get();</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> == threadPoolConfigEntity) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="type">ThreadPoolExecutor</span> <span class="variable">threadPoolExecutor</span> <span class="operator">=</span> threadPoolExecutorMap.get(threadPoolKey);</span><br><span class="line">        threadPoolExecutor.setCorePoolSize(threadPoolConfigEntity.getCorePoolSize());</span><br><span class="line">        threadPoolExecutor.setMaximumPoolSize(threadPoolConfigEntity.getMaximumPoolSize());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">DynamicThreadPoolService</span>(applicationName, threadPoolExecutorMap);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>启动自动配置 resources&#x2F;META-INF&#x2F;spring.factories（spi）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.czh.middleware.dynamic.thread.pool.sdk.config.DynamicThreadPoolAutoConfig</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="流程2-线程池数据上报"><a href="#流程2-线程池数据上报" class="headerlink" title="流程2 线程池数据上报"></a>流程2 线程池数据上报</h2><p>设置定时任务：线程池配置信息上报到Redis配置中心</p>
+<blockquote>
+<p>小bug：admin和组件里的涉及到redis解码，包名要保持一致</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">reportThreadPoolConfigParameter</span><span class="params">(ThreadPoolConfigEntity threadPoolConfigEntity)</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">cacheKey</span> <span class="operator">=</span> RegistryEnumVO.THREAD_POOL_CONFIG_PARAMETER_LIST_KEY.getKey() + <span class="string">&quot;_&quot;</span> + threadPoolConfigEntity.getAppName() + <span class="string">&quot;_&quot;</span> + threadPoolConfigEntity.getThreadPoolName();</span><br><span class="line">    RBucket&lt;ThreadPoolConfigEntity&gt; bucket = redissonClient.getBucket(cacheKey);</span><br><span class="line">    bucket.set(threadPoolConfigEntity, Duration.ofDays(<span class="number">30</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="流程3-订阅发布消息，变更线程池"><a href="#流程3-订阅发布消息，变更线程池" class="headerlink" title="流程3 订阅发布消息，变更线程池"></a>流程3 订阅发布消息，变更线程池</h2><p>监听消息，更新线程池配置，重新上报。</p>
+<p>具体的线程池更新，直接调用线程池的set函数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onMessage</span><span class="params">(CharSequence charSequence, ThreadPoolConfigEntity threadPoolConfigEntity)</span> &#123;</span><br><span class="line">    logger.info(<span class="string">&quot;动态线程池，调整线程池配置。线程池名称:&#123;&#125; 核心线程数:&#123;&#125; 最大线程数:&#123;&#125;&quot;</span>, threadPoolConfigEntity.getThreadPoolName(), threadPoolConfigEntity.getPoolSize(), threadPoolConfigEntity.getMaximumPoolSize());</span><br><span class="line">    dynamicThreadPoolService.updateThreadPoolConfig(threadPoolConfigEntity);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 更新后上报最新数据</span></span><br><span class="line">    List&lt;ThreadPoolConfigEntity&gt; threadPoolConfigEntities = dynamicThreadPoolService.queryThreadPoolList();</span><br><span class="line">    registry.reportThreadPool(threadPoolConfigEntities);</span><br><span class="line"></span><br><span class="line">    <span class="type">ThreadPoolConfigEntity</span> <span class="variable">threadPoolConfigEntityCurrent</span> <span class="operator">=</span> dynamicThreadPoolService.queryThreadPoolConfigByName(threadPoolConfigEntity.getThreadPoolName());</span><br><span class="line">    registry.reportThreadPoolConfigParameter(threadPoolConfigEntityCurrent);</span><br><span class="line">    logger.info(<span class="string">&quot;动态线程池，上报线程池配置：&#123;&#125;&quot;</span>, JSON.toJSONString(threadPoolConfigEntity));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="流程4-管理端工程搭建"><a href="#流程4-管理端工程搭建" class="headerlink" title="流程4 管理端工程搭建"></a>流程4 管理端工程搭建</h2><p>本质上，就是往数据中心发送一条更新线程池配置的消息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(value = &quot;update_thread_pool_config&quot;, method = RequestMethod.POST)</span><br><span class="line">public Response&lt;Boolean&gt; updateThreadPoolConfig(@RequestBody ThreadPoolConfigEntity request) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        log.info(&quot;修改线程池配置开始 &#123;&#125; &#123;&#125; &#123;&#125;&quot;, request.getAppName(), request.getThreadPoolName(), JSON.toJSONString(request));</span><br><span class="line">        RTopic topic = redissonClient.getTopic(&quot;DYNAMIC_THREAD_POOL_REDIS_TOPIC&quot; + &quot;_&quot; + request.getAppName());</span><br><span class="line">        topic.publish(request);</span><br><span class="line">        log.info(&quot;修改线程池配置完成 &#123;&#125; &#123;&#125;&quot;, request.getAppName(), request.getThreadPoolName());</span><br><span class="line">        return Response.&lt;Boolean&gt;builder()</span><br><span class="line">                .code(Response.Code.SUCCESS.getCode())</span><br><span class="line">                .info(Response.Code.SUCCESS.getInfo())</span><br><span class="line">                .data(true)</span><br><span class="line">                .build();</span><br><span class="line">    &#125; catch (Exception e) &#123;</span><br><span class="line">        log.error(&quot;修改线程池配置异常 &#123;&#125;&quot;, JSON.toJSONString(request), e);</span><br><span class="line">        return Response.&lt;Boolean&gt;builder()</span><br><span class="line">                .code(Response.Code.UN_ERROR.getCode())</span><br><span class="line">                .info(Response.Code.UN_ERROR.getInfo())</span><br><span class="line">                .data(false)</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BC%80%E5%8F%91/" rel="tag"># 开发</a>
+              <a href="/tags/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%BB%84%E4%BB%B6/" rel="tag"># 动态线程池组件</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/project/Dynamic-thread-pool/market3/" rel="prev" title="【开发】动态线程池组件记录3 - 简历">
+                  <i class="fa fa-angle-left"></i> 【开发】动态线程池组件记录3 - 简历
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/project/market/market7/" rel="next" title="【开发】营销抽奖系统开发记录7 - Domain4_返利">
+                  【开发】营销抽奖系统开发记录7 - Domain4_返利 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2022 - 2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蔡正海</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

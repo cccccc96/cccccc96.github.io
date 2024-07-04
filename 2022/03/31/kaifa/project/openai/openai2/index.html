@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="通过okhttp为大模型自己实现一个api涉及到的技术栈：okhttp3、Jackson   chatglm请求里的几个核心字段1234567891011121314151617181920212223242526&#x2F;** * 模型 *&#x2F;private Model model &#x3D; Model.GLM_3_5_TURBO;&#x2F;** * 请求参数 &#123;&quot;role&quot;: &amp;quot">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【开发】AI问答助手项目记录2 - 大模型api">
+<meta property="og:url" content="http://example.com/2022/03/31/kaifa/project/openai/openai2/index.html">
+<meta property="og:site_name" content="czh的学习小站">
+<meta property="og:description" content="通过okhttp为大模型自己实现一个api涉及到的技术栈：okhttp3、Jackson   chatglm请求里的几个核心字段1234567891011121314151617181920212223242526&#x2F;** * 模型 *&#x2F;private Model model &#x3D; Model.GLM_3_5_TURBO;&#x2F;** * 请求参数 &#123;&quot;role&quot;: &amp;quot">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240704115618698.png">
+<meta property="article:published_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:modified_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:author" content="蔡正海">
+<meta property="article:tag" content="开发">
+<meta property="article:tag" content="AI问答助手">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240704115618698.png">
+
+
+<link rel="canonical" href="http://example.com/2022/03/31/kaifa/project/openai/openai2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/03/31/kaifa/project/openai/openai2/","path":"2022/03/31/kaifa/project/openai/openai2/","title":"【开发】AI问答助手项目记录2 - 大模型api"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【开发】AI问答助手项目记录2 - 大模型api | czh的学习小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">czh的学习小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">自律</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E8%BF%87okhttp%E4%B8%BA%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%87%AA%E5%B7%B1%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AAapi"><span class="nav-number">1.</span> <span class="nav-text">通过okhttp为大模型自己实现一个api</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#chatglm%E8%AF%B7%E6%B1%82%E9%87%8C%E7%9A%84%E5%87%A0%E4%B8%AA%E6%A0%B8%E5%BF%83%E5%AD%97%E6%AE%B5"><span class="nav-number">2.</span> <span class="nav-text">chatglm请求里的几个核心字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">整体结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%A6%E6%88%AA%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">拦截器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9D%E6%8E%A5%E5%8F%A3-%E5%9F%BA%E4%BA%8Eeventsource%E7%9A%84%E5%93%8D%E5%BA%94"><span class="nav-number">5.</span> <span class="nav-text">会话接口 - 基于eventsource的响应</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蔡正海"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">蔡正海</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/openai/openai2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【开发】AI问答助手项目记录2 - 大模型api | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【开发】AI问答助手项目记录2 - 大模型api
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/AI%E9%97%AE%E7%AD%94%E5%8A%A9%E6%89%8B/" itemprop="url" rel="index"><span itemprop="name">AI问答助手</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="通过okhttp为大模型自己实现一个api"><a href="#通过okhttp为大模型自己实现一个api" class="headerlink" title="通过okhttp为大模型自己实现一个api"></a>通过okhttp为大模型自己实现一个api</h2><p>涉及到的技术栈：okhttp3、Jackson</p>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240704115618698.png" alt="image-20240704115618698" style="zoom: 50%;" />
+
+<h2 id="chatglm请求里的几个核心字段"><a href="#chatglm请求里的几个核心字段" class="headerlink" title="chatglm请求里的几个核心字段"></a>chatglm请求里的几个核心字段</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 模型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">Model</span> <span class="variable">model</span> <span class="operator">=</span> Model.GLM_3_5_TURBO;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 请求参数 &#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;你好&quot;&#125;</span></span><br><span class="line"><span class="comment"> * 24年1月发布的 GLM_3_5_TURBO、GLM_4 模型时新增</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> List&lt;Prompt&gt; messages;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 请求ID</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@JsonProperty(&quot;request_id&quot;)</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">String</span> <span class="variable">requestId</span> <span class="operator">=</span> String.format(<span class="string">&quot;czh-%d&quot;</span>, System.currentTimeMillis());</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * do_sample 为 true 时启用采样策略，do_sample 为 false 时采样策略 temperature、top_p 将不生效</span></span><br><span class="line"><span class="comment"> * 24年1月发布的 GLM_3_5_TURBO、GLM_4 模型时新增</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@JsonProperty(&quot;do_sample&quot;)</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">Boolean</span> <span class="variable">doSample</span> <span class="operator">=</span> <span class="literal">true</span>;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 使用同步调用时，此参数应当设置为 Fasle 或者省略。表示模型生成完所有内容后一次性返回所有内容。</span></span><br><span class="line"><span class="comment"> * 如果设置为 True，模型将通过标准 Event Stream ，逐块返回模型生成内容。Event Stream 结束时会返回一条data: [DONE]消息。</span></span><br><span class="line"><span class="comment"> * 24年1月发布的 GLM_3_5_TURBO、GLM_4 模型时新增</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">Boolean</span> <span class="variable">stream</span> <span class="operator">=</span> <span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h2><p>本质上，我们要开启一个openai会话，需要做以下几件事</p>
+<ol>
+<li>开启一个OkHttpClient<ol>
+<li>设置拦截器（因为要写入大模型token）</li>
+</ol>
+</li>
+<li>通过Retrofit封装OkHttp</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 开启 Http 客户端</span></span><br><span class="line"><span class="type">OkHttpClient</span> <span class="variable">okHttpClient</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OkHttpClient</span></span><br><span class="line">        .Builder()</span><br><span class="line">        .addInterceptor(httpLoggingInterceptor)</span><br><span class="line">        .addInterceptor(<span class="keyword">new</span> <span class="title class_">OpenAiHTTPInterceptor</span>(configuration))</span><br><span class="line">        .connectTimeout(configuration.getConnectTimeout(), TimeUnit.SECONDS)</span><br><span class="line">        .writeTimeout(configuration.getWriteTimeout(), TimeUnit.SECONDS)</span><br><span class="line">        .readTimeout(configuration.getReadTimeout(), TimeUnit.SECONDS)</span><br><span class="line">        .build();</span><br><span class="line"></span><br><span class="line">configuration.setOkHttpClient(okHttpClient);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 创建 API 服务</span></span><br><span class="line"><span class="type">IOpenAiApi</span> <span class="variable">openAiApi</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Retrofit</span>.Builder()</span><br><span class="line">        .baseUrl(configuration.getApiHost())</span><br><span class="line">        .client(okHttpClient)</span><br><span class="line">        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())</span><br><span class="line">        .addConverterFactory(JacksonConverterFactory.create())</span><br><span class="line">        .build().create(IOpenAiApi.class);</span><br><span class="line"></span><br><span class="line">configuration.setOpenAiApi(openAiApi);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 实例化执行器</span></span><br><span class="line">HashMap&lt;Model, Executor&gt; executorGroup = configuration.newExecutorGroup();</span><br></pre></td></tr></table></figure>
+
+<h2 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h2><p>实现okhttp3.Interceptor的拦截器。</p>
+<p>在用户调用sdk时拦截，并传入用户自定义的apikey</p>
+<p>也就是加上Authorization字段，这也是大模型通用的做法（对于这里的chatglm而言，我们还需要对apikey进行jwt编码）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="meta">@NotNull</span> Response <span class="title function_">intercept</span><span class="params">(Chain chain)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="comment">// 1. 获取原始 Request</span></span><br><span class="line">        <span class="type">Request</span> <span class="variable">original</span> <span class="operator">=</span> chain.request();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 构建请求</span></span><br><span class="line">        <span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> original.newBuilder()</span><br><span class="line">                .url(original.url())</span><br><span class="line">                .header(<span class="string">&quot;Authorization&quot;</span>, <span class="string">&quot;Bearer &quot;</span> + BearerTokenUtils.getToken(configuration.getApiKey(), configuration.getApiSecret()))</span><br><span class="line">                .header(<span class="string">&quot;Content-Type&quot;</span>, Configuration.JSON_CONTENT_TYPE)</span><br><span class="line">                .header(<span class="string">&quot;User-Agent&quot;</span>, Configuration.DEFAULT_USER_AGENT)</span><br><span class="line"><span class="comment">//                .header(&quot;Accept&quot;, null != original.header(&quot;Accept&quot;) ? original.header(&quot;Accept&quot;) : Configuration.SSE_CONTENT_TYPE)</span></span><br><span class="line">                .method(original.method(), original.body())</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. 返回执行结果</span></span><br><span class="line">        <span class="keyword">return</span> chain.proceed(request);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="会话接口-基于eventsource的响应"><a href="#会话接口-基于eventsource的响应" class="headerlink" title="会话接口 - 基于eventsource的响应"></a>会话接口 - 基于eventsource的响应</h2><p>使用eventsource进行流式传输，适用于长时间连接并接收实时更新的情况，接受一个请求对象和事件监听器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> EventSource.Factory factory;</span><br><span class="line"><span class="keyword">public</span> EventSource <span class="title function_">completions</span><span class="params">(ChatCompletionRequest chatCompletionRequest, EventSourceListener eventSourceListener)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    <span class="comment">// 构建请求信息</span></span><br><span class="line">    <span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Request</span>.Builder()</span><br><span class="line">            .url(configuration.getApiHost().concat(IOpenAiApi.v4))</span><br><span class="line">            .post(RequestBody.create(MediaType.parse(Configuration.JSON_CONTENT_TYPE), chatCompletionRequest.toString()))</span><br><span class="line">            .build();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回事件结果</span></span><br><span class="line">    <span class="keyword">return</span> factory.newEventSource(request, chatCompletionRequest.getIsCompatible() ? eventSourceListener(eventSourceListener) : eventSourceListener);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>示例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">openAiSession.completions(request, <span class="keyword">new</span> <span class="title class_">EventSourceListener</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onEvent</span><span class="params">(EventSource eventSource, <span class="meta">@Nullable</span> String id, <span class="meta">@Nullable</span> String type, String data)</span> &#123;</span><br><span class="line">                <span class="type">ChatCompletionResponse</span> <span class="variable">response</span> <span class="operator">=</span> JSON.parseObject(data, ChatCompletionResponse.class);</span><br><span class="line">                log.info(<span class="string">&quot;测试结果 onEvent czh：&#123;&#125;&quot;</span>, type);</span><br><span class="line">                log.info(<span class="string">&quot;测试结果 onEvent：&#123;&#125;&quot;</span>, response.getData());</span><br><span class="line">                <span class="comment">// type 消息类型，add 增量，finish 结束，error 错误，interrupted 中断</span></span><br><span class="line">                <span class="keyword">if</span> (EventType.finish.getCode().equals(type)) &#123;</span><br><span class="line">                    ChatCompletionResponse.<span class="type">Meta</span> <span class="variable">meta</span> <span class="operator">=</span> JSON.parseObject(response.getMeta(), ChatCompletionResponse.Meta.class);</span><br><span class="line">                    log.info(<span class="string">&quot;[输出结束] Tokens &#123;&#125;&quot;</span>, JSON.toJSONString(meta));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onClosed</span><span class="params">(EventSource eventSource)</span> &#123;</span><br><span class="line">                log.info(<span class="string">&quot;对话完成&quot;</span>);</span><br><span class="line">                countDownLatch.countDown();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onFailure</span><span class="params">(EventSource eventSource, <span class="meta">@Nullable</span> Throwable t, <span class="meta">@Nullable</span> Response response)</span> &#123;</span><br><span class="line">                log.info(<span class="string">&quot;对话异常&quot;</span>);</span><br><span class="line">                countDownLatch.countDown();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BC%80%E5%8F%91/" rel="tag"># 开发</a>
+              <a href="/tags/AI%E9%97%AE%E7%AD%94%E5%8A%A9%E6%89%8B/" rel="tag"># AI问答助手</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/project/Dynamic-thread-pool/market1/" rel="prev" title="【开发】动态线程池组件记录1 - 线程池调研">
+                  <i class="fa fa-angle-left"></i> 【开发】动态线程池组件记录1 - 线程池调研
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/project/openai/openai10/" rel="next" title="【开发】AI问答助手项目记录10 - 简历">
+                  【开发】AI问答助手项目记录10 - 简历 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2022 - 2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蔡正海</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

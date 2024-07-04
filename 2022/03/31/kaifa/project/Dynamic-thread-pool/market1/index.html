@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="ThreadPoolExecutor 学习资料：Java线程池实现原理及其在美团业务中的实践  基本概念线程池（是什么）池化思想管理线程，好处  降低资源消耗：重复利用已创建的线程 提高响应速度：任务到达时，无需等待线程创建 提高线程的可管理性：线程是稀缺资源，使用线程进行统一的分配、调优和监控 提供更多更强大的功能：ScheduledThreadPoolExecutor  线程池解决的问题（为什">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【开发】动态线程池组件记录1 - 线程池调研">
+<meta property="og:url" content="http://example.com/2022/03/31/kaifa/project/Dynamic-thread-pool/market1/index.html">
+<meta property="og:site_name" content="czh的学习小站">
+<meta property="og:description" content="ThreadPoolExecutor 学习资料：Java线程池实现原理及其在美团业务中的实践  基本概念线程池（是什么）池化思想管理线程，好处  降低资源消耗：重复利用已创建的线程 提高响应速度：任务到达时，无需等待线程创建 提高线程的可管理性：线程是稀缺资源，使用线程进行统一的分配、调优和监控 提供更多更强大的功能：ScheduledThreadPoolExecutor  线程池解决的问题（为什">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154427652.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154449505.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154505795.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154521689.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154538532.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154555686.png">
+<meta property="article:published_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:modified_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:author" content="蔡正海">
+<meta property="article:tag" content="开发">
+<meta property="article:tag" content="动态线程池组件">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154427652.png">
+
+
+<link rel="canonical" href="http://example.com/2022/03/31/kaifa/project/Dynamic-thread-pool/market1/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/03/31/kaifa/project/Dynamic-thread-pool/market1/","path":"2022/03/31/kaifa/project/Dynamic-thread-pool/market1/","title":"【开发】动态线程池组件记录1 - 线程池调研"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【开发】动态线程池组件记录1 - 线程池调研 | czh的学习小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">czh的学习小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">自律</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ThreadPoolExecutor"><span class="nav-number">1.</span> <span class="nav-text">ThreadPoolExecutor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0%EF%BC%88%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">线程池（是什么）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%88%E4%B8%BA%E4%BB%80%E4%B9%88%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">线程池解决的问题（为什么）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%A0%B8%E5%BF%83%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">线程池核心设计与实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E4%BD%93%E8%AE%BE%E8%AE%A1"><span class="nav-number">3.1.</span> <span class="nav-text">总体设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E7%90%86"><span class="nav-number">3.2.</span> <span class="nav-text">生命周期管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E6%89%A7%E8%A1%8C%E6%9C%BA%E5%88%B6"><span class="nav-number">3.3.</span> <span class="nav-text">任务执行机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="nav-number">3.3.1.</span> <span class="nav-text">任务调度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E7%BC%93%E5%86%B2%EF%BC%88%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97%EF%BC%89"><span class="nav-number">3.3.2.</span> <span class="nav-text">任务缓冲（阻塞队列）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E7%94%B3%E8%AF%B7"><span class="nav-number">3.3.3.</span> <span class="nav-text">任务申请</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E6%8B%92%E7%BB%9D"><span class="nav-number">3.3.4.</span> <span class="nav-text">任务拒绝</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Worker%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86"><span class="nav-number">3.4.</span> <span class="nav-text">Worker线程管理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E8%B7%B5%E5%9C%BA%E6%99%AF"><span class="nav-number">4.</span> <span class="nav-text">实践场景</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%BF%AB%E9%80%9F%E5%93%8D%E5%BA%94%E7%94%A8%E6%88%B7%E8%AF%B7%E6%B1%82"><span class="nav-number">4.1.</span> <span class="nav-text">1 - 快速响应用户请求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0"><span class="nav-number">4.1.1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90"><span class="nav-number">4.1.2.</span> <span class="nav-text">分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%BF%AB%E9%80%9F%E5%A4%84%E7%90%86%E6%89%B9%E9%87%8F%E4%BB%BB%E5%8A%A1"><span class="nav-number">4.2.</span> <span class="nav-text">2 - 快速处理批量任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%8F%E8%BF%B0-1"><span class="nav-number">4.2.1.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90-1"><span class="nav-number">4.2.2.</span> <span class="nav-text">分析</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蔡正海"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">蔡正海</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/Dynamic-thread-pool/market1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【开发】动态线程池组件记录1 - 线程池调研 | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【开发】动态线程池组件记录1 - 线程池调研
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">动态线程池组件</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h1><blockquote>
+<p>学习资料：Java线程池实现原理及其在美团业务中的实践</p>
+</blockquote>
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><h2 id="线程池（是什么）"><a href="#线程池（是什么）" class="headerlink" title="线程池（是什么）"></a>线程池（是什么）</h2><p>池化思想管理线程，好处</p>
+<ul>
+<li><strong>降低资源消耗</strong>：重复利用已创建的线程</li>
+<li><strong>提高响应速度</strong>：任务到达时，无需等待线程创建</li>
+<li><strong>提高线程的可管理性</strong>：线程是稀缺资源，使用线程进行统一的分配、调优和监控</li>
+<li><strong>提供更多更强大的功能</strong>：ScheduledThreadPoolExecutor</li>
+</ul>
+<h2 id="线程池解决的问题（为什么）"><a href="#线程池解决的问题（为什么）" class="headerlink" title="线程池解决的问题（为什么）"></a>线程池解决的问题（为什么）</h2><p>线程是稀缺资源，不能够确定在任意时刻中，有多少任务需要执行，有多少资源需要投入</p>
+<ul>
+<li>频繁申请&#x2F;销毁资源，带来额外的消耗</li>
+<li>对资源无限申请，易引发系统资源耗尽的风险</li>
+</ul>
+<p>池化思想：</p>
+<ul>
+<li>内存池</li>
+<li>连接池</li>
+<li>实例池</li>
+</ul>
+<h1 id="线程池核心设计与实现"><a href="#线程池核心设计与实现" class="headerlink" title="线程池核心设计与实现"></a>线程池核心设计与实现</h1><h2 id="总体设计"><a href="#总体设计" class="headerlink" title="总体设计"></a>总体设计</h2><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154427652.png" alt="image-20240702154427652" style="zoom:50%;" />
+
+<ul>
+<li>顶层接口Exector：<ul>
+<li>任务提交和任务执行解藕</li>
+<li>用户只需要将Runnable提交到Executor中</li>
+</ul>
+</li>
+<li>ExecutorService：<ul>
+<li>补充执行任务的能力，生成Future</li>
+<li>管控线程池，停止线程池的运行</li>
+</ul>
+</li>
+<li>AbstractExecutorService：<ul>
+<li>抽象类，串联执行任务的流程</li>
+</ul>
+</li>
+<li>ThreadPoolExecutor<ul>
+<li>实现类</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154449505.png" alt="image-20240702154449505"></p>
+<p>线程池内部实际上构建了一个生产者消费者模型，将线程和任务两者解藕，缓冲任务，复用线程。</p>
+<p>任务管理（生产者）</p>
+<ul>
+<li>直接申请线程执行任务</li>
+<li>缓冲队列中等待线程执行</li>
+<li>拒绝该任务</li>
+</ul>
+<p>线程管理（消费者）</p>
+<ul>
+<li>它们被统⼀维护在线程池内，根据任务请求进⾏线程的分配</li>
+</ul>
+<h2 id="生命周期管理"><a href="#生命周期管理" class="headerlink" title="生命周期管理"></a>生命周期管理</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="type">AtomicInteger</span> <span class="variable">ctl</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicInteger</span>(ctlOf(RUNNING, <span class="number">0</span>));</span><br></pre></td></tr></table></figure>
+
+<p>维护两个值：运行状态（runState），工作线程数量（workerCount）</p>
+<p>运行状态有五种：</p>
+<ul>
+<li>RUNNING：正常运行</li>
+<li>SHUTDOWN：不再接收新任务，能继续处理</li>
+<li>STOP：不接受新任务，中断线程</li>
+<li>TIDYING：</li>
+<li>TERMINATED</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154505795.png" alt="image-20240702154505795"></p>
+<h2 id="任务执行机制"><a href="#任务执行机制" class="headerlink" title="任务执行机制"></a>任务执行机制</h2><h3 id="任务调度"><a href="#任务调度" class="headerlink" title="任务调度"></a>任务调度</h3><ul>
+<li>先看核心线程有没有满</li>
+<li>再看阻塞队列</li>
+<li>最后看最大线程数</li>
+<li>都不行，就拒绝</li>
+</ul>
+<h3 id="任务缓冲（阻塞队列）"><a href="#任务缓冲（阻塞队列）" class="headerlink" title="任务缓冲（阻塞队列）"></a>任务缓冲（阻塞队列）</h3><p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154521689.png" alt="image-20240702154521689"></p>
+<h3 id="任务申请"><a href="#任务申请" class="headerlink" title="任务申请"></a>任务申请</h3><p>⼀种是任务直接由新创建的线程执⾏。</p>
+<p>另⼀种是线程从任务队列中获取任务然后执⾏，执⾏完任务的空闲线程会再次去从队列中申请任务再去执⾏。</p>
+<h3 id="任务拒绝"><a href="#任务拒绝" class="headerlink" title="任务拒绝"></a>任务拒绝</h3><p>任务队列满，线程池满，采取任务拒绝策略</p>
+<ul>
+<li>丢弃任务，抛出异常</li>
+<li>丢弃任务，不抛出异常</li>
+<li>丢弃最前面的任务，提交被拒绝的任务</li>
+<li>由调用线程处理该任务</li>
+</ul>
+<h2 id="Worker线程管理"><a href="#Worker线程管理" class="headerlink" title="Worker线程管理"></a>Worker线程管理</h2><p>thread是在调⽤构造⽅法时通过ThreadFactory来创建的线程，可以⽤来执⾏任务；firstTask⽤它来保存传⼊的第⼀个任务，这个任务可以有也可以为null。如果这个值是⾮空的，那么线程就会在启动初期⽴即执⾏这个任务，也就对应核⼼线程创建时的情况；如果这个值是null，那么就需要创建⼀个线程去执⾏任务列表（workQueue）中的任务，也就是⾮核⼼线程的创建。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Worker</span> <span class="keyword">extends</span> <span class="title class_">AbstractQueuedSynchronizer</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span>&#123;</span><br><span class="line"> <span class="keyword">final</span> Thread thread;<span class="comment">//Worker持有的线程</span></span><br><span class="line"> Runnable firstTask;<span class="comment">//初始化的任务，可以为null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154538532.png" alt="image-20240702154538532">Worker集成AQS，独占锁，比如回收场景</p>
+<ul>
+<li>Lock方法一旦获取了锁，代表该线程在执行任务，不能中断回收</li>
+<li>不是独占，空闲，可以回收</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154555686.png" alt="image-20240702154555686"></p>
+<p>Worker线程执行任务</p>
+<ol>
+<li>while循环不断getTask()方法来获取任务<ol>
+<li>如果getTask为null则跳出循环，销毁线程</li>
+</ol>
+</li>
+<li>判断线程池是否stop</li>
+<li>执行任务</li>
+</ol>
+<h1 id="实践场景"><a href="#实践场景" class="headerlink" title="实践场景"></a>实践场景</h1><h2 id="1-快速响应用户请求"><a href="#1-快速响应用户请求" class="headerlink" title="1 - 快速响应用户请求"></a>1 - 快速响应用户请求</h2><h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>实时请求，⽐如说⽤户要查看⼀个商品的信息，那么我们需要将商品维度的⼀系列信息如商品的价格、优惠、库存、图⽚等等聚合起来，展示给⽤户。</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>不设置队列去缓冲并发任务，调高corePoolSize和maxPoolSize去尽可能创造多的线程快速执⾏任务。</p>
+<h2 id="2-快速处理批量任务"><a href="#2-快速处理批量任务" class="headerlink" title="2 - 快速处理批量任务"></a>2 - 快速处理批量任务</h2><h3 id="描述-1"><a href="#描述-1" class="headerlink" title="描述"></a>描述</h3><p>离线任务，需要快速执行，统计报表</p>
+<h3 id="分析-1"><a href="#分析-1" class="headerlink" title="分析"></a>分析</h3><p>不需要瞬时完成，吞吐量优先。设置队列去缓冲并发任务，调整合适的corePoolSize去设置处理任务的线程数。在这⾥，设置的线程数过多可能还会引发线程上下⽂切换频繁的问题，也会降低处理任务的速度，降低吞吐量。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BC%80%E5%8F%91/" rel="tag"># 开发</a>
+              <a href="/tags/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%BB%84%E4%BB%B6/" rel="tag"># 动态线程池组件</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/project/openai/openai4/" rel="prev" title="【开发】AI问答助手项目记录4 - 商品下单">
+                  <i class="fa fa-angle-left"></i> 【开发】AI问答助手项目记录4 - 商品下单
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/project/openai/openai2/" rel="next" title="【开发】AI问答助手项目记录2 - 大模型api">
+                  【开发】AI问答助手项目记录2 - 大模型api <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2022 - 2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蔡正海</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
