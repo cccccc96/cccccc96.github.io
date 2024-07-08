@@ -123,18 +123,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">31</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -205,6 +205,115 @@
     <div class="post-body" itemprop="articleBody">
           <h2 id="学习小记"><a href="#学习小记" class="headerlink" title="学习小记"></a>学习小记</h2><p>记录项目开发过程、技术学习笔记、科研笔记</p>
 <h3 id="分类1-开发"><a href="#分类1-开发" class="headerlink" title="分类1 开发"></a>分类1 开发</h3><h3 id="分类2-科研"><a href="#分类2-科研" class="headerlink" title="分类2 科研"></a>分类2 科研</h3>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/mianjing/mianjing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/mianjing/mianjing/" class="post-title-link" itemprop="url">【开发】面经</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%9D%A2%E7%BB%8F/" itemprop="url" rel="index"><span itemprop="name">面经</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h2><p>组合模式规则树（单例）</p>
+<p>公众号重试</p>
+<h2 id="用到了什么设计模式"><a href="#用到了什么设计模式" class="headerlink" title="用到了什么设计模式"></a>用到了什么设计模式</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/cccccc96/Interview/tree/main/Design%20Pattern">https://github.com/cccccc96/Interview/tree/main/Design%20Pattern</a></p>
+</blockquote>
+<p>在抽奖的规则过滤中，用到了责任链和组合模式。最核心的作用就是把if else进行拆分，便于后期维护。</p>
+<p>对于不同的抽奖策略采用了抽奖模式。</p>
+<p>对于流程开发，采用了模版模式</p>
+<h3 id="责任链"><a href="#责任链" class="headerlink" title="责任链"></a>责任链</h3><p>故名思义，责任链就是一个链表，唯一的区别就是我们为每个节点做一个实现（因为每个节点要实现不同的功能）。</p>
+<p>所以我们执行责任链就是遍历这个链表，每个节点可能会拦截掉，或是继续下一个节点。</p>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240706161127811.png" alt="image-20240706161127811"></p>
+<h3 id="组合模式-规则树模型"><a href="#组合模式-规则树模型" class="headerlink" title="组合模式-规则树模型"></a>组合模式-规则树模型</h3><p>故名思义，规则树模型就是一个树形结构。可以想象一个B+树，根据大小进行遍历。那么，规则树也是类似，只是每个树节点有不同的规则。</p>
+<ul>
+<li>Filter（树节点）：拿不同种类的信息（年龄信息&#x2F;性别信息）<ul>
+<li>filter(): 遍历所有子边，哪个边符合，则找到对应的下一个子节点</li>
+</ul>
+</li>
+<li>IEngine：遍历整颗树<ul>
+<li>可以想象，搜索树中，小于进左子树，大于进右子树；而在规则树中，每条边的规则是固定的</li>
+</ul>
+</li>
+<li>好处：方便维护，可以把树结构存进数据库中</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240706175427996.png" alt="image-20240706175427996"></p>
+<h3 id="策略模式和模版模式"><a href="#策略模式和模版模式" class="headerlink" title="策略模式和模版模式"></a>策略模式和模版模式</h3><p>这两个非常简单</p>
+<ul>
+<li>策略模式：一个接口，多个实现，需要哪个策略用哪个</li>
+<li>模版模式：定义抽象类，定义流程，每个步骤都是一个抽奖方法。步骤具体的实现去继承类里面去做。</li>
+</ul>
+<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>功能：拆分出了核心流程与辅助流程</p>
+<p>实现也非常简单，只需要做两件事</p>
+<ul>
+<li>定义各种listener，方法里去做要做的事</li>
+<li>定义一个Manager，负责注册和通知</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240706214913020.png" alt="image-20240706214913020"></p>
+
       
     </div>
 
@@ -1078,102 +1187,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market10/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/market/market10/" class="post-title-link" itemprop="url">【开发】营销抽奖系统开发记录10 - 简历</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="简历"><a href="#简历" class="headerlink" title="简历"></a>简历</h2><p>项目名称： 营销平台 - 幸运大转盘</p>
-<p><a target="_blank" rel="noopener" href="http://116.198.234.247/?userId=xiaofuge&activityId=100301">http://116.198.234.247/?userId=xiaofuge&amp;activityId=100301</a></p>
-<p>核心技术：SpringBoot、MyBatis、MySQL、Redis、Kafka、React</p>
-<p>项目描述：该项目是我参考字节掘金中幸运抽奖模块开发的一个幸运大转盘抽奖系统。该系统支持多种营销策略，如：用户积分，积分兑换抽奖次数，返利等；也支持各类差异化抽奖流程，如：消耗积分指定抽奖范围、抽奖N次解锁奖品等各类抽奖玩法。该系统采用DDD架构进行设计，将整个系统划分为抽奖活动、抽奖策略、奖品、积分、返利这五个领域。同时设计中运用到了责任链模式、组合模式、工厂模式等多种设计模式，提高了代码的可扩展性，并对抽奖的计算和秒杀做了设计的优化，可以支撑单机 4c8g 服务器 1000 TPS 的吞吐量，抽奖接口响应时长<code>160毫秒</code>左右。</p>
-<p>核心职责</p>
-<ul>
-<li><p>采用策略模式实现两种抽奖算法，一种是总体概率，空间复杂度为O(1)；一种是单项概率，将对应概率的概率的奖品提前映射到数组中，时间复杂度为O(1)。</p>
-</li>
-<li><p>根据不同的抽奖玩法，设计整体抽奖策略。在抽奖流程的抽象上，分为抽奖前和抽奖后，如抽奖前的人群判断、抽奖后兜底奖励等。设计模版模式定义抽奖流程，抽奖前调用责任链完成抽奖，抽奖后的动作使用组合模式的规则树进行动态处理。</p>
-</li>
-<li><p>抽奖是一种峰值流量高的业务场景，针对抽奖活动库存和奖品库存的扣减：采用了 Redis decr 分段消费和加锁兜底的设计，同时对于消费成功的库存，异步队列方式 + 定时任务更新库存。当库存扣减为0时，采用MQ对数据库库存清零并清空队列。减轻数据库压力并确保数据最终一致性。</p>
-</li>
-<li><p>针对打卡返利、积分兑换活动、抽奖下发奖品等流程，采用MQ，将积分支付和活动账户充值、抽奖和奖品下发等流程，进行解藕。并且通过task表进行补偿，确保消息成功消费。</p>
-</li>
-<li><p>对于用户账户、用户活动订单、积分返利订单等库表，采取分库分表的方式</p>
-</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

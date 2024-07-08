@@ -123,18 +123,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-count">31</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -151,6 +151,384 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/openai/openai4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/openai/openai4/" class="post-title-link" itemprop="url">【开发】AI问答助手项目记录4 - 商品下单</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/AI%E9%97%AE%E7%AD%94%E5%8A%A9%E6%89%8B/" itemprop="url" rel="index"><span itemprop="name">AI问答助手</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="商品下单"><a href="#商品下单" class="headerlink" title="商品下单"></a>商品下单</h2><p>这里的商品就是各种大模型次数的额度</p>
+<h2 id="步骤1-用户点击购买，创建未支付订单，等待用户支付"><a href="#步骤1-用户点击购买，创建未支付订单，等待用户支付" class="headerlink" title="步骤1 用户点击购买，创建未支付订单，等待用户支付"></a>步骤1 用户点击购买，创建未支付订单，等待用户支付</h2><p>我们主要做两件事：创建订单，请求支付宝支付请求</p>
+<ol>
+<li>校验token，获取用户id和商品信息，根据用户信息和商品信息创建未支付订单</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(value = &quot;create_pay_order&quot;, method = RequestMethod.POST)</span></span><br><span class="line"><span class="keyword">public</span> Response&lt;String&gt; <span class="title function_">createParOrder</span><span class="params">(<span class="meta">@RequestHeader(&quot;Authorization&quot;)</span> String token, <span class="meta">@RequestParam</span> Integer productId)</span> &#123;</span><br><span class="line">        <span class="comment">// 1. Token 校验</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. Token 解析</span></span><br><span class="line"></span><br><span class="line">        <span class="type">ShopCartEntity</span> <span class="variable">shopCartEntity</span> <span class="operator">=</span> ShopCartEntity.builder()</span><br><span class="line">                .openid(openid)</span><br><span class="line">                .productId(productId).build();</span><br><span class="line"></span><br><span class="line">        <span class="type">PayOrderEntity</span> <span class="variable">payOrder</span> <span class="operator">=</span> orderService.createOrder(shopCartEntity);</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>如果用户存在有效的未支付订单，则直接返回原来的那笔订单；否则的话，创建一笔未支付订单</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> PayOrderEntity <span class="title function_">createOrder</span><span class="params">(ShopCartEntity shopCartEntity)</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 0. 基础信息</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">openid</span> <span class="operator">=</span> shopCartEntity.getOpenid();</span><br><span class="line">        <span class="type">Integer</span> <span class="variable">productId</span> <span class="operator">=</span> shopCartEntity.getProductId();</span><br><span class="line">        <span class="comment">// 1. 查询有效的未支付订单，如果存在直接返回现成的</span></span><br><span class="line">        <span class="comment">// 2. 商品查询</span></span><br><span class="line">        <span class="comment">// 3. 保存订单</span></span><br><span class="line">        <span class="type">OrderEntity</span> <span class="variable">orderEntity</span> <span class="operator">=</span> <span class="built_in">this</span>.doSaveOrder(openid, productEntity);</span><br><span class="line">        <span class="comment">// 4. 创建支付</span></span><br><span class="line">        <span class="type">PayOrderEntity</span> <span class="variable">payOrderEntity</span> <span class="operator">=</span> <span class="built_in">this</span>.doPrepayOrder(openid, orderEntity.getOrderId(), productEntity.getProductName(), orderEntity.getTotalAmount());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> payOrderEntity;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>提交支付宝沙箱支付请求</li>
+</ol>
+<p>alipayClient.pageExecute(request).getBody()</p>
+<p>它会返回给我们一串html代码，我们返回给前端，用户就能看到支付界面了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> PayOrderEntity <span class="title function_">doPrepayOrder</span><span class="params">(String openid, String orderId, String productName, BigDecimal amountTotal)</span> <span class="keyword">throws</span> AlipayApiException &#123;</span><br><span class="line">    <span class="type">AlipayTradePagePayRequest</span> <span class="variable">request</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AlipayTradePagePayRequest</span>();  <span class="comment">// 发送请求的 Request类</span></span><br><span class="line">    request.setNotifyUrl(notify_url);			<span class="comment">// 支付的地址</span></span><br><span class="line">    request.setReturnUrl(return_url);</span><br><span class="line"></span><br><span class="line">    <span class="type">JSONObject</span> <span class="variable">bizContent</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JSONObject</span>();</span><br><span class="line">    bizContent.put(<span class="string">&quot;out_trade_no&quot;</span>, orderId);  <span class="comment">// 我们自己生成的订单编号</span></span><br><span class="line">    bizContent.put(<span class="string">&quot;total_amount&quot;</span>, amountTotal.toString()); <span class="comment">// 订单的总金额</span></span><br><span class="line">    bizContent.put(<span class="string">&quot;subject&quot;</span>, productName);   <span class="comment">// 支付的名称</span></span><br><span class="line">    bizContent.put(<span class="string">&quot;product_code&quot;</span>, <span class="string">&quot;FAST_INSTANT_TRADE_PAY&quot;</span>);  <span class="comment">// 固定配置</span></span><br><span class="line">    request.setBizContent(bizContent.toString());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建支付单</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">codeUrl</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> != alipayClient) &#123;</span><br><span class="line">        codeUrl = alipayClient.pageExecute(request).getBody();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        codeUrl = <span class="string">&quot;因你未配置支付渠道，所以暂时不能生成有效的支付URL。请配置支付渠道后，在application-dev.yml中配置支付渠道信息&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 更新订单支付信息</span></span><br><span class="line">    orderRepository.updateOrderPayInfo(payOrderEntity);</span><br><span class="line">    <span class="keyword">return</span> payOrderEntity;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="步骤二-支付宝支付回调"><a href="#步骤二-支付宝支付回调" class="headerlink" title="步骤二 支付宝支付回调"></a>步骤二 支付宝支付回调</h2><p>拿到支付成功的回调请求，更新订单为已支付，并发送MQ消息，进行发货</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 支付宝验签</span><br><span class="line">if (checkSignature) &#123;</span><br><span class="line">    // 更新订单</span><br><span class="line">    boolean isSuccess = orderService.changeOrderPaySuccess(tradeNo, alipayTradeNo, new BigDecimal(totalAmount).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP), dateFormat.parse(gmtPayment));</span><br><span class="line">    if (isSuccess) &#123;</span><br><span class="line">        eventBus.post(tradeNo);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/openai/openai3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/openai/openai3/" class="post-title-link" itemprop="url">【开发】AI问答助手项目记录3 - 规则过滤</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/AI%E9%97%AE%E7%AD%94%E5%8A%A9%E6%89%8B/" itemprop="url" rel="index"><span itemprop="name">AI问答助手</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="规则过滤"><a href="#规则过滤" class="headerlink" title="规则过滤"></a>规则过滤</h2><p>用户在真正调用大模型前，我们需要进行规则过滤，只有满足所有规则，才能真正请求大模型。</p>
+<p>规则：敏感词、白名单、频次限制、账户状态、账户额度</p>
+<p>这里的实现和抽奖项目一样，采用责任链，为每个规则定义一个过滤实现。</p>
+<p>特别地，对于敏感词，我们用hubbo提供的敏感词包进行过滤</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">List&lt;MessageEntity&gt; newMessages = chatProcess.getMessages().stream()</span><br><span class="line">        .map(message -&gt; &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">content</span> <span class="operator">=</span> message.getContent();</span><br><span class="line">            <span class="type">String</span> <span class="variable">replace</span> <span class="operator">=</span> words.replace(content);</span><br><span class="line">            <span class="keyword">return</span> MessageEntity.builder()</span><br><span class="line">                    .role(message.getRole())</span><br><span class="line">                    .name(message.getName())</span><br><span class="line">                    .content(replace)</span><br><span class="line">                    .build();</span><br><span class="line">        &#125;)</span><br><span class="line">        .collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/openai/openai2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/openai/openai2/" class="post-title-link" itemprop="url">【开发】AI问答助手项目记录2 - 大模型api</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/AI%E9%97%AE%E7%AD%94%E5%8A%A9%E6%89%8B/" itemprop="url" rel="index"><span itemprop="name">AI问答助手</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="通过okhttp为大模型自己实现一个api"><a href="#通过okhttp为大模型自己实现一个api" class="headerlink" title="通过okhttp为大模型自己实现一个api"></a>通过okhttp为大模型自己实现一个api</h2><p>涉及到的技术栈：okhttp3、Jackson</p>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240704115618698.png" alt="image-20240704115618698" style="zoom: 50%;" />
+
+<h2 id="chatglm请求里的几个核心字段"><a href="#chatglm请求里的几个核心字段" class="headerlink" title="chatglm请求里的几个核心字段"></a>chatglm请求里的几个核心字段</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 模型</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">Model</span> <span class="variable">model</span> <span class="operator">=</span> Model.GLM_3_5_TURBO;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 请求参数 &#123;&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;你好&quot;&#125;</span></span><br><span class="line"><span class="comment"> * 24年1月发布的 GLM_3_5_TURBO、GLM_4 模型时新增</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> List&lt;Prompt&gt; messages;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 请求ID</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@JsonProperty(&quot;request_id&quot;)</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">String</span> <span class="variable">requestId</span> <span class="operator">=</span> String.format(<span class="string">&quot;czh-%d&quot;</span>, System.currentTimeMillis());</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * do_sample 为 true 时启用采样策略，do_sample 为 false 时采样策略 temperature、top_p 将不生效</span></span><br><span class="line"><span class="comment"> * 24年1月发布的 GLM_3_5_TURBO、GLM_4 模型时新增</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@JsonProperty(&quot;do_sample&quot;)</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">Boolean</span> <span class="variable">doSample</span> <span class="operator">=</span> <span class="literal">true</span>;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 使用同步调用时，此参数应当设置为 Fasle 或者省略。表示模型生成完所有内容后一次性返回所有内容。</span></span><br><span class="line"><span class="comment"> * 如果设置为 True，模型将通过标准 Event Stream ，逐块返回模型生成内容。Event Stream 结束时会返回一条data: [DONE]消息。</span></span><br><span class="line"><span class="comment"> * 24年1月发布的 GLM_3_5_TURBO、GLM_4 模型时新增</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">Boolean</span> <span class="variable">stream</span> <span class="operator">=</span> <span class="literal">true</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h2><p>本质上，我们要开启一个openai会话，需要做以下几件事</p>
+<ol>
+<li>开启一个OkHttpClient<ol>
+<li>设置拦截器（因为要写入大模型token）</li>
+</ol>
+</li>
+<li>通过Retrofit封装OkHttp</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 开启 Http 客户端</span></span><br><span class="line"><span class="type">OkHttpClient</span> <span class="variable">okHttpClient</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OkHttpClient</span></span><br><span class="line">        .Builder()</span><br><span class="line">        .addInterceptor(httpLoggingInterceptor)</span><br><span class="line">        .addInterceptor(<span class="keyword">new</span> <span class="title class_">OpenAiHTTPInterceptor</span>(configuration))</span><br><span class="line">        .connectTimeout(configuration.getConnectTimeout(), TimeUnit.SECONDS)</span><br><span class="line">        .writeTimeout(configuration.getWriteTimeout(), TimeUnit.SECONDS)</span><br><span class="line">        .readTimeout(configuration.getReadTimeout(), TimeUnit.SECONDS)</span><br><span class="line">        .build();</span><br><span class="line"></span><br><span class="line">configuration.setOkHttpClient(okHttpClient);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 创建 API 服务</span></span><br><span class="line"><span class="type">IOpenAiApi</span> <span class="variable">openAiApi</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Retrofit</span>.Builder()</span><br><span class="line">        .baseUrl(configuration.getApiHost())</span><br><span class="line">        .client(okHttpClient)</span><br><span class="line">        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())</span><br><span class="line">        .addConverterFactory(JacksonConverterFactory.create())</span><br><span class="line">        .build().create(IOpenAiApi.class);</span><br><span class="line"></span><br><span class="line">configuration.setOpenAiApi(openAiApi);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 实例化执行器</span></span><br><span class="line">HashMap&lt;Model, Executor&gt; executorGroup = configuration.newExecutorGroup();</span><br></pre></td></tr></table></figure>
+
+<h2 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h2><p>实现okhttp3.Interceptor的拦截器。</p>
+<p>在用户调用sdk时拦截，并传入用户自定义的apikey</p>
+<p>也就是加上Authorization字段，这也是大模型通用的做法（对于这里的chatglm而言，我们还需要对apikey进行jwt编码）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="meta">@NotNull</span> Response <span class="title function_">intercept</span><span class="params">(Chain chain)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        <span class="comment">// 1. 获取原始 Request</span></span><br><span class="line">        <span class="type">Request</span> <span class="variable">original</span> <span class="operator">=</span> chain.request();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 构建请求</span></span><br><span class="line">        <span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> original.newBuilder()</span><br><span class="line">                .url(original.url())</span><br><span class="line">                .header(<span class="string">&quot;Authorization&quot;</span>, <span class="string">&quot;Bearer &quot;</span> + BearerTokenUtils.getToken(configuration.getApiKey(), configuration.getApiSecret()))</span><br><span class="line">                .header(<span class="string">&quot;Content-Type&quot;</span>, Configuration.JSON_CONTENT_TYPE)</span><br><span class="line">                .header(<span class="string">&quot;User-Agent&quot;</span>, Configuration.DEFAULT_USER_AGENT)</span><br><span class="line"><span class="comment">//                .header(&quot;Accept&quot;, null != original.header(&quot;Accept&quot;) ? original.header(&quot;Accept&quot;) : Configuration.SSE_CONTENT_TYPE)</span></span><br><span class="line">                .method(original.method(), original.body())</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. 返回执行结果</span></span><br><span class="line">        <span class="keyword">return</span> chain.proceed(request);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="会话接口-基于eventsource的响应"><a href="#会话接口-基于eventsource的响应" class="headerlink" title="会话接口 - 基于eventsource的响应"></a>会话接口 - 基于eventsource的响应</h2><p>使用eventsource进行流式传输，适用于长时间连接并接收实时更新的情况，接受一个请求对象和事件监听器</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> EventSource.Factory factory;</span><br><span class="line"><span class="keyword">public</span> EventSource <span class="title function_">completions</span><span class="params">(ChatCompletionRequest chatCompletionRequest, EventSourceListener eventSourceListener)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    <span class="comment">// 构建请求信息</span></span><br><span class="line">    <span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Request</span>.Builder()</span><br><span class="line">            .url(configuration.getApiHost().concat(IOpenAiApi.v4))</span><br><span class="line">            .post(RequestBody.create(MediaType.parse(Configuration.JSON_CONTENT_TYPE), chatCompletionRequest.toString()))</span><br><span class="line">            .build();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回事件结果</span></span><br><span class="line">    <span class="keyword">return</span> factory.newEventSource(request, chatCompletionRequest.getIsCompatible() ? eventSourceListener(eventSourceListener) : eventSourceListener);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>示例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">openAiSession.completions(request, <span class="keyword">new</span> <span class="title class_">EventSourceListener</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onEvent</span><span class="params">(EventSource eventSource, <span class="meta">@Nullable</span> String id, <span class="meta">@Nullable</span> String type, String data)</span> &#123;</span><br><span class="line">                <span class="type">ChatCompletionResponse</span> <span class="variable">response</span> <span class="operator">=</span> JSON.parseObject(data, ChatCompletionResponse.class);</span><br><span class="line">                log.info(<span class="string">&quot;测试结果 onEvent czh：&#123;&#125;&quot;</span>, type);</span><br><span class="line">                log.info(<span class="string">&quot;测试结果 onEvent：&#123;&#125;&quot;</span>, response.getData());</span><br><span class="line">                <span class="comment">// type 消息类型，add 增量，finish 结束，error 错误，interrupted 中断</span></span><br><span class="line">                <span class="keyword">if</span> (EventType.finish.getCode().equals(type)) &#123;</span><br><span class="line">                    ChatCompletionResponse.<span class="type">Meta</span> <span class="variable">meta</span> <span class="operator">=</span> JSON.parseObject(response.getMeta(), ChatCompletionResponse.Meta.class);</span><br><span class="line">                    log.info(<span class="string">&quot;[输出结束] Tokens &#123;&#125;&quot;</span>, JSON.toJSONString(meta));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onClosed</span><span class="params">(EventSource eventSource)</span> &#123;</span><br><span class="line">                log.info(<span class="string">&quot;对话完成&quot;</span>);</span><br><span class="line">                countDownLatch.countDown();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onFailure</span><span class="params">(EventSource eventSource, <span class="meta">@Nullable</span> Throwable t, <span class="meta">@Nullable</span> Response response)</span> &#123;</span><br><span class="line">                log.info(<span class="string">&quot;对话异常&quot;</span>);</span><br><span class="line">                countDownLatch.countDown();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/openai/openai10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/openai/openai10/" class="post-title-link" itemprop="url">【开发】AI问答助手项目记录10 - 简历</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/AI%E9%97%AE%E7%AD%94%E5%8A%A9%E6%89%8B/" itemprop="url" rel="index"><span itemprop="name">AI问答助手</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>智能AI问答助手 </p>
+<p> 主要技术:Spring Boot、MyBatis、Redis、RabbitMQ、OKHttp3、React、TypeScript</p>
+<ol>
+<li><p>对接微信公众号 SDK，使用从微信公众号获取验证码的方式进行授权登录，使用JWT进行token校验</p>
+</li>
+<li><p>使用OKHttp3封装ChatGLM和openai的Java SDK，使用流式异步响应式框架开发应答接口，对接相关大模型</p>
+</li>
+<li><p>采用责任链模式实现规则过滤，包含敏感词、白名单、频次限制、账户状态、账户额度等</p>
+</li>
+<li><p>对接支付宝沙箱支付，实现商品支付功能，用户能购买大模型额度。同时使用Kafka进行异步发货，结合定时任务扫描实现超时关单、掉单补偿。</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1014,105 +1392,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/leetcode/algorithm1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/leetcode/algorithm1/" class="post-title-link" itemprop="url">【1每日一题】</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">每日一题</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="【1每日一题】"><a href="#【1每日一题】" class="headerlink" title="【1每日一题】"></a>【1每日一题】</h2><blockquote>
-<p>3.无重复字符的最长子串</p>
-<ol start="93">
-<li>复原 IP 地址</li>
-<li>字符串相加<br>LCR 181. 字符串中的单词反转</li>
-<li>三数之和</li>
-<li>组合总和</li>
-<li>组合总和 II</li>
-<li>数组中的第K个最大元素</li>
-<li>二分查找</li>
-<li>买卖股票的最佳时机</li>
-<li>最大子数组和</li>
-<li>有效的括号<br>LCR 090. 打家劫舍 II</li>
-<li>比较版本号</li>
-<li>轮转数组</li>
-<li>二叉树中的最大路径和</li>
-<li>删除排序链表中的重复元素 II</li>
-<li>最长回文子串</li>
-<li>LRU缓存机制<br>1120：子树的最大平均值</li>
-<li>斐波那契数</li>
-</ol>
-</blockquote>
-<h3 id="无重复字符的最长子串"><a href="#无重复字符的最长子串" class="headerlink" title="无重复字符的最长子串"></a>无重复字符的最长子串</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 经典的滑动窗口</span></span><br><span class="line">left = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> right==<span class="number">0</span>; right&lt;=length;right++)&#123;</span><br><span class="line">  更新right条件</span><br><span class="line">    <span class="keyword">while</span>(不满足条件)&#123;</span><br><span class="line">      left++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="复原-IP-地址"><a href="#复原-IP-地址" class="headerlink" title="复原 IP 地址"></a>复原 IP 地址</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 经典回溯，别忘了判定首项为0</span><br><span class="line"></span><br><span class="line">dfs(int i)&#123;</span><br><span class="line">	for(int j=0;j&lt;3;j++)&#123;</span><br><span class="line">	  更新path</span><br><span class="line">	  dfs(i+1)</span><br><span class="line">	  回溯path</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="字符串相加"><a href="#字符串相加" class="headerlink" title="字符串相加"></a>字符串相加</h3><p>弱智题</p>
-<h3 id="字符串中的单词反转"><a href="#字符串中的单词反转" class="headerlink" title="字符串中的单词反转"></a>字符串中的单词反转</h3><p>同向双指针</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
