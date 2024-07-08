@@ -20,23 +20,29 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta property="og:type" content="website">
-<meta property="og:title" content="czh的学习小站">
-<meta property="og:url" content="http://example.com/archives/2023/index.html">
+    <meta name="description" content="整理答题思路SpringBoot自动配置 解决什么问题（为了解决XML） 自动配置是什么以及好处（如何使用，configuration，spring.factories） 自动配置的原理（如何加载配置，自动配置中用到了importSelector和springfactories）  SpringIOC 解决什么问题（多个依赖，不能new，而应该依赖倒置，可维护）  IOC是什么以及好处（把对实例的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【开发八股】面经自测">
+<meta property="og:url" content="http://example.com/2022/03/31/kaifa/mianjing/%E8%87%AA%E6%B5%8B/index.html">
 <meta property="og:site_name" content="czh的学习小站">
+<meta property="og:description" content="整理答题思路SpringBoot自动配置 解决什么问题（为了解决XML） 自动配置是什么以及好处（如何使用，configuration，spring.factories） 自动配置的原理（如何加载配置，自动配置中用到了importSelector和springfactories）  SpringIOC 解决什么问题（多个依赖，不能new，而应该依赖倒置，可维护）  IOC是什么以及好处（把对实例的">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:modified_time" content="2022-03-31T11:01:35.000Z">
 <meta property="article:author" content="蔡正海">
+<meta property="article:tag" content="开发">
+<meta property="article:tag" content="面经">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/archives/2023/">
+<link rel="canonical" href="http://example.com/2022/03/31/kaifa/mianjing/%E8%87%AA%E6%B5%8B/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"archives/2023/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/03/31/kaifa/mianjing/%E8%87%AA%E6%B5%8B/","path":"2022/03/31/kaifa/mianjing/自测/","title":"【开发八股】面经自测"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>归档 | czh的学习小站</title>
+<title>【开发八股】面经自测 | czh的学习小站</title>
   
 
 
@@ -69,7 +75,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">czh的学习小站</h1>
+      <p class="site-title">czh的学习小站</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">自律</p>
@@ -96,7 +102,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -109,6 +115,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B4%E7%90%86%E7%AD%94%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="nav-number">1.</span> <span class="nav-text">整理答题思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringBoot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text">SpringBoot自动配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringIOC"><span class="nav-number">1.2.</span> <span class="nav-text">SpringIOC</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -150,90 +157,111 @@
 
     </div>
 
-    <div class="main-inner archive posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/mianjing/%E8%87%AA%E6%B5%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【开发八股】面经自测 | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【开发八股】面经自测
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%9D%A2%E7%BB%8F/" itemprop="url" rel="index"><span itemprop="name">面经</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="整理答题思路"><a href="#整理答题思路" class="headerlink" title="整理答题思路"></a>整理答题思路</h1><h2 id="SpringBoot自动配置"><a href="#SpringBoot自动配置" class="headerlink" title="SpringBoot自动配置"></a>SpringBoot自动配置</h2><ol>
+<li>解决什么问题（为了解决XML）</li>
+<li>自动配置是什么以及好处（如何使用，configuration，spring.factories）</li>
+<li>自动配置的原理（如何加载配置，自动配置中用到了importSelector和springfactories）</li>
+</ol>
+<h2 id="SpringIOC"><a href="#SpringIOC" class="headerlink" title="SpringIOC"></a>SpringIOC</h2><ol>
+<li><p>解决什么问题（多个依赖，不能new，而应该依赖倒置，可维护）</p>
+</li>
+<li><p>IOC是什么以及好处（把对实例的控制交给IOC容器来做）（依赖降低、资源变得容易管理）</p>
+</li>
+<li><p>IOC原理（applicationContext，BeanFactory注册BeanDefinition，getBean）</p>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BC%80%E5%8F%91/" rel="tag"># 开发</a>
+              <a href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag"># 面经</a>
+          </div>
+
         
-        <span class="collection-header">还行! 目前共计 32 篇日志。 继续努力。</span>
-      </div>
 
-      
-    <div class="collection-year">
-      <span class="collection-header">2023<span class="collection-year-count">3</span></span>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-03-31T19:01:35+08:00"
-              content="2023-03-31">
-          03-31
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/03/31/keyan/Pono%203%20-%20IC3%208d5d54f3c75e4d73b7c2921bc010c1d2/" itemprop="url">
-            <span itemprop="name">【Research】pono 3 - IC3</span>
-          </a>
-      </div>
-
-      
-    </header>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/31/hello-world/" rel="prev" title="总 - 我的博客">
+                  <i class="fa fa-angle-left"></i> 总 - 我的博客
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/mianjing/mianjing/" rel="next" title="【开发八股】面经">
+                  【开发八股】面经 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
   </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-03-31T19:01:35+08:00"
-              content="2023-03-31">
-          03-31
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/03/31/keyan/pono%201%20-%20%E4%BB%8E%E4%B8%80%E4%B8%AA%E6%B5%8B%E8%AF%95%E5%87%BA%E5%8F%91%EF%BC%8Cpono%20%E5%9C%A8%E5%81%9A%E4%BB%80%E4%B9%88%20ffd2579350f7433d9dd34304b198f411/" itemprop="url">
-            <span itemprop="name">【Research】pono 1 - 从一个测试出发，pono 在做什么</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2023-03-31T19:01:35+08:00"
-              content="2023-03-31">
-          03-31
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/2023/03/31/keyan/pono%202%20-%20IC3%20%E7%B3%BB%E5%88%97%20%E7%AE%97%E6%B3%95%20%E4%B9%8B%20IC3Base%20172e05600c374db19c49e6ab87df041f/" itemprop="url">
-            <span itemprop="name">【Research】pono 2 - IC3 系列 算法 之 IC3Base</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
+</div>
 
 
-    </div>
-  </div>
-  
-  
-  
+
+
+
 
 </div>
   </main>
