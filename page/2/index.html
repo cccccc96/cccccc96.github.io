@@ -1345,6 +1345,161 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/10%E5%B0%8F%E6%97%B6Java%E8%BF%9B%E9%98%B6%E6%8A%80%E6%9C%AF%E6%A0%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/10%E5%B0%8F%E6%97%B6Java%E8%BF%9B%E9%98%B6%E6%8A%80%E6%9C%AF%E6%A0%88/" class="post-title-link" itemprop="url">【开发】【八股】压测</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%9D%A2%E7%BB%8F/" itemprop="url" rel="index"><span itemprop="name">面经</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%9D%A2%E7%BB%8F/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E3%80%81JVM/" itemprop="url" rel="index"><span itemprop="name">性能测试、JVM</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="性能调优"><a href="#性能调优" class="headerlink" title="性能调优"></a>性能调优</h1><h3 id="RT、TPS、资源利用率"><a href="#RT、TPS、资源利用率" class="headerlink" title="RT、TPS、资源利用率"></a>RT、TPS、资源利用率</h3><p>影响因素：</p>
+<ul>
+<li>数据库读写、网络IO、逻辑计算复杂度、缓存</li>
+<li>JVM</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240717134417860.png" alt="image-20240717134417860"></p>
+<p>三个区，在轻度负载区，RT基本不变，在重度负载区</p>
+<h3 id="一个简单的JMeter例子"><a href="#一个简单的JMeter例子" class="headerlink" title="一个简单的JMeter例子"></a>一个简单的JMeter例子</h3><ol>
+<li><p>线程组配置</p>
+<ol>
+<li>线程数：发送http请求的线程数量（50）</li>
+<li>循环次数：循环执行多少次操作（2000）</li>
+<li>ramp-up：预热时间，要在多久内，创建线程</li>
+</ol>
+</li>
+<li><p>curl导入http请求</p>
+</li>
+<li><p>设置断言</p>
+<ol>
+<li>响应断言：code包含0000</li>
+<li>断言持续时间：3s</li>
+</ol>
+</li>
+<li><p>报告</p>
+<ol>
+<li>聚合报告（响应时间，吞吐量，KB）</li>
+<li>RT、TPS（插件）</li>
+<li>cpu、内存（perform插件）</li>
+</ol>
+</li>
+</ol>
+<h3 id="性能关键指标"><a href="#性能关键指标" class="headerlink" title="性能关键指标"></a>性能关键指标</h3><p>TPS、QPS、RT这些就不说，TPS和QPS越大越好，RT响应时间越好越好。</p>
+<p>硬件指标，带宽，CPU平均负载(top)。</p>
+<h3 id="TPS上限是多少"><a href="#TPS上限是多少" class="headerlink" title="TPS上限是多少"></a>TPS上限是多少</h3><p>和RT，服务端的线程数有关；当然还有带宽</p>
+<h2 id="梯度压测"><a href="#梯度压测" class="headerlink" title="梯度压测"></a>梯度压测</h2><p><strong>一点一点压力提上去，分析性能瓶颈</strong></p>
+<h2 id="重点1-低延时的接口压测（查询奖品列表）"><a href="#重点1-低延时的接口压测（查询奖品列表）" class="headerlink" title="**重点1  低延时的接口压测（查询奖品列表）"></a>**重点1  低延时的接口压测（查询奖品列表）</h2><p><strong>配置情况</strong></p>
+<ul>
+<li><p>线程梯度:5、10、15、20、25、30、35、40个线程；循环请求次数5000次</p>
+</li>
+<li><p>配置断言:超过3s，响应状态码不为1000，则为无效请求</p>
+</li>
+</ul>
+<p><strong>测试结果TPS</strong></p>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240718222919726.png" alt="image-20240718222919726"></p>
+<p><strong>测试结果RT</strong></p>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240718222953489.png" alt="image-20240718222953489"></p>
+<p><strong>测试结果CPU负载</strong></p>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240718223749894.png" alt="image-20240718223749894" style="zoom: 33%;" />
+
+<p><strong>结论</strong></p>
+<p>随着压力的上升，<strong>TPS不再增加</strong>，响应时间逐渐在增加，偶尔发生异常。但是<strong>CPU负载不高</strong>，说明<strong>瓶颈在带宽</strong>上。</p>
+<p><strong>优化方案</strong></p>
+<ul>
+<li>方案01 – 降低数据包大小</li>
+<li>方案02 – 提升带宽，在内网压测</li>
+</ul>
+<h2 id="重点2-高延时的接口压测（积分兑换-抽奖）"><a href="#重点2-高延时的接口压测（积分兑换-抽奖）" class="headerlink" title="**重点2 高延时的接口压测（积分兑换&#x2F;抽奖）"></a>**重点2 高延时的接口压测（积分兑换&#x2F;抽奖）</h2><ul>
+<li><p>线程梯度:100、200、300、400、500、600、700、800个线程; </p>
+</li>
+<li><p>（为什么线程数要设置的多呢，因为要让TPS上去）</p>
+</li>
+<li><p>循环请求次数200次</p>
+</li>
+</ul>
+<p><strong>测试结果RT</strong></p>
+<p>基本在120</p>
+<p>**测试结果CPU负载 **</p>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240719172051966.png" alt="image-20240719172051966"></p>
+<p><strong>结论</strong></p>
+<p>在<strong>高延时</strong>场景下，服务瓶颈主要在<strong>容器最大并发线程数</strong>，卡在容器端</p>
+<p>且异常率较高，与阻塞式IO模型有关系</p>
+<h2 id="优化点"><a href="#优化点" class="headerlink" title="优化点"></a>优化点</h2><ul>
+<li>tomcat线程数</li>
+<li>数据库连接池：HikariCP</li>
+<li>mysql最大连接数</li>
+<li>JVM</li>
+<li>线程池</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/bagu/springboot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1487,158 +1642,6 @@
 <td></td>
 </tr>
 </tbody></table>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/bagu/springIOC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/bagu/springIOC/" class="post-title-link" itemprop="url">【开发】【八股】springIOC</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/23277575/answer/169698662">https://www.zhihu.com/question/23277575/answer/169698662</a></p>
-<p><a target="_blank" rel="noopener" href="https://javadoop.com/post/spring-ioc">https://javadoop.com/post/spring-ioc</a></p>
-<p><a target="_blank" rel="noopener" href="https://javaguide.cn/system-design/framework/spring/ioc-and-aop.html#ioc-%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98">https://javaguide.cn/system-design/framework/spring/ioc-and-aop.html#ioc-解决了什么问题</a></p>
-</blockquote>
-<h2 id="知乎的一个非常典型的例子"><a href="#知乎的一个非常典型的例子" class="headerlink" title="知乎的一个非常典型的例子"></a>知乎的一个非常典型的例子</h2><p>IOC是<strong>依赖倒置原则</strong>的体现，是为了处理工程中的依赖关系。</p>
-<p>知乎的这个例子很好地解释了“依赖注入”的注入是什么。</p>
-<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/v2-82e0c12a1b26f7979ed9241e169affda_1440w.webp" alt="img" style="zoom:50%;" />
-
-<p>这种方式是不好的，为什么？假如最末尾一个类的构造方法改了，完蛋，全部类的构造方法都要改。这种工程是不可维护的。</p>
-<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/v2-c920a0540ce0651003a5326f6ef9891d_1440w.webp" alt="img"></p>
-<p>所以我们怎么办呢，当然就用我们的依赖注入：就是<strong>把底层类作为参数传入上层类</strong>。实现上层类对下层类的控制。</p>
-<h2 id="什么是IOC"><a href="#什么是IOC" class="headerlink" title="什么是IOC"></a>什么是IOC</h2><p>我们在springboot项目中</p>
-<ul>
-<li>不管是Dao，还是外部包的那些config</li>
-<li>我们从来都不会通过<strong>new</strong>的方式来创建，而是通过依赖注入的方式。</li>
-<li><strong>你只需要维护一个Configuration（可以是xml可以是一段代码），而不用每次初始化一辆车都要亲手去写那一大段初始化的代码</strong></li>
-</ul>
-<p>控制反转（描述的是对象的创建以及管理的问题）</p>
-<ul>
-<li>控制：对象创建的权利</li>
-<li>反转：控制权交给外部环境IOC容器</li>
-</ul>
-<p>好处</p>
-<ul>
-<li>对象之间的依赖程度降低</li>
-<li>资源变的容易管理<ul>
-<li>单例模式</li>
-<li>IOC容器负责bean的整个生命周期</li>
-</ul>
-</li>
-</ul>
-<h2 id="IOC原理"><a href="#IOC原理" class="headerlink" title="IOC原理"></a>IOC原理</h2><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708103644862.png" alt="image-20240708103644862" style="zoom:50%;" />
-
-<ol>
-<li>FileSystemXmlApplicationContext&#x2F;ClassPathXmlApplicationContext ：xml配置文件在系统中的路径</li>
-<li>AnnotationConfigApplicationContext：基于注解来使用</li>
-</ol>
-<h3 id="一个小例子"><a href="#一个小例子" class="headerlink" title="一个小例子"></a>一个小例子</h3><p>使用 ClassPathXmlApplicationContext 进行分析，方便理解整个构建流程</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用我们的配置文件来启动一个 ApplicationContext</span></span><br><span class="line"><span class="type">ApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;classpath:application.xml&quot;</span>);</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;context 启动成功&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 从 context 中取出我们的 Bean，而不是用 new MessageServiceImpl() 这种方式</span></span><br><span class="line"><span class="type">MessageService</span> <span class="variable">messageService</span> <span class="operator">=</span> context.getBean(MessageService.class);</span><br><span class="line">System.out.println(messageService.getMessage());</span><br></pre></td></tr></table></figure>
-
-<p>那么，这里我们通过ApplicationContext拿到了Bean。那么ApplicationContext是如何创建实例Bean，并且往各个Bean中注入依赖的呢？</p>
-<h3 id="BeanFactory"><a href="#BeanFactory" class="headerlink" title="BeanFactory"></a>BeanFactory</h3><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708105257053.png" alt="image-20240708105257053" style="zoom:33%;" />
-
-<p>ApplicationContext其实就是一个BeanFactory</p>
-<h3 id="启动过程分析"><a href="#启动过程分析" class="headerlink" title="启动过程分析"></a>启动过程分析</h3><h4 id="1-构造方法"><a href="#1-构造方法" class="headerlink" title="1. 构造方法"></a>1. 构造方法</h4><p>先从构造方法开始，把configLocations（也就是XML地址）读进来</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">ClassPathXmlApplicationContext</span><span class="params">(String[] configLocations, <span class="type">boolean</span> refresh, ApplicationContext parent)</span></span><br><span class="line">		<span class="keyword">throws</span> BeansException &#123;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">super</span>(parent);</span><br><span class="line">	setConfigLocations(configLocations);</span><br><span class="line">	<span class="keyword">if</span> (refresh) &#123;</span><br><span class="line">		refresh();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-refresh-方法-–-（BeanFactory注册BeanDefinition-初始化所有单例beans"><a href="#2-refresh-方法-–-（BeanFactory注册BeanDefinition-初始化所有单例beans" class="headerlink" title="2. refresh()方法 – （BeanFactory注册BeanDefinition+初始化所有单例beans)"></a>2. refresh()方法 – （BeanFactory注册BeanDefinition+初始化所有单例beans)</h4><blockquote>
-<ol>
-<li>插一嘴，BeanFactory当然是Bean容器，那么Bean是什么呢？它其实准确来说叫BeanDefinition，我们自己定义的一个个Bean会转换成一个个BeanDefinition存在于Spring的BeanFactory中。</li>
-<li>BeanDefinition保存了所有的Bean信息：是哪个类，是否是单例的，等等</li>
-<li>所以，Bean是什么？在代码层面可以理解为：BeanDefinition的实例</li>
-</ol>
-</blockquote>
-<p>（太复杂，以后再慢慢看吧，先看核心的几步）</p>
-<ul>
-<li>obtainFreshBeanFactory（拿到BeanFactory）<ul>
-<li>这代表applicationContext其实内部持有了一个BeanFactory</li>
-<li>BeanDefinition注册到了BeanFactory中</li>
-<li>我们可以看到里面维护了一个<strong>ConcurrentHashMap</strong>，存beanName-&gt; beanDefinition</li>
-<li><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708165122143.png" alt="image-20240708165122143"></li>
-</ul>
-</li>
-<li>finishBeanFactoryInitialization（创建所有单例Bean，也就是getBean方法）<ul>
-<li><strong>实例化</strong>：使用反射创建Bean实例。</li>
-<li><strong>依赖注入</strong>：根据Bean定义中的依赖关系，将所需的依赖注入到Bean实例中。<ul>
-<li>（这里就是依赖倒置的概念，dfs，从上层往下层搜索，知乎的那个教程里写的）</li>
-<li><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708171643710.png" alt="image-20240708171643710"></li>
-</ul>
-</li>
-<li><strong>初始化</strong>：调用Bean的初始化方法（如配置的init-method或实现了InitializingBean接口的afterPropertiesSet方法）。</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">refresh</span><span class="params">()</span> <span class="keyword">throws</span> BeansException, IllegalStateException &#123;</span><br><span class="line">			。。。。。。</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 这步比较关键，这步完成后，配置文件就会解析成一个个 Bean 定义，注册到 BeanFactory 中，</span></span><br><span class="line">      <span class="comment">// 当然，这里说的 Bean 还没有初始化，只是配置信息都提取出来了，</span></span><br><span class="line">      <span class="comment">// 注册也只是将这些信息都保存到了注册中心(说到底核心是一个 beanName-&gt; beanDefinition 的 map)</span></span><br><span class="line">      <span class="type">ConfigurableListableBeanFactory</span> <span class="variable">beanFactory</span> <span class="operator">=</span> obtainFreshBeanFactory();</span><br><span class="line">  </span><br><span class="line">  		。。。。。。</span><br><span class="line">        <span class="comment">// 重点，重点，重点</span></span><br><span class="line">        <span class="comment">// 初始化所有的 singleton beans</span></span><br><span class="line">        <span class="comment">//（lazy-init 的除外）</span></span><br><span class="line">        finishBeanFactoryInitialization(beanFactory);</span><br><span class="line">			</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 
       
     </div>
