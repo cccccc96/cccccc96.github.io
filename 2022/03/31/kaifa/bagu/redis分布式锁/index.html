@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Redis分布式锁Redis是基于内存操作，性能极高。 考虑如果没有reddsion，用setIfAbsent 方案1 （直接加锁）如果缓存里没有数据，就加锁。加锁成功就访问，反之就自旋重新拿数据。 缺点：虽然设置了过期时间，但当业务执行完成之后，我们的锁还持有着。我们希望的是业务执行完之后，立即释放锁。 方案2（finally删除锁）在方案1的基础之上，加一行finally删除锁。 缺点：假如过">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【开发】【八股】Redis分布式锁">
+<meta property="og:url" content="http://example.com/2022/03/31/kaifa/bagu/redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/index.html">
+<meta property="og:site_name" content="czh的学习小站">
+<meta property="og:description" content="Redis分布式锁Redis是基于内存操作，性能极高。 考虑如果没有reddsion，用setIfAbsent 方案1 （直接加锁）如果缓存里没有数据，就加锁。加锁成功就访问，反之就自旋重新拿数据。 缺点：虽然设置了过期时间，但当业务执行完成之后，我们的锁还持有着。我们希望的是业务执行完之后，立即释放锁。 方案2（finally删除锁）在方案1的基础之上，加一行finally删除锁。 缺点：假如过">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:modified_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:author" content="蔡正海">
+<meta property="article:tag" content="开发">
+<meta property="article:tag" content="八股">
+<meta property="article:tag" content="redis分布式锁">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2022/03/31/kaifa/bagu/redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/03/31/kaifa/bagu/redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/","path":"2022/03/31/kaifa/bagu/redis分布式锁/","title":"【开发】【八股】Redis分布式锁"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【开发】【八股】Redis分布式锁 | czh的学习小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">czh的学习小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">自律</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-number">1.</span> <span class="nav-text">Redis分布式锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%A1%881-%EF%BC%88%E7%9B%B4%E6%8E%A5%E5%8A%A0%E9%94%81%EF%BC%89"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">方案1 （直接加锁）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%A1%882%EF%BC%88finally%E5%88%A0%E9%99%A4%E9%94%81%EF%BC%89"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">方案2（finally删除锁）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%A1%883%EF%BC%88%E9%94%81%E8%AE%BE%E7%BD%AE%E4%B8%80%E4%B8%AAvalue%E5%80%BC%EF%BC%89"><span class="nav-number">1.0.0.3.</span> <span class="nav-text">方案3（锁设置一个value值）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%A1%884%EF%BC%88Reddision-trylock%EF%BC%89"><span class="nav-number">1.0.0.4.</span> <span class="nav-text">方案4（Reddision trylock）</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蔡正海"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">蔡正海</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/bagu/redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【开发】【八股】Redis分布式锁 | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【开发】【八股】Redis分布式锁
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="Redis分布式锁"><a href="#Redis分布式锁" class="headerlink" title="Redis分布式锁"></a>Redis分布式锁</h1><p>Redis是基于内存操作，性能极高。</p>
+<p>考虑如果没有reddsion，用setIfAbsent</p>
+<h4 id="方案1-（直接加锁）"><a href="#方案1-（直接加锁）" class="headerlink" title="方案1 （直接加锁）"></a>方案1 （直接加锁）</h4><p>如果缓存里没有数据，就加锁。加锁成功就访问，反之就自旋重新拿数据。</p>
+<p>缺点：虽然设置了<strong>过期时间</strong>，但当业务执行完成之后，我们的锁还持有着。我们<strong>希望的是业务执行完之后，立即释放锁</strong>。</p>
+<h4 id="方案2（finally删除锁）"><a href="#方案2（finally删除锁）" class="headerlink" title="方案2（finally删除锁）"></a>方案2（finally删除锁）</h4><p>在方案1的基础之上，加一行finally删除锁。</p>
+<p>缺点：假如过期时间比较短，B已经获取了锁，那么<strong>A执行完之后可能会释放B的锁</strong></p>
+<h4 id="方案3（锁设置一个value值）"><a href="#方案3（锁设置一个value值）" class="headerlink" title="方案3（锁设置一个value值）"></a>方案3（锁设置一个value值）</h4><p>在方案2的情况下，加锁的时候，设置一个value值。</p>
+<p>缺点：如何设置过期时间值</p>
+<ul>
+<li>太短：业务还没有执行完，就执行完了</li>
+<li>太长：节点宕机了， 其他节点一直获取不到锁</li>
+</ul>
+<p><strong>看门狗</strong>：<strong>守护线程</strong>，隔固定时间去查看业务是否执行完毕，如果没有就<strong>续期</strong>。</p>
+<h4 id="方案4（Reddision-trylock）"><a href="#方案4（Reddision-trylock）" class="headerlink" title="方案4（Reddision trylock）"></a>方案4（Reddision trylock）</h4><p>解决了前三个方案的问题：</p>
+<ul>
+<li>锁过期问题，释放他人的锁</li>
+<li>看门狗机制：默认锁过期时间是30s，会有一个定时任务在每10s去扫描一下该锁是否被释放，如果没有释放就延长至30s</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BC%80%E5%8F%91/" rel="tag"># 开发</a>
+              <a href="/tags/%E5%85%AB%E8%82%A1/" rel="tag"># 八股</a>
+              <a href="/tags/redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" rel="tag"># redis分布式锁</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/10%E5%B0%8F%E6%97%B6Java%E8%BF%9B%E9%98%B6%E6%8A%80%E6%9C%AF%E6%A0%88/" rel="prev" title="【开发】【八股】10小时掌握Java进阶技术栈">
+                  <i class="fa fa-angle-left"></i> 【开发】【八股】10小时掌握Java进阶技术栈
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/bagu/JWT%E8%BF%98%E6%98%AFcookie/" rel="next" title="【开发】【八股】JWT">
+                  【开发】【八股】JWT <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2022 - 2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蔡正海</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

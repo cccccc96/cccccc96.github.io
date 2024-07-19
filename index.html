@@ -123,18 +123,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1140,7 +1140,7 @@
           <h2 id="简历"><a href="#简历" class="headerlink" title="简历"></a>简历</h2><p>项目名称： 营销平台 - 幸运大转盘</p>
 <p><a target="_blank" rel="noopener" href="http://116.198.234.247/?userId=xiaofuge&activityId=100301">http://116.198.234.247/?userId=xiaofuge&amp;activityId=100301</a></p>
 <p>核心技术：SpringBoot、MyBatis、MySQL、Redis、Kafka、React</p>
-<p>项目描述：该项目是我参考字节掘金中幸运抽奖模块开发的一个幸运大转盘抽奖系统。该系统支持多种营销策略，如：用户积分，积分兑换抽奖次数，返利等；也支持各类差异化抽奖流程，如：消耗积分指定抽奖范围、抽奖N次解锁奖品等各类抽奖玩法。该系统采用DDD架构进行设计，将整个系统划分为抽奖活动、抽奖策略、奖品、积分、返利这五个领域。同时设计中运用到了责任链模式、组合模式、工厂模式等多种设计模式，提高了代码的可扩展性，并对抽奖的计算和秒杀做了设计的优化，可以支撑单机 4c8g 服务器 1000 TPS 的吞吐量，抽奖接口响应时长<code>160毫秒</code>左右。</p>
+<p>项目描述：该项目是我参考字节掘金中幸运抽奖模块开发的一个幸运大转盘抽奖系统。该系统支持多种营销策略，如：用户积分，积分兑换抽奖次数，返利等；也支持各类差异化抽奖流程，如：消耗积分指定抽奖范围、抽奖N次解锁奖品等各类抽奖玩法。该系统采用DDD架构进行设计，将整个系统划分为抽奖活动、抽奖策略、奖品、积分、返利这五个领域。同时设计中运用到了责任链模式、组合模式、工厂模式等多种设计模式，提高了代码的可扩展性，并对抽奖的计算和秒杀做了设计的优化，可以支撑单机 4c8g 服务器 1100 TPS 的吞吐量，抽奖接口响应时长<code>160毫秒</code>左右。</p>
 <p>核心职责</p>
 <ul>
 <li><p>采用策略模式实现两种抽奖算法，一种是总体概率，空间复杂度为O(1)；一种是单项概率，将对应概率的概率的奖品提前映射到数组中，时间复杂度为O(1)。</p>
