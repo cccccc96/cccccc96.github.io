@@ -160,7 +160,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market1/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/openai/openai4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -178,7 +178,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/market/market1/" class="post-title-link" itemprop="url">【开发】营销抽奖系统开发记录1 - 理清基本的营销场景</a>
+          <a href="/2022/03/31/kaifa/project/openai/openai4/" class="post-title-link" itemprop="url">【开发】AI问答助手项目记录4 - 商品下单</a>
         </h2>
 
         <div class="post-meta-container">
@@ -197,7 +197,7 @@
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/AI%E9%97%AE%E7%AD%94%E5%8A%A9%E6%89%8B/" itemprop="url" rel="index"><span itemprop="name">AI问答助手</span></a>
         </span>
     </span>
 
@@ -211,25 +211,30 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="先看一下市面上常见的几种营销场景"><a href="#先看一下市面上常见的几种营销场景" class="headerlink" title="先看一下市面上常见的几种营销场景"></a>先看一下市面上常见的几种营销场景</h2><ol>
-<li>拼多多的砍一刀</li>
-<li>拼多多的农场，牧场</li>
-<li>掘金转盘抽奖</li>
-<li>出行打车好友助力得券</li>
-</ol>
-<p>本质上，都是通过app上的消费，赠送你各种优惠，来留存用户。</p>
-<h2 id="这里主要选择掘金抽奖为参考"><a href="#这里主要选择掘金抽奖为参考" class="headerlink" title="这里主要选择掘金抽奖为参考"></a>这里主要选择掘金抽奖为参考</h2><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240627220950725.png" alt="image-20240627220950725" style="zoom:50%;" />
-
-<p>这里选择：用户通过积分进行抽奖作为主要的场景。</p>
-<p>核心场景就是：用户通过某种行为动作（发帖、点赞）获得抽奖额度，然后进行抽奖。</p>
-<p>领域：暂时可以简单地划分出“积分账号”、“抽奖”、“奖品”这几个领域。后续随着开发再往里加。</p>
-<h2 id="现在可以画流程图理一下思路了"><a href="#现在可以画流程图理一下思路了" class="headerlink" title="现在可以画流程图理一下思路了"></a>现在可以画流程图理一下思路了</h2><p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/%E8%90%A5%E9%94%801.png" alt="营销1"></p>
-<p>一个整体的需求流程可以分为几块</p>
+          <h2 id="商品下单"><a href="#商品下单" class="headerlink" title="商品下单"></a>商品下单</h2><p>这里的商品就是各种大模型次数的额度</p>
+<h2 id="步骤1-用户点击购买，创建未支付订单，等待用户支付"><a href="#步骤1-用户点击购买，创建未支付订单，等待用户支付" class="headerlink" title="步骤1 用户点击购买，创建未支付订单，等待用户支付"></a>步骤1 用户点击购买，创建未支付订单，等待用户支付</h2><p>我们主要做两件事：创建订单，请求支付宝支付请求</p>
 <ol>
-<li>给用户创建一个<strong>营销账户</strong>，存放用户的积分数据</li>
-<li><strong>返利</strong>服务，基于用户的行为数据（打卡、消费等），增加各项积分</li>
-<li>抽奖，抽奖应该进行详细的<strong>抽奖规则</strong>构建，例如根据用户的积分数量更改奖品的优先级等。</li>
+<li>校验token，获取用户id和商品信息，根据用户信息和商品信息创建未支付订单</li>
 </ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping(value = &quot;create_pay_order&quot;, method = RequestMethod.POST)</span></span><br><span class="line"><span class="keyword">public</span> Response&lt;String&gt; <span class="title function_">createParOrder</span><span class="params">(<span class="meta">@RequestHeader(&quot;Authorization&quot;)</span> String token, <span class="meta">@RequestParam</span> Integer productId)</span> &#123;</span><br><span class="line">        <span class="comment">// 1. Token 校验</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. Token 解析</span></span><br><span class="line"></span><br><span class="line">        <span class="type">ShopCartEntity</span> <span class="variable">shopCartEntity</span> <span class="operator">=</span> ShopCartEntity.builder()</span><br><span class="line">                .openid(openid)</span><br><span class="line">                .productId(productId).build();</span><br><span class="line"></span><br><span class="line">        <span class="type">PayOrderEntity</span> <span class="variable">payOrder</span> <span class="operator">=</span> orderService.createOrder(shopCartEntity);</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>如果用户存在有效的未支付订单，则直接返回原来的那笔订单；否则的话，创建一笔未支付订单</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> PayOrderEntity <span class="title function_">createOrder</span><span class="params">(ShopCartEntity shopCartEntity)</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 0. 基础信息</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">openid</span> <span class="operator">=</span> shopCartEntity.getOpenid();</span><br><span class="line">        <span class="type">Integer</span> <span class="variable">productId</span> <span class="operator">=</span> shopCartEntity.getProductId();</span><br><span class="line">        <span class="comment">// 1. 查询有效的未支付订单，如果存在直接返回现成的</span></span><br><span class="line">        <span class="comment">// 2. 商品查询</span></span><br><span class="line">        <span class="comment">// 3. 保存订单</span></span><br><span class="line">        <span class="type">OrderEntity</span> <span class="variable">orderEntity</span> <span class="operator">=</span> <span class="built_in">this</span>.doSaveOrder(openid, productEntity);</span><br><span class="line">        <span class="comment">// 4. 创建支付</span></span><br><span class="line">        <span class="type">PayOrderEntity</span> <span class="variable">payOrderEntity</span> <span class="operator">=</span> <span class="built_in">this</span>.doPrepayOrder(openid, orderEntity.getOrderId(), productEntity.getProductName(), orderEntity.getTotalAmount());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> payOrderEntity;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>提交支付宝沙箱支付请求</li>
+</ol>
+<p>alipayClient.pageExecute(request).getBody()</p>
+<p>它会返回给我们一串html代码，我们返回给前端，用户就能看到支付界面了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> PayOrderEntity <span class="title function_">doPrepayOrder</span><span class="params">(String openid, String orderId, String productName, BigDecimal amountTotal)</span> <span class="keyword">throws</span> AlipayApiException &#123;</span><br><span class="line">    <span class="type">AlipayTradePagePayRequest</span> <span class="variable">request</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AlipayTradePagePayRequest</span>();  <span class="comment">// 发送请求的 Request类</span></span><br><span class="line">    request.setNotifyUrl(notify_url);			<span class="comment">// 支付的地址</span></span><br><span class="line">    request.setReturnUrl(return_url);</span><br><span class="line"></span><br><span class="line">    <span class="type">JSONObject</span> <span class="variable">bizContent</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JSONObject</span>();</span><br><span class="line">    bizContent.put(<span class="string">&quot;out_trade_no&quot;</span>, orderId);  <span class="comment">// 我们自己生成的订单编号</span></span><br><span class="line">    bizContent.put(<span class="string">&quot;total_amount&quot;</span>, amountTotal.toString()); <span class="comment">// 订单的总金额</span></span><br><span class="line">    bizContent.put(<span class="string">&quot;subject&quot;</span>, productName);   <span class="comment">// 支付的名称</span></span><br><span class="line">    bizContent.put(<span class="string">&quot;product_code&quot;</span>, <span class="string">&quot;FAST_INSTANT_TRADE_PAY&quot;</span>);  <span class="comment">// 固定配置</span></span><br><span class="line">    request.setBizContent(bizContent.toString());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建支付单</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">codeUrl</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">null</span> != alipayClient) &#123;</span><br><span class="line">        codeUrl = alipayClient.pageExecute(request).getBody();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        codeUrl = <span class="string">&quot;因你未配置支付渠道，所以暂时不能生成有效的支付URL。请配置支付渠道后，在application-dev.yml中配置支付渠道信息&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 更新订单支付信息</span></span><br><span class="line">    orderRepository.updateOrderPayInfo(payOrderEntity);</span><br><span class="line">    <span class="keyword">return</span> payOrderEntity;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="步骤二-支付宝支付回调"><a href="#步骤二-支付宝支付回调" class="headerlink" title="步骤二 支付宝支付回调"></a>步骤二 支付宝支付回调</h2><p>拿到支付成功的回调请求，更新订单为已支付，并发送MQ消息，进行发货</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 支付宝验签</span><br><span class="line">if (checkSignature) &#123;</span><br><span class="line">    // 更新订单</span><br><span class="line">    boolean isSuccess = orderService.changeOrderPaySuccess(tradeNo, alipayTradeNo, new BigDecimal(totalAmount).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP), dateFormat.parse(gmtPayment));</span><br><span class="line">    if (isSuccess) &#123;</span><br><span class="line">        eventBus.post(tradeNo);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
@@ -256,7 +261,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/dbrouter/dbrouter1/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/dbrouter/dbrouter10/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +279,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/dbrouter/dbrouter1/" class="post-title-link" itemprop="url">【开发】数据库动态路由组件记录1 - 线程池调研</a>
+          <a href="/2022/03/31/kaifa/project/dbrouter/dbrouter10/" class="post-title-link" itemprop="url">【开发】mysql动态路由组件记录2 - 简历</a>
         </h2>
 
         <div class="post-meta-container">
@@ -307,795 +312,13 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>参考学习：<a target="_blank" rel="noopener" href="https://shardingsphere.apache.org/index_zh.html">Apache ShardingSphere</a></p>
-</blockquote>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>动态路由组件的一个核心思路，就是分库和分表，所以我们核心要实现如下两件事</p>
-<ul>
-<li>分库：根据字段属性，动态切换数据源（改数据源）</li>
-<li>分表：根据字段属性，拦截修改sql语句（改from后面的那个表）</li>
-</ul>
-<p>所以可以简单设计动态路由的流程：</p>
-<ol>
-<li>根据字段计算hash值，存入threadlocal</li>
-<li>修改sql语句</li>
-<li>切换数据源</li>
-</ol>
-<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240703105637622.png" alt="image-20240703105637622"></p>
-<h2 id="流程1-初始化加载配置"><a href="#流程1-初始化加载配置" class="headerlink" title="流程1 初始化加载配置"></a>流程1 初始化加载配置</h2><p>重写springboot中EnvironmentAware的setEnvironment方法</p>
-<p>通过environment.getProperty（）方法，我们可以直接拿到yml中的配置，也就是我们对于分库分表的配置信息</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mini-db-router:</span><br><span class="line">  jdbc:</span><br><span class="line">    datasource:</span><br><span class="line">      dbCount: 2</span><br><span class="line">      tbCount: 4</span><br><span class="line">      default: db00</span><br><span class="line">      routerKey: userId</span><br><span class="line">      list: db01,db02</span><br><span class="line">      db00:</span><br><span class="line">        driver-class-name: com.mysql.cj.jdbc.Driver</span><br><span class="line">        url: ??</span><br><span class="line">        username: root</span><br><span class="line">        password: ??</span><br><span class="line">        type-class-name: com.zaxxer.hikari.HikariDataSource</span><br><span class="line">        pool:</span><br><span class="line">          pool-name: Retail_HikariCP</span><br><span class="line">          ...</span><br><span class="line">      db01:  ...</span><br><span class="line">      db02:  ...</span><br></pre></td></tr></table></figure>
-
-<p>实现EnvironmentAware，就可以拿上面的这些信息了</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataSourceAutoConfig</span> <span class="keyword">implements</span> <span class="title class_">EnvironmentAware</span> &#123;</span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setEnvironment</span><span class="params">(Environment environment)</span> &#123;</span><br><span class="line">       <span class="type">String</span> <span class="variable">prefix</span> <span class="operator">=</span> <span class="string">&quot;mini-db-router.jdbc.datasource.&quot;</span>;</span><br><span class="line"></span><br><span class="line">       dbCount = Integer.valueOf(environment.getProperty(prefix + <span class="string">&quot;dbCount&quot;</span>));</span><br><span class="line">       tbCount = Integer.valueOf(environment.getProperty(prefix + <span class="string">&quot;tbCount&quot;</span>));</span><br><span class="line">       routerKey = environment.getProperty(prefix + <span class="string">&quot;routerKey&quot;</span>);</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 分库分表数据源</span></span><br><span class="line">       <span class="type">String</span> <span class="variable">dataSources</span> <span class="operator">=</span> environment.getProperty(prefix + <span class="string">&quot;list&quot;</span>);</span><br><span class="line">       <span class="keyword">assert</span> dataSources != <span class="literal">null</span>;</span><br><span class="line">       <span class="keyword">for</span> (String dbInfo : dataSources.split(<span class="string">&quot;,&quot;</span>)) &#123;</span><br><span class="line">           Map&lt;String, Object&gt; dataSourceProps = PropertyUtil.handle(environment, prefix + dbInfo, Map.class);</span><br><span class="line">           dataSourceMap.put(dbInfo, dataSourceProps);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 默认数据源</span></span><br><span class="line">       <span class="type">String</span> <span class="variable">defaultData</span> <span class="operator">=</span> environment.getProperty(prefix + <span class="string">&quot;default&quot;</span>);</span><br><span class="line">       defaultDataSourceConfig = PropertyUtil.handle(environment, prefix + defaultData, Map.class);</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="流程2-AOP切面-通过注解-获取入参字段，并进行路由计算"><a href="#流程2-AOP切面-通过注解-获取入参字段，并进行路由计算" class="headerlink" title="流程2 AOP切面 通过注解 获取入参字段，并进行路由计算"></a>流程2 AOP切面 通过注解 获取入参字段，并进行路由计算</h2><p>既然要进行分库分表，我们首先要把用来分库分表的字段，以及其对应的值拿到手。</p>
-<p>那么第一步，用注解拿到对应的参数，并拿到对应的值。</p>
-<p>复习一下注解</p>
-<ul>
-<li><p>interface</p>
-<ul>
-<li><p>Retention(RetentionPolicy.RUNTIME) 运行时的注解</p>
-</li>
-<li><p>Target({ElementType.METHOD,ElementType.TYPE}) 修饰在方法或着类型上</p>
-</li>
-<li><p>String key() default “”;  注解的参数例如：DBRouter(key&#x3D;”userId”)</p>
-</li>
-</ul>
-</li>
-<li><p>Aspect - JoinPoint</p>
-<ul>
-<li>Pointcut 切点 （标记对应的注解）</li>
-<li>@Around(“aopPoint() &amp;&amp; @annotation(dbRouter)”)  （在该切点处运行）</li>
-<li>Around方法内些具体要做的事（拿字段参数，和对应的值）</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.METHOD,ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> DBRouter &#123;</span><br><span class="line">    <span class="comment">/** 分库分表字段 */</span></span><br><span class="line">    String <span class="title function_">key</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DBRouterJoinPoint</span> &#123;</span><br><span class="line">     <span class="meta">@Pointcut(&quot;@annotation(cn.czh.middleware.db.router.annotation.DBRouter)&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">aopPoint</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Around(&quot;aopPoint() &amp;&amp; @annotation(dbRouter)&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">doRouter</span><span class="params">(ProceedingJoinPoint jp, DBRouter dbRouter)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">dbKey</span> <span class="operator">=</span> dbRouter.key();</span><br><span class="line">				</span><br><span class="line">        <span class="comment">// 拿到参数的值，如果就是字段变量，直接拿；如果是对象，BeanUtils.getProperty拿</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">dbKeyAttr</span> <span class="operator">=</span> getAttrValue(dbKey, jp.getArgs());</span><br><span class="line">        dbRouterStrategy.doRouter(dbKeyAttr);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> jp.proceed();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            dbRouterStrategy.clear();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>拿到了值就可以调用doRouter函数，进行hash散列的计算。</p>
-<p>计算好的hash值存入threadlocal中</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DBContextHolder</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;String&gt; dbKey = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;String&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;String&gt; tbKey = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;String&gt;();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doRouter</span><span class="params">(String dbKeyAttr)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">size</span> <span class="operator">=</span> dbRouterConfig.getDbCount()*dbRouterConfig.getTbCount();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 扰动函数；在 JDK 的 HashMap 中，对于一个元素的存放，需要进行哈希散列。而为了让散列更加均匀，所以添加了扰动函数。</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">idx</span> <span class="operator">=</span> (size - <span class="number">1</span>) &amp; (dbKeyAttr.hashCode() ^ (dbKeyAttr.hashCode() &gt;&gt;&gt; <span class="number">16</span>));</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> <span class="variable">dbIdx</span> <span class="operator">=</span> idx / dbRouterConfig.getTbCount()+<span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">tbIdx</span> <span class="operator">=</span> idx - dbRouterConfig.getTbCount() * (dbIdx - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        DBContextHolder.setDBKey(String.format(<span class="string">&quot;%02d&quot;</span>, dbIdx));</span><br><span class="line">        DBContextHolder.setTBKey(String.format(<span class="string">&quot;%03d&quot;</span>, tbIdx));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="流程3-替换表名-（ibatis-plugin-Interceptor）"><a href="#流程3-替换表名-（ibatis-plugin-Interceptor）" class="headerlink" title="流程3 替换表名 （ibatis.plugin.Interceptor）"></a>流程3 替换表名 （ibatis.plugin.Interceptor）</h2><p>到了这个流程我们可以开始进行分表的操作。</p>
-<p>我们其实是用mybatis plugin去对sql语句做一个拦截。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Intercepts(&#123;@Signature(type = StatementHandler.class, method = &quot;prepare&quot;, args = &#123;Connection.class, Integer.class&#125;)&#125;)</span><br><span class="line">public class DynamicMybatisPlugin implements Interceptor &#123;</span><br></pre></td></tr></table></figure>
-
-<p>然后我们重写Interceptor中的intercept函数，拦截sql语句并修改</p>
-<ol>
-<li>invocation.getTarget().getBoundSql()拿到sql语句</li>
-<li>利用Pattern进行替换sql语句中对应的表名</li>
-<li>通过反射修改SQL语句</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public Object intercept(Invocation invocation) throws Throwable &#123;</span><br><span class="line">        // 获取StatementHandler</span><br><span class="line">        StatementHandler statementHandler = (StatementHandler) invocation.getTarget();</span><br><span class="line">				。。。。。。</span><br><span class="line">        // 获取sql 并替换</span><br><span class="line">        BoundSql boundSql = statementHandler.getBoundSql();</span><br><span class="line">        String sql = boundSql.getSql();</span><br><span class="line">				。。。。。。</span><br><span class="line">        String replaceSql = matcher.replaceAll(tableName + &quot;_&quot; + DBContextHolder.getTBKey());</span><br><span class="line"></span><br><span class="line">        // 通过反射修改SQL语句</span><br><span class="line">        Field field = boundSql.getClass().getDeclaredField(&quot;sql&quot;);</span><br><span class="line">        field.setAccessible(true);</span><br><span class="line">        field.set(boundSql, replaceSql);</span><br><span class="line">        field.setAccessible(false);</span><br><span class="line"></span><br><span class="line">        return invocation.proceed();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="流程4-切换数据源-（jdbc-datasource-lookup-AbstractRoutingDataSource）"><a href="#流程4-切换数据源-（jdbc-datasource-lookup-AbstractRoutingDataSource）" class="headerlink" title="流程4 切换数据源 （jdbc.datasource.lookup.AbstractRoutingDataSource）"></a>流程4 切换数据源 （jdbc.datasource.lookup.AbstractRoutingDataSource）</h2><p>根据yml里拿到的那几个数据源，使用AbstractRoutingDataSource替换默认数据源</p>
-<p>重写determineCurrentLookupKey，AbstractRoutingDataSource能够帮助我们根据threadlocal里的值动态切换数据源</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class DynamicDataSource extends AbstractRoutingDataSource &#123;</span><br><span class="line">    @Override</span><br><span class="line">    protected Object determineCurrentLookupKey() &#123;</span><br><span class="line">        return &quot;db&quot; + DBContextHolder.getDBKey();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Bean</span><br><span class="line">public DataSource dataSource() &#123;</span><br><span class="line">// 创建数据源</span><br><span class="line">Map&lt;Object, Object&gt; targetDataSources = new HashMap&lt;&gt;();</span><br><span class="line">for (String dbInfo : dataSourceMap.keySet()) &#123;</span><br><span class="line">Map&lt;String, Object&gt; objMap = dataSourceMap.get(dbInfo);</span><br><span class="line">targetDataSources.put(dbInfo, new DriverManagerDataSource(objMap.get(&quot;url&quot;).toString(), objMap.get(&quot;username&quot;).toString(), objMap.get(&quot;password&quot;).toString()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 设置数据源</span><br><span class="line">DynamicDataSource dynamicDataSource = new DynamicDataSource();</span><br><span class="line">dynamicDataSource.setTargetDataSources(targetDataSources);</span><br><span class="line">dynamicDataSource.setDefaultTargetDataSource(new DriverManagerDataSource(defaultDataSourceConfig.get(&quot;url&quot;).toString(), defaultDataSourceConfig.get(&quot;username&quot;).toString(), defaultDataSourceConfig.get(&quot;password&quot;).toString()));</span><br><span class="line"></span><br><span class="line">return dynamicDataSource;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/Dynamic-thread-pool/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A03/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/Dynamic-thread-pool/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A03/" class="post-title-link" itemprop="url">【开发】动态线程池组件记录3 - 简历</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">动态线程池组件</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>项目名称： 动态线程池【组件】</p>
-<p>核心技术：SpringBoot、SpringBoot Starter、ThreadPoolExecutor、Redis</p>
-<p>项目描述：线程池的参数配置需要遵循一定的规范。但实际场景中，线程池的配置信息无法一次明确，随着业务的变更或者服务器的压力，线程池需要动态修改。因此开发了一款动态线程池组件，监控和动态修改线程池。</p>
-<p>核心职责</p>
-<ul>
-<li>设计 Redis 版本的注册中心，管理线程池核心信息。定时扫描线程池，上报到 Redis 注册中心，让各个接入该组件的应用实现线程池的统一管理。</li>
-<li>开发管理系统 监控和动态修改 线程池，通过Redis 的发布订阅能力，让对应的应用上的 sdk 监听和修改线程池，实现线程池的动态修改。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/Dynamic-thread-pool/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A02/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/Dynamic-thread-pool/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A02/" class="post-title-link" itemprop="url">【开发】动态线程池组件记录2 - 动态线程池的实现</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">动态线程池组件</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="总流程"><a href="#总流程" class="headerlink" title="总流程"></a>总流程</h1><p>虽然线程池的参数配置有一些规范，但实际场景中，线程池的参数并不好一次就配置好。同时需要做监控处理，知道整个线程的消耗情况，所以需要动态线程池。</p>
-<p>核心流程如下：</p>
-<ul>
-<li>线程池核心信息的获取，核心线程数、最大线程数、活跃线程数、队列类型、队列任务数、队列剩余可用任务数</li>
-<li>设计 Redis 版本的注册中心，通过 SDK 上报方式到 Redis 注册中心，做统一的管理，让各个接入动态线程池的组件都能统一管理。</li>
-<li>通过Redis 的发布订阅能力，通过推送指定的主题，让对应的应用上的 sdk 监听和处置线程池。</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702173453723.png" alt="image-20240702173453723"></p>
-<h2 id="流程1-如何采集应用中的线程池信息"><a href="#流程1-如何采集应用中的线程池信息" class="headerlink" title="流程1 如何采集应用中的线程池信息"></a>流程1 如何采集应用中的线程池信息</h2><p>首先，我们需要一个接口，能实现线程池的配置查询和配置更新</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IDynamicThreadPoolService</span> &#123;</span><br><span class="line"></span><br><span class="line">    List&lt;ThreadPoolConfigEntity&gt; <span class="title function_">queryThreadPoolList</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    ThreadPoolConfigEntity <span class="title function_">queryThreadPoolConfigByName</span><span class="params">(String threadPoolName)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">updateThreadPoolConfig</span><span class="params">(ThreadPoolConfigEntity threadPoolConfigEntity)</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>其次，我们需要构建一个bean对象将上述接口注入进应用中。</p>
-<ul>
-<li>拿到应用的applicationContext和所有threadPoolExecutor</li>
-<li>构造DynamicThreadPoolService</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean(&quot;dynamicThreadPollService&quot;)</span></span><br><span class="line"><span class="keyword">public</span> DynamicThreadPoolService <span class="title function_">dynamicThreadPollService</span><span class="params">(ApplicationContext applicationContext, Map&lt;String, ThreadPoolExecutor&gt; threadPoolExecutorMap, RedissonClient redissonClient)</span> &#123;</span><br><span class="line">    applicationName = applicationContext.getEnvironment().getProperty(<span class="string">&quot;spring.application.name&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (StringUtils.isBlank(applicationName)) &#123;</span><br><span class="line">        applicationName = <span class="string">&quot;缺省的&quot;</span>;</span><br><span class="line">        logger.warn(<span class="string">&quot;动态线程池，启动提示。SpringBoot 应用未配置 spring.application.name 无法获取到应用名称！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取缓存数据，设置本地线程池配置</span></span><br><span class="line">    Set&lt;String&gt; threadPoolKeys = threadPoolExecutorMap.keySet();</span><br><span class="line">    <span class="keyword">for</span> (String threadPoolKey : threadPoolKeys) &#123;</span><br><span class="line">        <span class="type">ThreadPoolConfigEntity</span> <span class="variable">threadPoolConfigEntity</span> <span class="operator">=</span> redissonClient.&lt;ThreadPoolConfigEntity&gt;getBucket(RegistryEnumVO.THREAD_POOL_CONFIG_PARAMETER_LIST_KEY.getKey() + <span class="string">&quot;_&quot;</span> + applicationName + <span class="string">&quot;_&quot;</span> + threadPoolKey).get();</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> == threadPoolConfigEntity) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="type">ThreadPoolExecutor</span> <span class="variable">threadPoolExecutor</span> <span class="operator">=</span> threadPoolExecutorMap.get(threadPoolKey);</span><br><span class="line">        threadPoolExecutor.setCorePoolSize(threadPoolConfigEntity.getCorePoolSize());</span><br><span class="line">        threadPoolExecutor.setMaximumPoolSize(threadPoolConfigEntity.getMaximumPoolSize());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">DynamicThreadPoolService</span>(applicationName, threadPoolExecutorMap);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>启动自动配置 resources&#x2F;META-INF&#x2F;spring.factories（spi）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.czh.middleware.dynamic.thread.pool.sdk.config.DynamicThreadPoolAutoConfig</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="流程2-线程池数据上报"><a href="#流程2-线程池数据上报" class="headerlink" title="流程2 线程池数据上报"></a>流程2 线程池数据上报</h2><p>设置定时任务：线程池配置信息上报到Redis配置中心</p>
-<blockquote>
-<p>小bug：admin和组件里的涉及到redis解码，包名要保持一致</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">reportThreadPoolConfigParameter</span><span class="params">(ThreadPoolConfigEntity threadPoolConfigEntity)</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">cacheKey</span> <span class="operator">=</span> RegistryEnumVO.THREAD_POOL_CONFIG_PARAMETER_LIST_KEY.getKey() + <span class="string">&quot;_&quot;</span> + threadPoolConfigEntity.getAppName() + <span class="string">&quot;_&quot;</span> + threadPoolConfigEntity.getThreadPoolName();</span><br><span class="line">    RBucket&lt;ThreadPoolConfigEntity&gt; bucket = redissonClient.getBucket(cacheKey);</span><br><span class="line">    bucket.set(threadPoolConfigEntity, Duration.ofDays(<span class="number">30</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="流程3-订阅发布消息，变更线程池"><a href="#流程3-订阅发布消息，变更线程池" class="headerlink" title="流程3 订阅发布消息，变更线程池"></a>流程3 订阅发布消息，变更线程池</h2><p>监听消息，更新线程池配置，重新上报。</p>
-<p>具体的线程池更新，直接调用线程池的set函数。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onMessage</span><span class="params">(CharSequence charSequence, ThreadPoolConfigEntity threadPoolConfigEntity)</span> &#123;</span><br><span class="line">    logger.info(<span class="string">&quot;动态线程池，调整线程池配置。线程池名称:&#123;&#125; 核心线程数:&#123;&#125; 最大线程数:&#123;&#125;&quot;</span>, threadPoolConfigEntity.getThreadPoolName(), threadPoolConfigEntity.getPoolSize(), threadPoolConfigEntity.getMaximumPoolSize());</span><br><span class="line">    dynamicThreadPoolService.updateThreadPoolConfig(threadPoolConfigEntity);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 更新后上报最新数据</span></span><br><span class="line">    List&lt;ThreadPoolConfigEntity&gt; threadPoolConfigEntities = dynamicThreadPoolService.queryThreadPoolList();</span><br><span class="line">    registry.reportThreadPool(threadPoolConfigEntities);</span><br><span class="line"></span><br><span class="line">    <span class="type">ThreadPoolConfigEntity</span> <span class="variable">threadPoolConfigEntityCurrent</span> <span class="operator">=</span> dynamicThreadPoolService.queryThreadPoolConfigByName(threadPoolConfigEntity.getThreadPoolName());</span><br><span class="line">    registry.reportThreadPoolConfigParameter(threadPoolConfigEntityCurrent);</span><br><span class="line">    logger.info(<span class="string">&quot;动态线程池，上报线程池配置：&#123;&#125;&quot;</span>, JSON.toJSONString(threadPoolConfigEntity));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="流程4-管理端工程搭建"><a href="#流程4-管理端工程搭建" class="headerlink" title="流程4 管理端工程搭建"></a>流程4 管理端工程搭建</h2><p>本质上，就是往数据中心发送一条更新线程池配置的消息</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(value = &quot;update_thread_pool_config&quot;, method = RequestMethod.POST)</span><br><span class="line">public Response&lt;Boolean&gt; updateThreadPoolConfig(@RequestBody ThreadPoolConfigEntity request) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        log.info(&quot;修改线程池配置开始 &#123;&#125; &#123;&#125; &#123;&#125;&quot;, request.getAppName(), request.getThreadPoolName(), JSON.toJSONString(request));</span><br><span class="line">        RTopic topic = redissonClient.getTopic(&quot;DYNAMIC_THREAD_POOL_REDIS_TOPIC&quot; + &quot;_&quot; + request.getAppName());</span><br><span class="line">        topic.publish(request);</span><br><span class="line">        log.info(&quot;修改线程池配置完成 &#123;&#125; &#123;&#125;&quot;, request.getAppName(), request.getThreadPoolName());</span><br><span class="line">        return Response.&lt;Boolean&gt;builder()</span><br><span class="line">                .code(Response.Code.SUCCESS.getCode())</span><br><span class="line">                .info(Response.Code.SUCCESS.getInfo())</span><br><span class="line">                .data(true)</span><br><span class="line">                .build();</span><br><span class="line">    &#125; catch (Exception e) &#123;</span><br><span class="line">        log.error(&quot;修改线程池配置异常 &#123;&#125;&quot;, JSON.toJSONString(request), e);</span><br><span class="line">        return Response.&lt;Boolean&gt;builder()</span><br><span class="line">                .code(Response.Code.UN_ERROR.getCode())</span><br><span class="line">                .info(Response.Code.UN_ERROR.getInfo())</span><br><span class="line">                .data(false)</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/Dynamic-thread-pool/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/Dynamic-thread-pool/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A01/" class="post-title-link" itemprop="url">【开发】动态线程池组件记录1 - 线程池调研</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">动态线程池组件</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h1><blockquote>
-<p>学习资料：Java线程池实现原理及其在美团业务中的实践</p>
-</blockquote>
-<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><h2 id="线程池（是什么）"><a href="#线程池（是什么）" class="headerlink" title="线程池（是什么）"></a>线程池（是什么）</h2><p>池化思想管理线程，好处</p>
-<ul>
-<li><strong>降低资源消耗</strong>：重复利用已创建的线程</li>
-<li><strong>提高响应速度</strong>：任务到达时，无需等待线程创建</li>
-<li><strong>提高线程的可管理性</strong>：线程是稀缺资源，使用线程进行统一的分配、调优和监控</li>
-<li><strong>提供更多更强大的功能</strong>：ScheduledThreadPoolExecutor</li>
-</ul>
-<h2 id="线程池解决的问题（为什么）"><a href="#线程池解决的问题（为什么）" class="headerlink" title="线程池解决的问题（为什么）"></a>线程池解决的问题（为什么）</h2><p>线程是稀缺资源，不能够确定在任意时刻中，有多少任务需要执行，有多少资源需要投入</p>
-<ul>
-<li>频繁申请&#x2F;销毁资源，带来额外的消耗</li>
-<li>对资源无限申请，易引发系统资源耗尽的风险</li>
-</ul>
-<p>池化思想：</p>
-<ul>
-<li>内存池</li>
-<li>连接池</li>
-<li>实例池</li>
-</ul>
-<h1 id="线程池核心设计与实现"><a href="#线程池核心设计与实现" class="headerlink" title="线程池核心设计与实现"></a>线程池核心设计与实现</h1><h2 id="总体设计"><a href="#总体设计" class="headerlink" title="总体设计"></a>总体设计</h2><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154427652.png" alt="image-20240702154427652" style="zoom:50%;" />
-
-<ul>
-<li>顶层接口Exector：<ul>
-<li>任务提交和任务执行解藕</li>
-<li>用户只需要将Runnable提交到Executor中</li>
-</ul>
-</li>
-<li>ExecutorService：<ul>
-<li>补充执行任务的能力，生成Future</li>
-<li>管控线程池，停止线程池的运行</li>
-</ul>
-</li>
-<li>AbstractExecutorService：<ul>
-<li>抽象类，串联执行任务的流程</li>
-</ul>
-</li>
-<li>ThreadPoolExecutor<ul>
-<li>实现类</li>
-</ul>
-</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154449505.png" alt="image-20240702154449505"></p>
-<p>线程池内部实际上构建了一个生产者消费者模型，将线程和任务两者解藕，缓冲任务，复用线程。</p>
-<p>任务管理（生产者）</p>
-<ul>
-<li>直接申请线程执行任务</li>
-<li>缓冲队列中等待线程执行</li>
-<li>拒绝该任务</li>
-</ul>
-<p>线程管理（消费者）</p>
-<ul>
-<li>它们被统⼀维护在线程池内，根据任务请求进⾏线程的分配</li>
-</ul>
-<h2 id="生命周期管理"><a href="#生命周期管理" class="headerlink" title="生命周期管理"></a>生命周期管理</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="type">AtomicInteger</span> <span class="variable">ctl</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicInteger</span>(ctlOf(RUNNING, <span class="number">0</span>));</span><br></pre></td></tr></table></figure>
-
-<p>维护两个值：运行状态（runState），工作线程数量（workerCount）</p>
-<p>运行状态有五种：</p>
-<ul>
-<li>RUNNING：正常运行</li>
-<li>SHUTDOWN：不再接收新任务，能继续处理</li>
-<li>STOP：不接受新任务，中断线程</li>
-<li>TIDYING：</li>
-<li>TERMINATED</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154505795.png" alt="image-20240702154505795"></p>
-<h2 id="任务执行机制"><a href="#任务执行机制" class="headerlink" title="任务执行机制"></a>任务执行机制</h2><h3 id="任务调度"><a href="#任务调度" class="headerlink" title="任务调度"></a>任务调度</h3><ul>
-<li>先看核心线程有没有满</li>
-<li>再看阻塞队列</li>
-<li>最后看最大线程数</li>
-<li>都不行，就拒绝</li>
-</ul>
-<h3 id="任务缓冲（阻塞队列）"><a href="#任务缓冲（阻塞队列）" class="headerlink" title="任务缓冲（阻塞队列）"></a>任务缓冲（阻塞队列）</h3><p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154521689.png" alt="image-20240702154521689"></p>
-<h3 id="任务申请"><a href="#任务申请" class="headerlink" title="任务申请"></a>任务申请</h3><p>⼀种是任务直接由新创建的线程执⾏。</p>
-<p>另⼀种是线程从任务队列中获取任务然后执⾏，执⾏完任务的空闲线程会再次去从队列中申请任务再去执⾏。</p>
-<h3 id="任务拒绝"><a href="#任务拒绝" class="headerlink" title="任务拒绝"></a>任务拒绝</h3><p>任务队列满，线程池满，采取任务拒绝策略</p>
-<ul>
-<li>丢弃任务，抛出异常</li>
-<li>丢弃任务，不抛出异常</li>
-<li>丢弃最前面的任务，提交被拒绝的任务</li>
-<li>由调用线程处理该任务</li>
-</ul>
-<h2 id="Worker线程管理"><a href="#Worker线程管理" class="headerlink" title="Worker线程管理"></a>Worker线程管理</h2><p>thread是在调⽤构造⽅法时通过ThreadFactory来创建的线程，可以⽤来执⾏任务；firstTask⽤它来保存传⼊的第⼀个任务，这个任务可以有也可以为null。如果这个值是⾮空的，那么线程就会在启动初期⽴即执⾏这个任务，也就对应核⼼线程创建时的情况；如果这个值是null，那么就需要创建⼀个线程去执⾏任务列表（workQueue）中的任务，也就是⾮核⼼线程的创建。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Worker</span> <span class="keyword">extends</span> <span class="title class_">AbstractQueuedSynchronizer</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span>&#123;</span><br><span class="line"> <span class="keyword">final</span> Thread thread;<span class="comment">//Worker持有的线程</span></span><br><span class="line"> Runnable firstTask;<span class="comment">//初始化的任务，可以为null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154538532.png" alt="image-20240702154538532">Worker集成AQS，独占锁，比如回收场景</p>
-<ul>
-<li>Lock方法一旦获取了锁，代表该线程在执行任务，不能中断回收</li>
-<li>不是独占，空闲，可以回收</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154555686.png" alt="image-20240702154555686"></p>
-<p>Worker线程执行任务</p>
-<ol>
-<li>while循环不断getTask()方法来获取任务<ol>
-<li>如果getTask为null则跳出循环，销毁线程</li>
-</ol>
-</li>
-<li>判断线程池是否stop</li>
-<li>执行任务</li>
-</ol>
-<h1 id="实践场景"><a href="#实践场景" class="headerlink" title="实践场景"></a>实践场景</h1><h2 id="1-快速响应用户请求"><a href="#1-快速响应用户请求" class="headerlink" title="1 - 快速响应用户请求"></a>1 - 快速响应用户请求</h2><h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>实时请求，⽐如说⽤户要查看⼀个商品的信息，那么我们需要将商品维度的⼀系列信息如商品的价格、优惠、库存、图⽚等等聚合起来，展示给⽤户。</p>
-<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>不设置队列去缓冲并发任务，调高corePoolSize和maxPoolSize去尽可能创造多的线程快速执⾏任务。</p>
-<h2 id="2-快速处理批量任务"><a href="#2-快速处理批量任务" class="headerlink" title="2 - 快速处理批量任务"></a>2 - 快速处理批量任务</h2><h3 id="描述-1"><a href="#描述-1" class="headerlink" title="描述"></a>描述</h3><p>离线任务，需要快速执行，统计报表</p>
-<h3 id="分析-1"><a href="#分析-1" class="headerlink" title="分析"></a>分析</h3><p>不需要瞬时完成，吞吐量优先。设置队列去缓冲并发任务，调整合适的corePoolSize去设置处理任务的线程数。在这⾥，设置的线程数过多可能还会引发线程上下⽂切换频繁的问题，也会降低处理任务的速度，降低吞吐量。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/mianjing/%E8%87%AA%E6%B5%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/mianjing/%E8%87%AA%E6%B5%8B/" class="post-title-link" itemprop="url">【开发】【八股】面经自测</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%9D%A2%E7%BB%8F/" itemprop="url" rel="index"><span itemprop="name">面经</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="整理答题思路"><a href="#整理答题思路" class="headerlink" title="整理答题思路"></a>整理答题思路</h1><blockquote>
-<p>这里暂时只放最最基本的面试题，汇总在这里，面试前看看，别最基础的也忘了。</p>
-</blockquote>
-<h3 id="Java-中的集合类型？哪些是线程安全的？"><a href="#Java-中的集合类型？哪些是线程安全的？" class="headerlink" title="Java 中的集合类型？哪些是线程安全的？"></a>Java 中的集合类型？哪些是线程安全的？</h3><p>List、Set、Map</p>
-<p>ConcurrentHashMap线程安全</p>
-<h3 id="hashmap-的底层实现原理、put-方法实现流程、扩容机制？和Redis区别"><a href="#hashmap-的底层实现原理、put-方法实现流程、扩容机制？和Redis区别" class="headerlink" title="hashmap 的底层实现原理、put()方法实现流程、扩容机制？和Redis区别"></a>hashmap 的底层实现原理、put()方法实现流程、扩容机制？和Redis区别</h3><p>底层实现原理就不赘述了，关键词记一下，别忘了</p>
-<ul>
-<li><p><strong>结构：</strong></p>
-<ul>
-<li>桶数组，链表、红黑树</li>
-<li>hashcode()高16位和低16位异或，</li>
-</ul>
-</li>
-<li><p><strong>put：</strong></p>
-<ul>
-<li>覆盖？链表尾差&#x2F;红黑树？（是否需要树话，是否需要扩容）</li>
-</ul>
-</li>
-<li><p><strong>扩容：</strong></p>
-<ul>
-<li>2^n次方，0.75，8，64</li>
-</ul>
-</li>
-</ul>
-<p>和Redis区别，<strong>一个分布式，一个单机</strong></p>
-<h3 id="HashMap-为什么不安全，ConcurrentHashMap"><a href="#HashMap-为什么不安全，ConcurrentHashMap" class="headerlink" title="HashMap 为什么不安全，ConcurrentHashMap"></a>HashMap 为什么不安全，ConcurrentHashMap</h3><p>当然不安全</p>
-<ul>
-<li>两个<strong>同时put</strong>，应该用链表的，会被覆盖</li>
-<li><strong>get和put</strong>同时，这时候rehash了，就get null了</li>
-</ul>
-<p>ConcurrentHashMap原理（<strong>synchronized</strong>锁桶数组上的节点）（<strong>自旋+CAS</strong>避免不必要的锁）</p>
-<ul>
-<li>CAS+自旋 初始化数组</li>
-<li>CAS （散列到的节点是空，CAS写入）</li>
-<li>CAS+synchronized （进行扩容）</li>
-<li>synchronized（正常写入数据）</li>
-</ul>
-<h3 id="进程和线程的区别"><a href="#进程和线程的区别" class="headerlink" title="进程和线程的区别"></a>进程和线程的区别</h3><ul>
-<li>进程（JVM进程）<ul>
-<li>多核CPU，同时刻</li>
-</ul>
-</li>
-<li>线程<ul>
-<li>多个子任务通过事件片轮转，不同时刻</li>
-<li>Java虚拟机：<ul>
-<li>共享资源：堆、方法区</li>
-<li>线程：程序计数器、栈</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="线程的生命周期和状态？"><a href="#线程的生命周期和状态？" class="headerlink" title="线程的生命周期和状态？"></a>线程的生命周期和状态？</h3><p><strong>6个状态</strong></p>
-<ul>
-<li>正常：<ul>
-<li>new，run，terminate</li>
-</ul>
-</li>
-<li>wait、sleep、lock</li>
-</ul>
-<h3 id="sleep-和-wait-的区别"><a href="#sleep-和-wait-的区别" class="headerlink" title="sleep 和 wait 的区别"></a>sleep 和 wait 的区别</h3><p>sleep：线程，不释放锁</p>
-<p>wait：对象，释放锁</p>
-<h3 id="ThreadLocal与Synchronized区别"><a href="#ThreadLocal与Synchronized区别" class="headerlink" title="ThreadLocal与Synchronized区别"></a>ThreadLocal与Synchronized区别</h3><p>线程副本；加锁</p>
-<p>空间换时间；时间换空间</p>
-<p>Synchronized失去了并发性。</p>
-<h3 id="ThreadLocal-的实现原理？线程安全"><a href="#ThreadLocal-的实现原理？线程安全" class="headerlink" title="ThreadLocal 的实现原理？线程安全"></a>ThreadLocal 的实现原理？线程安全</h3><ul>
-<li>ThreadLocalMap：弱引用（ThreadLocal），强引用（局部变量本身）</li>
-<li>斐波那契散列，开放定址法，扩容（先清理，再判断是否需要扩容）</li>
-<li>线程不安全，弱引用没了，强引用还在。记得remove</li>
-</ul>
-<h3 id="Java-内存模型（JMM）"><a href="#Java-内存模型（JMM）" class="headerlink" title="Java 内存模型（JMM）"></a>Java 内存模型（JMM）</h3><p>抽象模型，主存与本地内存</p>
-<p>并发问题：可见性（volitile），原子性（synchronized），有序性（volitile）</p>
-<p>指令重排，happens-before</p>
-<h3 id="Volitile"><a href="#Volitile" class="headerlink" title="Volitile"></a>Volitile</h3><p><strong>可见性</strong>：读写屏障</p>
-<p><strong>有序性</strong>：禁止指令重排</p>
-<h3 id="synchronized和volatile的区别"><a href="#synchronized和volatile的区别" class="headerlink" title="synchronized和volatile的区别"></a>synchronized和volatile的区别</h3><p>代码块，方法，类（原子）</p>
-<p>有序性（volatile）</p>
-<h3 id="synchronized实现原理？可重入？锁升级？"><a href="#synchronized实现原理？可重入？锁升级？" class="headerlink" title="synchronized实现原理？可重入？锁升级？"></a>synchronized实现原理？可重入？锁升级？</h3><p><strong>实现原理（可重入）</strong></p>
-<ul>
-<li>ObjectMonitor：CAS获取Owner，_recursions ++（可重入的），_EntryList</li>
-</ul>
-<p><strong>锁升级</strong></p>
-<ul>
-<li><p>对象头的Mark Word</p>
-</li>
-<li><p>无锁，偏向锁（长时间同一线程获取锁），轻量锁（锁在不同时刻，不涉及上下文切换），重量锁（）</p>
-</li>
-<li><p>流程</p>
-<ul>
-<li>偏向锁（记下这个线程ID）</li>
-<li>—-（CAS修改线程ID失败）—-&gt; 轻量锁</li>
-<li>—-（自旋获取锁，避免立即进入阻塞）—–&gt;  重量级锁</li>
-</ul>
-</li>
-</ul>
-<h3 id="ReentrantLock和Synchronized区别"><a href="#ReentrantLock和Synchronized区别" class="headerlink" title="ReentrantLock和Synchronized区别"></a>ReentrantLock和Synchronized区别</h3><ul>
-<li>公平锁（FIFO）和非公平锁；非公平锁</li>
-<li>AQS；底层</li>
-</ul>
-<h3 id="CAS和ABA"><a href="#CAS和ABA" class="headerlink" title="CAS和ABA"></a>CAS和ABA</h3><p>乐观锁（相比之下synchronized是悲观锁）</p>
-<p>A改为B，又改为A，CAS操作线程<strong>无法知晓该位置的值已经被修改过</strong>了（<strong>改进：通过版本号</strong>）</p>
-<h2 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h2><ul>
-<li><p>好处</p>
-<ul>
-<li><strong>降低资源消耗</strong>：重复利用已创建的线程</li>
-<li><strong>提高响应速度</strong>：任务到达时，无需等待线程创建</li>
-<li><strong>提高线程的可管理性</strong>：线程是稀缺资源，使用线程进行统一的分配、调优和监控</li>
-<li><strong>提供更多更强大的功能</strong>：ScheduledThreadPoolExecutor</li>
-</ul>
-</li>
-<li><p>应用（大营销）</p>
-<ul>
-<li>项目背景：抽奖是高并发的，需要快速响应用户请求，聚合查询奖品信息</li>
-<li>核心线程数：cpu核的两倍，即云服务器4核 * 2&#x3D;8（有很多网络通信，数据库操作，所以是IO密集性任务，有较多的空闲线程）</li>
-<li>最大线程数：8 * 2 &#x3D;16 </li>
-<li>阻塞队列：SynchronousQueue（提交后立即交给等待的线程处理，提高响应速度）</li>
-<li>拒绝策略：CallerRunsPolicy（由调用线程来执行该任务，保证了任务能成功执行）</li>
-</ul>
-</li>
-</ul>
-<h3 id="线程池工作流程"><a href="#线程池工作流程" class="headerlink" title="线程池工作流程"></a>线程池工作流程</h3><p>核心线程—&gt; 任务队列 —&gt; 核心队列 —&gt;拒绝策略</p>
-<ul>
-<li>用start：run， start</li>
-<li>是否需要返回值：execute，submit</li>
-</ul>
-<h3 id="线程池CompletableFuture"><a href="#线程池CompletableFuture" class="headerlink" title="线程池CompletableFuture"></a>线程池CompletableFuture</h3><ul>
-<li>添加任务：runAsync（参数：runnable，线程池）</li>
-<li>等待所有任务执行完毕：allof().join()</li>
-</ul>
-<h3 id="MySQL存储引擎（Innodb，MyISAM）"><a href="#MySQL存储引擎（Innodb，MyISAM）" class="headerlink" title="MySQL存储引擎（Innodb，MyISAM）"></a>MySQL存储引擎（Innodb，MyISAM）</h3><p>选Innodb（事务，行级锁，redo Log和Undo Log）</p>
-<h3 id="三大日志"><a href="#三大日志" class="headerlink" title="三大日志"></a>三大日志</h3><ul>
-<li>binlog（用于主从复制）<ul>
-<li>索引文件（所有日志文件的顺序），<strong>日志文件</strong>（所有DDL、DML）</li>
-</ul>
-</li>
-<li>redolog<ul>
-<li>物理数据页的修改操作</li>
-</ul>
-</li>
-</ul>
-<h3 id="更新语句的两阶段提交"><a href="#更新语句的两阶段提交" class="headerlink" title="更新语句的两阶段提交"></a>更新语句的两阶段提交</h3><p>保证两个日志的逻辑一致</p>
-<ul>
-<li><p>流程</p>
-<ul>
-<li><p>写入redolog，并将状态修改为prepare</p>
-</li>
-<li><p>写入binlog</p>
-</li>
-<li><p>提交事务，并在redo log中设置为commit</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="MySQL执行一条SQL语句的流程"><a href="#MySQL执行一条SQL语句的流程" class="headerlink" title="MySQL执行一条SQL语句的流程"></a>MySQL执行一条SQL语句的流程</h3><ul>
-<li>连接器：开始处理这个请求</li>
-<li>解析器：检查语句是否符合SQL语法规则</li>
-<li>优化器：索引</li>
-<li>执行器：通过具体的存储引擎，进行数据读写</li>
-</ul>
-<h3 id="定位慢SQL"><a href="#定位慢SQL" class="headerlink" title="定位慢SQL"></a>定位慢SQL</h3><ul>
-<li>“SET GLOBAL slow_query_log”；mysqldumpslow去日志文件里找</li>
-<li>Explain分析如何执行SQL语句的<ul>
-<li>索引问题：possiable_keys（能用到的索引），key（实际用到的索引）</li>
-<li>IO开销问题：rows（要遍历的行数），filtered（有效行数&#x2F;扫描行数比值）字段来查看</li>
-</ul>
-</li>
-<li>优化<ul>
-<li>避免不必要的列</li>
-<li>索引优化<ul>
-<li>覆盖索引（最左前缀原则，必须包含最左的）</li>
-<li>适当使用前缀索引</li>
-<li>避免使用&lt;&gt;</li>
-</ul>
-</li>
-<li>分页优化<ul>
-<li>延迟关联（先检索出需要的id）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="MySQL索引有哪些"><a href="#MySQL索引有哪些" class="headerlink" title="MySQL索引有哪些"></a>MySQL索引有哪些</h3><ul>
-<li>主键（id），唯一索引（幂等id），普通索引</li>
-<li>聚簇索引（主键，直接指向内存地址），非聚簇索引（普通索引，叶子节点存的主键ID，需要回表）</li>
-</ul>
-<h3 id="雪花算法"><a href="#雪花算法" class="headerlink" title="雪花算法"></a>雪花算法</h3><p>相比UUID64位更小，时间戳也有一定的连续性</p>
-<p>分布式唯一ID（64位）hutool</p>
-<ul>
-<li>时间戳（41）</li>
-<li>机器表示（workid，datacenter）（10）</li>
-<li>自增序列（12）</li>
-</ul>
-<h3 id="MySQL加索引需要注意些什么"><a href="#MySQL加索引需要注意些什么" class="headerlink" title="MySQL加索引需要注意些什么"></a>MySQL加索引需要注意些什么</h3><ul>
-<li>选择合适的列<ul>
-<li>经常作为查询条件、排序条件、分组条件的列是建立索引的好候选（where，order by，group by）</li>
-<li>频繁更新的不要建立索引</li>
-<li>区分度低的（例如性别）</li>
-</ul>
-</li>
-<li>避免过多的索引<ul>
-<li>每个索引都需要占用额外的磁盘空间</li>
-<li>更新，所有的索引都需要更新</li>
-</ul>
-</li>
-<li>利用前缀索引和索引列的顺序</li>
-</ul>
-<h3 id="索引失效的情况"><a href="#索引失效的情况" class="headerlink" title="索引失效的情况"></a>索引失效的情况</h3><p>Where里函数，&lt;&gt;，最左匹配，or两边索引不一致</p>
-<h3 id="MySQL为什么用B-树"><a href="#MySQL为什么用B-树" class="headerlink" title="MySQL为什么用B+树"></a>MySQL为什么用B+树</h3><ul>
-<li>尽量减少读写次数（相比搜索树）</li>
-<li>只在叶子节点存数据（相比B树会在每个节点存数据，那么能存的东西就少了）；叶子结点有序链表，范围查询更方便</li>
-</ul>
-<h3 id="MySQL有哪些锁"><a href="#MySQL有哪些锁" class="headerlink" title="MySQL有哪些锁"></a>MySQL有哪些锁</h3><ul>
-<li>读写锁<ul>
-<li>读锁：for share mode（读锁是能获取的）</li>
-<li>写锁：for update mode（读写锁都不能获取）</li>
-</ul>
-</li>
-<li>行锁，表锁<ul>
-<li>行锁：记录锁，间隙锁、临键锁（用来坚决欢度）</li>
-<li>表锁：意向锁</li>
-</ul>
-</li>
-<li>乐观锁、悲观锁<ul>
-<li>乐观锁：MVCC（冲突提交才检查）</li>
-<li>悲观锁：for update</li>
-</ul>
-</li>
-</ul>
-<h3 id="MySQL事务的四个特性"><a href="#MySQL事务的四个特性" class="headerlink" title="MySQL事务的四个特性"></a>MySQL事务的四个特性</h3><ul>
-<li><p>A（undo log）</p>
-</li>
-<li><p>D（redo log）</p>
-</li>
-<li><p>I（MVCC）</p>
-</li>
-<li><p>C</p>
-</li>
-</ul>
-<h3 id="MySQL事务的隔离级别"><a href="#MySQL事务的隔离级别" class="headerlink" title="MySQL事务的隔离级别"></a>MySQL事务的隔离级别</h3><p>脏读（读取未提交的数据），不可重复读（另一个事务修改了值并提交，两次相同查询结果不同），幻读（另一个事务插入，发现多了一条数据）。</p>
-<p>读未提交，读已提交（MVCC，每次读取生成一个readview），可重复读（MVCC，第一次读取的时候生成一个readview），串行化（加锁）。</p>
-<h3 id="MySQL事务中MVCC的实现"><a href="#MySQL事务中MVCC的实现" class="headerlink" title="MySQL事务中MVCC的实现"></a>MySQL事务中MVCC的实现</h3><ul>
-<li>版本链<ul>
-<li>隐藏列：创建该版本的事务ID，undo指针</li>
-</ul>
-</li>
-<li>ReadView<ul>
-<li>作用：确定哪些版本的行记录是可见的</li>
-<li>四个属性：创建该ReadView的事务id，活跃id列表，最小事务id，最大事务id</li>
-<li>下面的情况是可见（也就是已经提交了）：比最小事务id小；在最小事务id和最大事务id之间且不在活跃id中</li>
-</ul>
-</li>
-</ul>
-<h3 id="不停机扩容"><a href="#不停机扩容" class="headerlink" title="不停机扩容"></a>不停机扩容</h3><ol>
-<li>在线双写，查询走旧库（进行数据的同步和校验）</li>
-<li>在线双写，查询走新库</li>
-<li>过一段时间，确定没有请求之后，就可以下线老库</li>
-</ol>
-<h3 id="Redis用来干嘛"><a href="#Redis用来干嘛" class="headerlink" title="Redis用来干嘛"></a>Redis用来干嘛</h3><ul>
-<li>缓存<ul>
-<li>String：各种东西，比如库存，奖品</li>
-<li>Hash：getMap，奖品概率查找表</li>
-<li>List：所有的线程池信息</li>
-</ul>
-</li>
-<li>消息队列<ul>
-<li>库存趋势更新到mysql，不稳定</li>
-</ul>
-</li>
-<li>分布式锁<ul>
-<li>库存扣减，防止超卖</li>
+          <ul>
+<li><strong>项目名称</strong>：Mysql分库分表【组件】</li>
+<li><strong>核心技术</strong>：SpringBoot、SpringBoot Starter、AOP、AbstractRoutingDataSource、MyBatis Plugin StatementHandler、哈希散列、ThreadLocal</li>
+<li><strong>项目描述</strong>：此组件项目是为了解决在分库分表场景下，开发一款可以应对自身业务场景多变特性，即支持个性的分库分表、只分库或者只分表以及双字段控制分库和分表，同时又能满足简单维护迭代的数据库路由组件。</li>
+<li>我的职责<ul>
+<li>调研平方散列、除法散列、乘法散列、哈希散列以及斐波那契散列，并结合雪崩测试，选择了一块适合数据库路由的散列算法，并做功能的开发实现。</li>
+<li>引入 MyBatis Plugin 插件开发功能，对执行的 SQL 语句动态变更表信息。引入AbstractRoutingDataSource替换默认数据源，动态切换数据源实现分库功能。</li>
 </ul>
 </li>
 </ul>
@@ -1125,7 +348,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/mianjing/mianjing/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/bagu/JWT%E8%BF%98%E6%98%AFcookie/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1143,116 +366,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/mianjing/mianjing/" class="post-title-link" itemprop="url">【开发】【八股】面经</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%9D%A2%E7%BB%8F/" itemprop="url" rel="index"><span itemprop="name">面经</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h2><p>组合模式规则树（单例）</p>
-<p>公众号重试</p>
-<h2 id="用到了什么设计模式"><a href="#用到了什么设计模式" class="headerlink" title="用到了什么设计模式"></a>用到了什么设计模式</h2><blockquote>
-<p><a target="_blank" rel="noopener" href="https://github.com/cccccc96/Interview/tree/main/Design%20Pattern">https://github.com/cccccc96/Interview/tree/main/Design%20Pattern</a></p>
-</blockquote>
-<p>在抽奖的规则过滤中，用到了责任链和组合模式。最核心的作用就是把if else进行拆分，便于后期维护。</p>
-<p>对于不同的抽奖策略采用了抽奖模式。</p>
-<p>对于流程开发，采用了模版模式</p>
-<h3 id="责任链"><a href="#责任链" class="headerlink" title="责任链"></a>责任链</h3><p>故名思义，责任链就是一个链表，唯一的区别就是我们为每个节点做一个实现（因为每个节点要实现不同的功能）。</p>
-<p>所以我们执行责任链就是遍历这个链表，每个节点可能会拦截掉，或是继续下一个节点。</p>
-<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240706161127811.png" alt="image-20240706161127811"></p>
-<h3 id="组合模式-规则树模型"><a href="#组合模式-规则树模型" class="headerlink" title="组合模式-规则树模型"></a>组合模式-规则树模型</h3><p>故名思义，规则树模型就是一个树形结构。可以想象一个B+树，根据大小进行遍历。那么，规则树也是类似，只是每个树节点有不同的规则。</p>
-<ul>
-<li>Filter（树节点）：拿不同种类的信息（年龄信息&#x2F;性别信息）<ul>
-<li>filter(): 遍历所有子边，哪个边符合，则找到对应的下一个子节点</li>
-</ul>
-</li>
-<li>IEngine：遍历整颗树<ul>
-<li>可以想象，搜索树中，小于进左子树，大于进右子树；而在规则树中，每条边的规则是固定的</li>
-</ul>
-</li>
-<li>好处：方便维护，可以把树结构存进数据库中</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240706175427996.png" alt="image-20240706175427996"></p>
-<h3 id="策略模式和模版模式"><a href="#策略模式和模版模式" class="headerlink" title="策略模式和模版模式"></a>策略模式和模版模式</h3><p>这两个非常简单</p>
-<ul>
-<li>策略模式：一个接口，多个实现，需要哪个策略用哪个</li>
-<li>模版模式：定义抽象类，定义流程，每个步骤都是一个抽奖方法。步骤具体的实现去继承类里面去做。</li>
-</ul>
-<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>功能：拆分出了核心流程与辅助流程</p>
-<p>实现也非常简单，只需要做两件事</p>
-<ul>
-<li>定义各种listener，方法里去做要做的事</li>
-<li>定义一个Manager，负责注册和通知</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240706214913020.png" alt="image-20240706214913020"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/bagu/%E6%89%8B%E6%92%95%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%A2%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/bagu/%E6%89%8B%E6%92%95%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%A2%98/" class="post-title-link" itemprop="url">【开发】【八股】手撕多线程</a>
+          <a href="/2022/03/31/kaifa/bagu/JWT%E8%BF%98%E6%98%AFcookie/" class="post-title-link" itemprop="url">【开发】【八股】JWT</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1281,44 +395,521 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="以下面几道经典题为例，如何快速解决手撕多线程题目"><a href="#以下面几道经典题为例，如何快速解决手撕多线程题目" class="headerlink" title="以下面几道经典题为例，如何快速解决手撕多线程题目"></a>以下面几道经典题为例，如何快速解决手撕多线程题目</h2><blockquote>
-<p><a target="_blank" rel="noopener" href="https://javakeeper.starfish.ink/java/JUC/%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C%E9%97%AE%E9%A2%98.html#%E4%BD%BF%E7%94%A8-lock">https://javakeeper.starfish.ink/java/JUC/%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C%E9%97%AE%E9%A2%98.html#%E4%BD%BF%E7%94%A8-lock</a></p>
+          <h2 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h2><h4 id="1-无状态"><a href="#1-无状态" class="headerlink" title="1 无状态"></a>1 无状态</h4><p>简化验证流程，JWT自身包含了身份验证所需要的所有信息（用户身份，有效期），服务器端不需要存储Session信息，大大减轻了服务器端的压力</p>
+<h4 id="2-有效避免CSRF（跨站请求伪造）"><a href="#2-有效避免CSRF（跨站请求伪造）" class="headerlink" title="2 有效避免CSRF（跨站请求伪造）"></a>2 有效避免CSRF（跨站请求伪造）</h4><p>某个链接中藏了一个请求，那么只要发出请求，cookie就会被携带，借助这个特性</p>
+<h4 id="3-移动端应用"><a href="#3-移动端应用" class="headerlink" title="3 移动端应用"></a>3 移动端应用</h4><p>移动端应用管理和维护Cookie比较复杂</p>
+<h4 id="4-单点登录友好"><a href="#4-单点登录友好" class="headerlink" title="4 单点登录友好"></a>4 单点登录友好</h4><p>需要常见的cookie跨域问题</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><h4 id="注销登录"><a href="#注销登录" class="headerlink" title="注销登录"></a>注销登录</h4><p>无法注销，通过Redis存储</p>
+<h4 id="续签问题"><a href="#续签问题" class="headerlink" title="续签问题"></a>续签问题</h4><p>无法动态刷新</p>
+<ul>
+<li>每次进行校验时，重新生成JWT返回给客户端</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/bagu/redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/bagu/redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" class="post-title-link" itemprop="url">【开发】【八股】Redis分布式锁</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Redis分布式锁"><a href="#Redis分布式锁" class="headerlink" title="Redis分布式锁"></a>Redis分布式锁</h1><p>Redis是基于内存操作，性能极高。</p>
+<p>考虑如果没有reddsion，用setIfAbsent</p>
+<h4 id="方案1-（直接加锁）"><a href="#方案1-（直接加锁）" class="headerlink" title="方案1 （直接加锁）"></a>方案1 （直接加锁）</h4><p>如果缓存里没有数据，就加锁。加锁成功就访问，反之就自旋重新拿数据。</p>
+<p>缺点：虽然设置了<strong>过期时间</strong>，但当业务执行完成之后，我们的锁还持有着。我们<strong>希望的是业务执行完之后，立即释放锁</strong>。</p>
+<h4 id="方案2（finally删除锁）"><a href="#方案2（finally删除锁）" class="headerlink" title="方案2（finally删除锁）"></a>方案2（finally删除锁）</h4><p>在方案1的基础之上，加一行finally删除锁。</p>
+<p>缺点：假如过期时间比较短，B已经获取了锁，那么<strong>A执行完之后可能会释放B的锁</strong></p>
+<h4 id="方案3（锁设置一个value值）"><a href="#方案3（锁设置一个value值）" class="headerlink" title="方案3（锁设置一个value值）"></a>方案3（锁设置一个value值）</h4><p>在方案2的情况下，加锁的时候，设置一个value值。</p>
+<p>缺点：如何设置过期时间值</p>
+<ul>
+<li>太短：业务还没有执行完，就执行完了</li>
+<li>太长：节点宕机了， 其他节点一直获取不到锁</li>
+</ul>
+<p><strong>看门狗</strong>：<strong>守护线程</strong>，隔固定时间去查看业务是否执行完毕，如果没有就<strong>续期</strong>。</p>
+<h4 id="方案4（Reddision-trylock）"><a href="#方案4（Reddision-trylock）" class="headerlink" title="方案4（Reddision trylock）"></a>方案4（Reddision trylock）</h4><p>解决了前三个方案的问题：</p>
+<ul>
+<li>锁过期问题，释放他人的锁</li>
+<li>看门狗机制：默认锁过期时间是30s，会有一个定时任务在每10s去扫描一下该锁是否被释放，如果没有释放就延长至30s</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/bagu/springAOP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/bagu/springAOP/" class="post-title-link" itemprop="url">【开发】【八股】springAOP</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="什么是AOP"><a href="#什么是AOP" class="headerlink" title="什么是AOP"></a>什么是AOP</h2><p>AOP（Aspect Oriented Programming）即面向切面编程。将把一些业务逻辑中的相同代码从核心业务逻辑中分离出来。</p>
+<p>如何实现呢？</p>
+<ul>
+<li>Aspect（切面）：</li>
+<li>Join Point（连接点）：被拦截到的方法</li>
+<li>PointCut（切点）：定位</li>
+<li>Advice（通知）：Before&#x2F;Around&#x2F;After</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span> 切面</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DBRouterJoinPoint</span> &#123;</span><br><span class="line">		<span class="comment">// Pointcut 切点，定位</span></span><br><span class="line">    <span class="meta">@Pointcut(&quot;@annotation(cn.bugstack.middleware.db.router.annotation.DBRouter)&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">aopPoint</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Around 通知，环绕</span></span><br><span class="line">    <span class="meta">@Around(&quot;aopPoint() &amp;&amp; @annotation(dbRouter)&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">doRouter</span><span class="params">(ProceedingJoinPoint jp, DBRouter dbRouter)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        .......</span><br><span class="line">        <span class="type">String</span> <span class="variable">dbKeyAttr</span> <span class="operator">=</span> getAttrValue(dbKey, jp.getArgs());</span><br><span class="line">        dbRouterStrategy.doRouter(dbKeyAttr);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> jp.proceed();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">           dbRouterStrategy.clear();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="怎么实现的-–-动态代理"><a href="#怎么实现的-–-动态代理" class="headerlink" title="怎么实现的 – 动态代理"></a>怎么实现的 – 动态代理</h3><p>啥是代理，以静态代理说明：代理类和目标类实现相同的接口，然后代理类里面维护一个目标类就完事了。</p>
+<p>那么spring AOP中的动态代理包含两类：默认如果使用接口的，用 JDK 提供的动态代理实现，如果是方法则使用 CGLIB 实现</p>
+<h4 id="1-JDK动态代理（缺点，只能代理接口）"><a href="#1-JDK动态代理（缺点，只能代理接口）" class="headerlink" title="1. JDK动态代理（缺点，只能代理接口）"></a>1. JDK动态代理（缺点，只能代理接口）</h4><p>通过java.lang.reflect.Proxy来实现（反射）</p>
+<ul>
+<li>InvocationHandler + invoke</li>
+</ul>
+<p>所以，AOP创建一个代理对象，在方法调用前后插入横切逻辑</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Service</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">perform</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">Service</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">perform</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Performing service...&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ServiceInvocationHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Object target;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ServiceInvocationHandler</span><span class="params">(Object target)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Before method&quot;</span>);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> method.invoke(target, args);</span><br><span class="line">        System.out.println(<span class="string">&quot;After method&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Service</span> <span class="variable">service</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ServiceImpl</span>();</span><br><span class="line">        <span class="type">Service</span> <span class="variable">proxy</span> <span class="operator">=</span> (Service) Proxy.newProxyInstance(</span><br><span class="line">            service.getClass().getClassLoader(),</span><br><span class="line">            service.getClass().getInterfaces(),</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">ServiceInvocationHandler</span>(service)</span><br><span class="line">        );</span><br><span class="line">        proxy.perform();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-CGLIB-动态代理（可以代理类）"><a href="#2-CGLIB-动态代理（可以代理类）" class="headerlink" title="2. CGLIB 动态代理（可以代理类）"></a>2. CGLIB 动态代理（可以代理类）</h4><p>基于ASM操作字节码。需要cglib库,MethodInterceptor</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProxyFactory</span> <span class="keyword">implements</span> <span class="title class_">MethodInterceptor</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//维护一个目标对象</span></span><br><span class="line">    <span class="keyword">private</span> Object target;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ProxyFactory</span><span class="params">(Object target)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//为目标对象生成代理对象</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">getProxyInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//工具类</span></span><br><span class="line">        <span class="type">Enhancer</span> <span class="variable">en</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Enhancer</span>();</span><br><span class="line">        <span class="comment">//设置父类</span></span><br><span class="line">        en.setSuperclass(target.getClass());</span><br><span class="line">        <span class="comment">//设置回调函数</span></span><br><span class="line">        en.setCallback(<span class="built_in">this</span>);</span><br><span class="line">        <span class="comment">//创建子类对象代理</span></span><br><span class="line">        <span class="keyword">return</span> en.create();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">intercept</span><span class="params">(Object obj, Method method, Object[] args, MethodProxy proxy)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;请问有什么可以帮到您？&quot;</span>);</span><br><span class="line">        <span class="comment">// 执行目标对象的方法</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">returnValue</span> <span class="operator">=</span> method.invoke(target, args);</span><br><span class="line">        System.out.println(<span class="string">&quot;问题已经解决啦！&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="SpringAOP和AspectJ啥区别"><a href="#SpringAOP和AspectJ啥区别" class="headerlink" title="SpringAOP和AspectJ啥区别"></a>SpringAOP和AspectJ啥区别</h2>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/bagu/springIOC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/bagu/springIOC/" class="post-title-link" itemprop="url">【开发】【八股】springIOC</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/23277575/answer/169698662">https://www.zhihu.com/question/23277575/answer/169698662</a></p>
+<p><a target="_blank" rel="noopener" href="https://javadoop.com/post/spring-ioc">https://javadoop.com/post/spring-ioc</a></p>
+<p><a target="_blank" rel="noopener" href="https://javaguide.cn/system-design/framework/spring/ioc-and-aop.html#ioc-%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98">https://javaguide.cn/system-design/framework/spring/ioc-and-aop.html#ioc-解决了什么问题</a></p>
 </blockquote>
+<h2 id="知乎的一个非常典型的例子"><a href="#知乎的一个非常典型的例子" class="headerlink" title="知乎的一个非常典型的例子"></a>知乎的一个非常典型的例子</h2><p>IOC是<strong>依赖倒置原则</strong>的体现，是为了处理工程中的依赖关系。</p>
+<p>知乎的这个例子很好地解释了“依赖注入”的注入是什么。</p>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/v2-82e0c12a1b26f7979ed9241e169affda_1440w.webp" alt="img" style="zoom:50%;" />
+
+<p>这种方式是不好的，为什么？假如最末尾一个类的构造方法改了，完蛋，全部类的构造方法都要改。这种工程是不可维护的。</p>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/v2-c920a0540ce0651003a5326f6ef9891d_1440w.webp" alt="img"></p>
+<p>所以我们怎么办呢，当然就用我们的依赖注入：就是<strong>把底层类作为参数传入上层类</strong>。实现上层类对下层类的控制。</p>
+<h2 id="什么是IOC"><a href="#什么是IOC" class="headerlink" title="什么是IOC"></a>什么是IOC</h2><p>我们在springboot项目中</p>
+<ul>
+<li>不管是Dao，还是外部包的那些config</li>
+<li>我们从来都不会通过<strong>new</strong>的方式来创建，而是通过依赖注入的方式。</li>
+<li><strong>你只需要维护一个Configuration（可以是xml可以是一段代码），而不用每次初始化一辆车都要亲手去写那一大段初始化的代码</strong></li>
+</ul>
+<p>控制反转（描述的是对象的创建以及管理的问题）</p>
+<ul>
+<li>控制：对象创建的权利</li>
+<li>反转：控制权交给外部环境IOC容器</li>
+</ul>
+<p>好处</p>
+<ul>
+<li>对象之间的依赖程度降低</li>
+<li>资源变的容易管理<ul>
+<li>单例模式</li>
+<li>IOC容器负责bean的整个生命周期</li>
+</ul>
+</li>
+</ul>
+<h2 id="IOC原理"><a href="#IOC原理" class="headerlink" title="IOC原理"></a>IOC原理</h2><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708103644862.png" alt="image-20240708103644862" style="zoom:50%;" />
+
 <ol>
-<li>三个线程分别打印 A，B，C，要求这三个线程一起运行，打印 n 次，输出形如“ABCABCABC….”的字符串</li>
-<li>两个线程交替打印 0~100 的奇偶数</li>
-<li>通过 N 个线程顺序循环打印从 0 至 100</li>
-<li>多线程按顺序调用，A-&gt;B-&gt;C，AA 打印 5 次，BB 打印10 次，CC 打印 15 次，重复 10 次</li>
-<li>用两个线程，一个输出字母，一个输出数字，交替输出 1A2B3C4D…26Z</li>
+<li>FileSystemXmlApplicationContext&#x2F;ClassPathXmlApplicationContext ：xml配置文件在系统中的路径</li>
+<li>AnnotationConfigApplicationContext：基于注解来使用</li>
 </ol>
-<p>JUC里那么多经典概念，都用一下吧。</p>
-<h3 id="Lock（题目1）"><a href="#Lock（题目1）" class="headerlink" title="Lock（题目1）"></a>Lock（题目1）</h3><p>三个线程循环打印，怎么打印呢？</p>
-<p>三个线程都去抢锁</p>
-<ul>
-<li>当然只有轮到你了你才能打印</li>
-<li>不然的话什么都不干就把锁释放了。</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Print_N_ABC_lock</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> times=<span class="number">10</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">state</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">Lock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">(<span class="type">int</span> myState,String toPrint)</span>&#123;</span><br><span class="line">        <span class="type">int</span> i=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(i&lt;times)&#123;</span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">if</span>(state%<span class="number">3</span>==myState)&#123;</span><br><span class="line">                state++;</span><br><span class="line">                i++;</span><br><span class="line">                System.out.println(toPrint);</span><br><span class="line">            &#125;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Print_N_ABC_lock</span> <span class="variable">printNAbcLock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Print_N_ABC_lock</span>();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">0</span>,<span class="string">&quot;A&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">1</span>,<span class="string">&quot;B&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">2</span>,<span class="string">&quot;C&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="一个小例子"><a href="#一个小例子" class="headerlink" title="一个小例子"></a>一个小例子</h3><p>使用 ClassPathXmlApplicationContext 进行分析，方便理解整个构建流程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用我们的配置文件来启动一个 ApplicationContext</span></span><br><span class="line"><span class="type">ApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;classpath:application.xml&quot;</span>);</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;context 启动成功&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 从 context 中取出我们的 Bean，而不是用 new MessageServiceImpl() 这种方式</span></span><br><span class="line"><span class="type">MessageService</span> <span class="variable">messageService</span> <span class="operator">=</span> context.getBean(MessageService.class);</span><br><span class="line">System.out.println(messageService.getMessage());</span><br></pre></td></tr></table></figure>
 
-<h3 id="Wait-Notify-题目1"><a href="#Wait-Notify-题目1" class="headerlink" title="Wait&#x2F;Notify(题目1)"></a>Wait&#x2F;Notify(题目1)</h3><p>万精油解法。</p>
-<blockquote>
-<p>稍微总结一下：</p>
-<ul>
-<li>加入是只有两个线程，那么直接通知，然后wait就完事</li>
-<li>如果是三个线程以上，那么得写个while循环在里面待着</li>
-</ul>
+<p>那么，这里我们通过ApplicationContext拿到了Bean。那么ApplicationContext是如何创建实例Bean，并且往各个Bean中注入依赖的呢？</p>
+<h3 id="BeanFactory"><a href="#BeanFactory" class="headerlink" title="BeanFactory"></a>BeanFactory</h3><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708105257053.png" alt="image-20240708105257053" style="zoom:33%;" />
+
+<p>ApplicationContext其实就是一个BeanFactory</p>
+<h3 id="启动过程分析"><a href="#启动过程分析" class="headerlink" title="启动过程分析"></a>启动过程分析</h3><h4 id="1-构造方法"><a href="#1-构造方法" class="headerlink" title="1. 构造方法"></a>1. 构造方法</h4><p>先从构造方法开始，把configLocations（也就是XML地址）读进来</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">ClassPathXmlApplicationContext</span><span class="params">(String[] configLocations, <span class="type">boolean</span> refresh, ApplicationContext parent)</span></span><br><span class="line">		<span class="keyword">throws</span> BeansException &#123;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">super</span>(parent);</span><br><span class="line">	setConfigLocations(configLocations);</span><br><span class="line">	<span class="keyword">if</span> (refresh) &#123;</span><br><span class="line">		refresh();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-refresh-方法-–-（BeanFactory注册BeanDefinition-初始化所有单例beans"><a href="#2-refresh-方法-–-（BeanFactory注册BeanDefinition-初始化所有单例beans" class="headerlink" title="2. refresh()方法 – （BeanFactory注册BeanDefinition+初始化所有单例beans)"></a>2. refresh()方法 – （BeanFactory注册BeanDefinition+初始化所有单例beans)</h4><blockquote>
+<ol>
+<li>插一嘴，BeanFactory当然是Bean容器，那么Bean是什么呢？它其实准确来说叫BeanDefinition，我们自己定义的一个个Bean会转换成一个个BeanDefinition存在于Spring的BeanFactory中。</li>
+<li>BeanDefinition保存了所有的Bean信息：是哪个类，是否是单例的，等等</li>
+<li>所以，Bean是什么？在代码层面可以理解为：BeanDefinition的实例</li>
+</ol>
 </blockquote>
-<p>用sychronized。没轮到你就一直在while循环里等着（当然你得wait()，释放锁）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Print_N_ABC_WaitAndNotify</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> times=<span class="number">10</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">state</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Object</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">(<span class="type">int</span> myState,String toPrint)</span>  &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;times;i++)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">while</span> (state % <span class="number">3</span> != myState) &#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        lock.wait();</span><br><span class="line">                    &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                state++;</span><br><span class="line">                System.out.println(toPrint);</span><br><span class="line">                lock.notifyAll();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Print_N_ABC_WaitAndNotify</span> <span class="variable">printNAbcLock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Print_N_ABC_WaitAndNotify</span>();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">0</span>,<span class="string">&quot;A&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">1</span>,<span class="string">&quot;B&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">2</span>,<span class="string">&quot;C&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>（太复杂，以后再慢慢看吧，先看核心的几步）</p>
+<ul>
+<li>obtainFreshBeanFactory（拿到BeanFactory）<ul>
+<li>这代表applicationContext其实内部持有了一个BeanFactory</li>
+<li>BeanDefinition注册到了BeanFactory中</li>
+<li>我们可以看到里面维护了一个<strong>ConcurrentHashMap</strong>，存beanName-&gt; beanDefinition</li>
+<li><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708165122143.png" alt="image-20240708165122143"></li>
+</ul>
+</li>
+<li>finishBeanFactoryInitialization（创建所有单例Bean，也就是getBean方法）<ul>
+<li><strong>实例化</strong>：使用反射创建Bean实例。</li>
+<li><strong>依赖注入</strong>：根据Bean定义中的依赖关系，将所需的依赖注入到Bean实例中。<ul>
+<li>（这里就是依赖倒置的概念，dfs，从上层往下层搜索，知乎的那个教程里写的）</li>
+<li><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708171643710.png" alt="image-20240708171643710"></li>
+</ul>
+</li>
+<li><strong>初始化</strong>：调用Bean的初始化方法（如配置的init-method或实现了InitializingBean接口的afterPropertiesSet方法）。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">refresh</span><span class="params">()</span> <span class="keyword">throws</span> BeansException, IllegalStateException &#123;</span><br><span class="line">			。。。。。。</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 这步比较关键，这步完成后，配置文件就会解析成一个个 Bean 定义，注册到 BeanFactory 中，</span></span><br><span class="line">      <span class="comment">// 当然，这里说的 Bean 还没有初始化，只是配置信息都提取出来了，</span></span><br><span class="line">      <span class="comment">// 注册也只是将这些信息都保存到了注册中心(说到底核心是一个 beanName-&gt; beanDefinition 的 map)</span></span><br><span class="line">      <span class="type">ConfigurableListableBeanFactory</span> <span class="variable">beanFactory</span> <span class="operator">=</span> obtainFreshBeanFactory();</span><br><span class="line">  </span><br><span class="line">  		。。。。。。</span><br><span class="line">        <span class="comment">// 重点，重点，重点</span></span><br><span class="line">        <span class="comment">// 初始化所有的 singleton beans</span></span><br><span class="line">        <span class="comment">//（lazy-init 的除外）</span></span><br><span class="line">        finishBeanFactoryInitialization(beanFactory);</span><br><span class="line">			</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
-<h3 id="Wait-Notify-题目2"><a href="#Wait-Notify-题目2" class="headerlink" title="Wait&#x2F;Notify(题目2)"></a>Wait&#x2F;Notify(题目2)</h3><p>同样的，synchronized+wait&#x2F;notify。只是这里只有两个线程，连判断条件都不用了。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Print_Ji_OU_WaitAndNotify</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>  <span class="variable">size</span> <span class="operator">=</span> <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">Object</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(count&lt;=size)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(count);</span><br><span class="line">                    count++;</span><br><span class="line">                    lock.notifyAll();</span><br><span class="line">                    lock.wait();</span><br><span class="line">                &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//防止有子线程被阻塞未被唤醒，导致主线程不退出</span></span><br><span class="line">                lock.notifyAll();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">        <span class="type">Print_Ji_OU_WaitAndNotify</span> <span class="variable">printJiOuWaitAndNotify</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Print_Ji_OU_WaitAndNotify</span>();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;printJiOuWaitAndNotify.print();&#125;).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;printJiOuWaitAndNotify.print();&#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="Wait-Notify-题目5"><a href="#Wait-Notify-题目5" class="headerlink" title="Wait&#x2F;Notify(题目5)"></a>Wait&#x2F;Notify(题目5)</h3><p>和题目二一样</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">public class Print_A1B2C3_WaitAndNotify &#123;</span><br><span class="line">    private int num = 1;</span><br><span class="line">    private char c = &#x27;A&#x27;;</span><br><span class="line">    private final static Object lock = new Object();</span><br><span class="line"></span><br><span class="line">    public void print(boolean flag)&#123;</span><br><span class="line">        synchronized (lock)&#123;</span><br><span class="line">            for(int i=0;i&lt;26;i++)&#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    if(flag==false) &#123;</span><br><span class="line">                        System.out.println(num+i);</span><br><span class="line">                    &#125;else&#123;</span><br><span class="line">                        System.out.println((char)(c+i));</span><br><span class="line">                    &#125;</span><br><span class="line">                    lock.notifyAll();</span><br><span class="line">                    lock.wait();</span><br><span class="line">                &#125;catch (Exception e)&#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        Print_A1B2C3_WaitAndNotify printA1B2C3WaitAndNotify = new Print_A1B2C3_WaitAndNotify();</span><br><span class="line">        new Thread(()-&gt;&#123;printA1B2C3WaitAndNotify.print(false);&#125;).start();</span><br><span class="line">        new Thread(()-&gt;&#123;printA1B2C3WaitAndNotify.print(true);&#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
 
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/bagu/springboot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/bagu/springboot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">【开发】【八股】springboot自动配置</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Springboot-自动配置是啥"><a href="#Springboot-自动配置是啥" class="headerlink" title="Springboot 自动配置是啥"></a>Springboot 自动配置是啥</h2><p>举两个例子</p>
+<ol>
+<li>我们在dbrouter里有这样一个类DataSourceAutoConfig，在spring.factories里配置了EnableAutoConfiguration</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataSourceAutoConfig</span> <span class="keyword">implements</span> <span class="title class_">EnvironmentAware</span></span><br><span class="line"><span class="comment">//spring.factories</span></span><br><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.czh.middleware.db.router.config.DataSourceAutoConfig</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在大营销项目中，有一个RedisClientConfig类，有@Configuration注解</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties(RedisClientConfigProperties.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RedisClientConfig</span> </span><br><span class="line"><span class="comment">//spring.factories</span></span><br><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.redisson.spring.starter.RedissonAutoConfiguration</span><br></pre></td></tr></table></figure>
+
+<p>这种形式就叫自动配置（顾名思义，配置作用当然就是省去繁琐的XML-bean配置，引入外部jar包加上几个注解就完事。至于jar包中有哪些自动配置类，类名是啥这些用户都不关心）</p>
+<h3 id="简单看看，一个自动配置的Config里应该包含什么"><a href="#简单看看，一个自动配置的Config里应该包含什么" class="headerlink" title="简单看看，一个自动配置的Config里应该包含什么"></a>简单看看，一个自动配置的Config里应该包含什么</h3><p>应该包含三个下面三种类型的注解</p>
+<ol>
+<li>@Configuration： 有了这个注解，类底下那些bean才会被spring给创建出来</li>
+<li>@ConfigurationProperties：配置属性，你得把yml那些信息读进来嘛</li>
+<li>@ConditionalOnClass：条件注解，当然还有很多其他的。你希望在满足一定条件的时候，这个config才有效。</li>
+</ol>
+<h2 id="Springboot-自动配置原理"><a href="#Springboot-自动配置原理" class="headerlink" title="Springboot 自动配置原理"></a>Springboot 自动配置原理</h2><p>我看网上的资料，自动配置的核心是基于下面两个概念，扩展成@EnableAutoConfiguration：</p>
+<ul>
+<li>ImportSelector</li>
+<li>spring.factories</li>
+</ul>
+<h5 id="面渣逆袭上的的一张图"><a href="#面渣逆袭上的的一张图" class="headerlink" title="面渣逆袭上的的一张图"></a>面渣逆袭上的的一张图</h5><p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/spring-df77ee15-2ff0-4ec7-8e65-e4ebb8ba88f1.png" alt="三分恶面渣逆袭：SpringBoot自动配置原理"></p>
+<h3 id="要看“自动配置”，当然得先看“配置”"><a href="#要看“自动配置”，当然得先看“配置”" class="headerlink" title="要看“自动配置”，当然得先看“配置”"></a>要看“自动配置”，当然得先看“配置”</h3><p>springboot要怎么加载一个配置，方法有两个：“ComponentScan”和“Import”。</p>
+<ul>
+<li><p>@ComponentScan，它会自动扫描@Component、@Service、@Repository和 @Controller这些个注解</p>
+<ul>
+<li>还可以配置basePackages、basePackageClasses指定包和类所在的包（当然这些和这里无关）</li>
+</ul>
+</li>
+<li><p>@Import，它有几种方法导入，我只看了前两种</p>
+<ul>
+<li><p>普通导入，直接把要加载的那个类通过import指定就完事</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AppConfig1</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> MyRepository <span class="title function_">myRepository</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">MyRepository</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@Import(&#123;AppConfig1.class, .......&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainConfig</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>“ImportSelector”：我们可以通过这个ImportSelector类，去告诉Import应该加载哪些东西</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AppConfig1</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> MyRepository <span class="title function_">myRepository</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">MyRepository</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyImportSelector</span> <span class="keyword">implements</span> <span class="title class_">ImportSelector</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String[] selectImports(AnnotationMetadata importingClassMetadata) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">String</span>[] &#123; AppConfig1.class.getName(), ...... &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@Import(MyImportSelector.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainConfig</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>还有一个ImportBeanDefinitionRegistrar就不看了</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>其实，自动配置就是通过其中一个方法实现的：是“ImportSelector”，只要selectImports能拿到要加载的类就好了。</p>
+<h3 id="知道了“配置”，可以看“自动配置”了"><a href="#知道了“配置”，可以看“自动配置”了" class="headerlink" title="知道了“配置”，可以看“自动配置”了"></a>知道了“配置”，可以看“自动配置”了</h3><p>实现自动装配的核心注解，就是@EnableAutoConfiguration注解</p>
+<p>当然我们在项目中看不到它，因为它藏在@SpringBootApplication中，@SpringBootApplication是三个</p>
+<ul>
+<li><strong>@EnableAutoConfiguration：自动装配</strong></li>
+<li>@Configuration（无关）</li>
+<li>@ComponentScan（无关）</li>
+</ul>
+<p>点进源码看的话，大概流程是：@EnableAutoConfiguration. —&gt; @import( AutoConfigurationImportSelector.class) –&gt; AutoConfigurationImportSelector的优雅实现</p>
+<h4 id="1-EnableAutoConfiguration"><a href="#1-EnableAutoConfiguration" class="headerlink" title="1. EnableAutoConfiguration"></a>1. EnableAutoConfiguration</h4><p>和上一节的小例子很像，import了一个AutoConfigurationImportSelector类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Import(AutoConfigurationImportSelector.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> EnableAutoConfiguration &#123;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-AutoConfigurationImportSelector"><a href="#2-AutoConfigurationImportSelector" class="headerlink" title="2. AutoConfigurationImportSelector"></a>2. AutoConfigurationImportSelector</h4><p>那么，我们也在就剩最后一件事要做。实现这个ImportSelector类，让它能发现classpath中jar包的自动配置类。</p>
+<p><strong>那么，具体要怎么去发现呢，用Spring框架中的SpringFactories机制</strong></p>
+<ul>
+<li>核心逻辑就是去读取所有META-INF&#x2F;spring.factories，把里面的&lt;K,V&gt;对都给读出来</li>
+</ul>
+<h5 id="2-1-实现这个ImportSelector类，核心就是重写selectImports"><a href="#2-1-实现这个ImportSelector类，核心就是重写selectImports" class="headerlink" title="2.1 实现这个ImportSelector类，核心就是重写selectImports"></a>2.1 实现这个ImportSelector类，核心就是重写selectImports</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> String[] selectImports(AnnotationMetadata annotationMetadata) &#123;</span><br><span class="line">	<span class="keyword">if</span> (!isEnabled(annotationMetadata)) &#123;</span><br><span class="line">		<span class="keyword">return</span> NO_IMPORTS;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="type">AutoConfigurationMetadata</span> <span class="variable">autoConfigurationMetadata</span> <span class="operator">=</span> AutoConfigurationMetadataLoader</span><br><span class="line">			.loadMetadata(<span class="built_in">this</span>.beanClassLoader);</span><br><span class="line">   <span class="comment">// 自动配置的入口方法 getAutoConfigurationEntry</span></span><br><span class="line">	<span class="type">AutoConfigurationEntry</span> <span class="variable">autoConfigurationEntry</span> <span class="operator">=</span> getAutoConfigurationEntry(autoConfigurationMetadata,</span><br><span class="line">			annotationMetadata);</span><br><span class="line">	<span class="keyword">return</span> StringUtils.toStringArray(autoConfigurationEntry.getConfigurations());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><em><strong><u>虽然但是，网上教程都是说这里会调用String[] selectImports()方法。为什么我debug进的是public Iterable<Entry> selectImports() 方法，难道是我看的教程时间太久远了吗？先不管了。</u></strong></em></p>
+<h5 id="2-2-selectImports-—-getAutoConfigurationEntry（）"><a href="#2-2-selectImports-—-getAutoConfigurationEntry（）" class="headerlink" title="2.2 selectImports —-&gt;getAutoConfigurationEntry（）"></a>2.2 selectImports —-&gt;getAutoConfigurationEntry（）</h5><p>核心就是getCandidateConfigurations（）函数，里面调用了SpringFactoriesLoader.loadFactoryNames()方法</p>
+<p>获取了EnableAutoConfiguration作为key的所有类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">	<span class="keyword">protected</span> AutoConfigurationEntry <span class="title function_">getAutoConfigurationEntry</span><span class="params">(AutoConfigurationMetadata autoConfigurationMetadata,</span></span><br><span class="line"><span class="params">			AnnotationMetadata annotationMetadata)</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> (!isEnabled(annotationMetadata)) &#123;</span><br><span class="line">			<span class="keyword">return</span> EMPTY_ENTRY;</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="comment">// 获取EnableAutoConfiguration的属性，从spring.factories中获取所有对应的类</span></span><br><span class="line">		<span class="type">AnnotationAttributes</span> <span class="variable">attributes</span> <span class="operator">=</span> getAttributes(annotationMetadata);</span><br><span class="line">		List&lt;String&gt; configurations = getCandidateConfigurations(annotationMetadata, attributes);</span><br><span class="line">    <span class="comment">// 下面就是把不满足exclude和condition这些条件的删了</span></span><br><span class="line">		configurations = removeDuplicates(configurations);</span><br><span class="line">		Set&lt;String&gt; exclusions = getExclusions(annotationMetadata, attributes);</span><br><span class="line">		checkExcludedClasses(configurations, exclusions);</span><br><span class="line">		configurations.removeAll(exclusions);</span><br><span class="line">		configurations = filter(configurations, autoConfigurationMetadata);</span><br><span class="line">		fireAutoConfigurationImportEvents(configurations, exclusions);</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">AutoConfigurationEntry</span>(configurations, exclusions);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span> List&lt;String&gt; <span class="title function_">getCandidateConfigurations</span><span class="params">(AnnotationMetadata metadata, AnnotationAttributes attributes)</span> &#123;</span><br><span class="line">  <span class="comment">// 调用SpringFactoriesLoader</span></span><br><span class="line">		List&lt;String&gt; configurations = SpringFactoriesLoader.loadFactoryNames(getSpringFactoriesLoaderFactoryClass(),</span><br><span class="line">				getBeanClassLoader());</span><br><span class="line">   。。。。。。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-3-getAutoConfigurationEntry-–-SpringFactoriesLoader-loadFactoryNames"><a href="#2-3-getAutoConfigurationEntry-–-SpringFactoriesLoader-loadFactoryNames" class="headerlink" title="2.3 getAutoConfigurationEntry() –&gt; SpringFactoriesLoader.loadFactoryNames()"></a>2.3 getAutoConfigurationEntry() –&gt; SpringFactoriesLoader.loadFactoryNames()</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">FACTORIES_RESOURCE_LOCATION</span> <span class="operator">=</span> <span class="string">&quot;META-INF/spring.factories&quot;</span>;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// SpringFactoriesLoader.loadFactoryNames核心代码如下</span></span><br><span class="line"></span><br><span class="line">			<span class="comment">// 通过classLoader：从所有的jar包中找到META-INF/spring.factories文件</span></span><br><span class="line">			Enumeration&lt;URL&gt; urls = classLoader.getResources(FACTORIES_RESOURCE_LOCATION);</span><br><span class="line">			<span class="keyword">while</span> (urls.hasMoreElements()) &#123;</span><br><span class="line">        <span class="comment">// url: jar包中spring.factories的文件路径</span></span><br><span class="line">				<span class="type">URL</span> <span class="variable">url</span> <span class="operator">=</span> urls.nextElement();</span><br><span class="line">				<span class="type">UrlResource</span> <span class="variable">resource</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UrlResource</span>(url);</span><br><span class="line">        <span class="comment">// properties：所有&lt;K,V&gt;对</span></span><br><span class="line">				<span class="type">Properties</span> <span class="variable">properties</span> <span class="operator">=</span> PropertiesLoaderUtils.loadProperties(resource);</span><br><span class="line">				<span class="keyword">for</span> (Map.Entry&lt;?, ?&gt; entry : properties.entrySet()) &#123;</span><br><span class="line">					<span class="type">String</span> <span class="variable">factoryTypeName</span> <span class="operator">=</span> ((String) entry.getKey()).trim();</span><br><span class="line">					String[] factoryImplementationNames =</span><br><span class="line">							StringUtils.commaDelimitedListToStringArray((String) entry.getValue());</span><br><span class="line">					<span class="keyword">for</span> (String factoryImplementationName : factoryImplementationNames) &#123;</span><br><span class="line">						result.computeIfAbsent(factoryTypeName, key -&gt; <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;())</span><br><span class="line">								.add(factoryImplementationName.trim());</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="SPI和Springboot自动配置的关系"><a href="#SPI和Springboot自动配置的关系" class="headerlink" title="SPI和Springboot自动配置的关系"></a>SPI和Springboot自动配置的关系</h2><p>系统里的各个模块，往往有不同的实现方案，我们不允许代码里涉及具体的实现类。所以，SPI就是提供了一个机制：为某个接口寻找服务实现。在运行时发现和使用这些接口。</p>
+<table>
+<thead>
+<tr>
+<th>Java SPI</th>
+<th>SpringFactories</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>配置文件：META-INF&#x2F;services&#x2F;全限定接口名<br />内容：全限定类名（一个类名一行）</td>
+<td>META-INF&#x2F;spring.factories<br />内容：key1&#x3D;value1,value2,……</td>
+</tr>
+<tr>
+<td>怎么拿实例：ServiceLoader，返回对象实例</td>
+<td>怎么拿实例：SpringFactoriesLoader，返回类名</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
 
       
     </div>
@@ -1500,7 +1091,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/bagu/springboot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/bagu/%E6%89%8B%E6%92%95%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1518,7 +1109,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/bagu/springboot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">【开发】【八股】springboot自动配置</a>
+          <a href="/2022/03/31/kaifa/bagu/%E6%89%8B%E6%92%95%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%A2%98/" class="post-title-link" itemprop="url">【开发】【八股】手撕多线程</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1547,101 +1138,153 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="Springboot-自动配置是啥"><a href="#Springboot-自动配置是啥" class="headerlink" title="Springboot 自动配置是啥"></a>Springboot 自动配置是啥</h2><p>举两个例子</p>
+          <h2 id="以下面几道经典题为例，如何快速解决手撕多线程题目"><a href="#以下面几道经典题为例，如何快速解决手撕多线程题目" class="headerlink" title="以下面几道经典题为例，如何快速解决手撕多线程题目"></a>以下面几道经典题为例，如何快速解决手撕多线程题目</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://javakeeper.starfish.ink/java/JUC/%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C%E9%97%AE%E9%A2%98.html#%E4%BD%BF%E7%94%A8-lock">https://javakeeper.starfish.ink/java/JUC/%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C%E9%97%AE%E9%A2%98.html#%E4%BD%BF%E7%94%A8-lock</a></p>
+</blockquote>
 <ol>
-<li>我们在dbrouter里有这样一个类DataSourceAutoConfig，在spring.factories里配置了EnableAutoConfiguration</li>
+<li>三个线程分别打印 A，B，C，要求这三个线程一起运行，打印 n 次，输出形如“ABCABCABC….”的字符串</li>
+<li>两个线程交替打印 0~100 的奇偶数</li>
+<li>通过 N 个线程顺序循环打印从 0 至 100</li>
+<li>多线程按顺序调用，A-&gt;B-&gt;C，AA 打印 5 次，BB 打印10 次，CC 打印 15 次，重复 10 次</li>
+<li>用两个线程，一个输出字母，一个输出数字，交替输出 1A2B3C4D…26Z</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataSourceAutoConfig</span> <span class="keyword">implements</span> <span class="title class_">EnvironmentAware</span></span><br><span class="line"><span class="comment">//spring.factories</span></span><br><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.czh.middleware.db.router.config.DataSourceAutoConfig</span><br></pre></td></tr></table></figure>
-
-<ol start="2">
-<li>在大营销项目中，有一个RedisClientConfig类，有@Configuration注解</li>
-</ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties(RedisClientConfigProperties.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RedisClientConfig</span> </span><br><span class="line"><span class="comment">//spring.factories</span></span><br><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.redisson.spring.starter.RedissonAutoConfiguration</span><br></pre></td></tr></table></figure>
-
-<p>这种形式就叫自动配置（顾名思义，配置作用当然就是省去繁琐的XML-bean配置，引入外部jar包加上几个注解就完事。至于jar包中有哪些自动配置类，类名是啥这些用户都不关心）</p>
-<h3 id="简单看看，一个自动配置的Config里应该包含什么"><a href="#简单看看，一个自动配置的Config里应该包含什么" class="headerlink" title="简单看看，一个自动配置的Config里应该包含什么"></a>简单看看，一个自动配置的Config里应该包含什么</h3><p>应该包含三个下面三种类型的注解</p>
-<ol>
-<li>@Configuration： 有了这个注解，类底下那些bean才会被spring给创建出来</li>
-<li>@ConfigurationProperties：配置属性，你得把yml那些信息读进来嘛</li>
-<li>@ConditionalOnClass：条件注解，当然还有很多其他的。你希望在满足一定条件的时候，这个config才有效。</li>
-</ol>
-<h2 id="Springboot-自动配置原理"><a href="#Springboot-自动配置原理" class="headerlink" title="Springboot 自动配置原理"></a>Springboot 自动配置原理</h2><p>我看网上的资料，自动配置的核心是基于下面两个概念，扩展成@EnableAutoConfiguration：</p>
+<p>JUC里那么多经典概念，都用一下吧。</p>
+<h3 id="Lock（题目1）"><a href="#Lock（题目1）" class="headerlink" title="Lock（题目1）"></a>Lock（题目1）</h3><p>三个线程循环打印，怎么打印呢？</p>
+<p>三个线程都去抢锁</p>
 <ul>
-<li>ImportSelector</li>
-<li>spring.factories</li>
+<li>当然只有轮到你了你才能打印</li>
+<li>不然的话什么都不干就把锁释放了。</li>
 </ul>
-<h5 id="面渣逆袭上的的一张图"><a href="#面渣逆袭上的的一张图" class="headerlink" title="面渣逆袭上的的一张图"></a>面渣逆袭上的的一张图</h5><p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/spring-df77ee15-2ff0-4ec7-8e65-e4ebb8ba88f1.png" alt="三分恶面渣逆袭：SpringBoot自动配置原理"></p>
-<h3 id="要看“自动配置”，当然得先看“配置”"><a href="#要看“自动配置”，当然得先看“配置”" class="headerlink" title="要看“自动配置”，当然得先看“配置”"></a>要看“自动配置”，当然得先看“配置”</h3><p>springboot要怎么加载一个配置，方法有两个：“ComponentScan”和“Import”。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Print_N_ABC_lock</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> times=<span class="number">10</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">state</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">Lock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">(<span class="type">int</span> myState,String toPrint)</span>&#123;</span><br><span class="line">        <span class="type">int</span> i=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(i&lt;times)&#123;</span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">if</span>(state%<span class="number">3</span>==myState)&#123;</span><br><span class="line">                state++;</span><br><span class="line">                i++;</span><br><span class="line">                System.out.println(toPrint);</span><br><span class="line">            &#125;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Print_N_ABC_lock</span> <span class="variable">printNAbcLock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Print_N_ABC_lock</span>();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">0</span>,<span class="string">&quot;A&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">1</span>,<span class="string">&quot;B&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">2</span>,<span class="string">&quot;C&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="Wait-Notify-题目1"><a href="#Wait-Notify-题目1" class="headerlink" title="Wait&#x2F;Notify(题目1)"></a>Wait&#x2F;Notify(题目1)</h3><p>万精油解法。</p>
+<blockquote>
+<p>稍微总结一下：</p>
 <ul>
-<li><p>@ComponentScan，它会自动扫描@Component、@Service、@Repository和 @Controller这些个注解</p>
+<li>加入是只有两个线程，那么直接通知，然后wait就完事</li>
+<li>如果是三个线程以上，那么得写个while循环在里面待着</li>
+</ul>
+</blockquote>
+<p>用sychronized。没轮到你就一直在while循环里等着（当然你得wait()，释放锁）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Print_N_ABC_WaitAndNotify</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> times=<span class="number">10</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">state</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Object</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">(<span class="type">int</span> myState,String toPrint)</span>  &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;times;i++)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">while</span> (state % <span class="number">3</span> != myState) &#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        lock.wait();</span><br><span class="line">                    &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                state++;</span><br><span class="line">                System.out.println(toPrint);</span><br><span class="line">                lock.notifyAll();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Print_N_ABC_WaitAndNotify</span> <span class="variable">printNAbcLock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Print_N_ABC_WaitAndNotify</span>();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">0</span>,<span class="string">&quot;A&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">1</span>,<span class="string">&quot;B&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">2</span>,<span class="string">&quot;C&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Wait-Notify-题目2"><a href="#Wait-Notify-题目2" class="headerlink" title="Wait&#x2F;Notify(题目2)"></a>Wait&#x2F;Notify(题目2)</h3><p>同样的，synchronized+wait&#x2F;notify。只是这里只有两个线程，连判断条件都不用了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Print_Ji_OU_WaitAndNotify</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>  <span class="variable">size</span> <span class="operator">=</span> <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">Object</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(count&lt;=size)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(count);</span><br><span class="line">                    count++;</span><br><span class="line">                    lock.notifyAll();</span><br><span class="line">                    lock.wait();</span><br><span class="line">                &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//防止有子线程被阻塞未被唤醒，导致主线程不退出</span></span><br><span class="line">                lock.notifyAll();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">        <span class="type">Print_Ji_OU_WaitAndNotify</span> <span class="variable">printJiOuWaitAndNotify</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Print_Ji_OU_WaitAndNotify</span>();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;printJiOuWaitAndNotify.print();&#125;).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;printJiOuWaitAndNotify.print();&#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Wait-Notify-题目5"><a href="#Wait-Notify-题目5" class="headerlink" title="Wait&#x2F;Notify(题目5)"></a>Wait&#x2F;Notify(题目5)</h3><p>和题目二一样</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">public class Print_A1B2C3_WaitAndNotify &#123;</span><br><span class="line">    private int num = 1;</span><br><span class="line">    private char c = &#x27;A&#x27;;</span><br><span class="line">    private final static Object lock = new Object();</span><br><span class="line"></span><br><span class="line">    public void print(boolean flag)&#123;</span><br><span class="line">        synchronized (lock)&#123;</span><br><span class="line">            for(int i=0;i&lt;26;i++)&#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    if(flag==false) &#123;</span><br><span class="line">                        System.out.println(num+i);</span><br><span class="line">                    &#125;else&#123;</span><br><span class="line">                        System.out.println((char)(c+i));</span><br><span class="line">                    &#125;</span><br><span class="line">                    lock.notifyAll();</span><br><span class="line">                    lock.wait();</span><br><span class="line">                &#125;catch (Exception e)&#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        Print_A1B2C3_WaitAndNotify printA1B2C3WaitAndNotify = new Print_A1B2C3_WaitAndNotify();</span><br><span class="line">        new Thread(()-&gt;&#123;printA1B2C3WaitAndNotify.print(false);&#125;).start();</span><br><span class="line">        new Thread(()-&gt;&#123;printA1B2C3WaitAndNotify.print(true);&#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/mianjing/mianjing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/mianjing/mianjing/" class="post-title-link" itemprop="url">【开发】【八股】面经</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%9D%A2%E7%BB%8F/" itemprop="url" rel="index"><span itemprop="name">面经</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h2><p>组合模式规则树（单例）</p>
+<p>公众号重试</p>
+<h2 id="用到了什么设计模式"><a href="#用到了什么设计模式" class="headerlink" title="用到了什么设计模式"></a>用到了什么设计模式</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/cccccc96/Interview/tree/main/Design%20Pattern">https://github.com/cccccc96/Interview/tree/main/Design%20Pattern</a></p>
+</blockquote>
+<p>在抽奖的规则过滤中，用到了责任链和组合模式。最核心的作用就是把if else进行拆分，便于后期维护。</p>
+<p>对于不同的抽奖策略采用了抽奖模式。</p>
+<p>对于流程开发，采用了模版模式</p>
+<h3 id="责任链"><a href="#责任链" class="headerlink" title="责任链"></a>责任链</h3><p>故名思义，责任链就是一个链表，唯一的区别就是我们为每个节点做一个实现（因为每个节点要实现不同的功能）。</p>
+<p>所以我们执行责任链就是遍历这个链表，每个节点可能会拦截掉，或是继续下一个节点。</p>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240706161127811.png" alt="image-20240706161127811"></p>
+<h3 id="组合模式-规则树模型"><a href="#组合模式-规则树模型" class="headerlink" title="组合模式-规则树模型"></a>组合模式-规则树模型</h3><p>故名思义，规则树模型就是一个树形结构。可以想象一个B+树，根据大小进行遍历。那么，规则树也是类似，只是每个树节点有不同的规则。</p>
 <ul>
-<li>还可以配置basePackages、basePackageClasses指定包和类所在的包（当然这些和这里无关）</li>
+<li>Filter（树节点）：拿不同种类的信息（年龄信息&#x2F;性别信息）<ul>
+<li>filter(): 遍历所有子边，哪个边符合，则找到对应的下一个子节点</li>
 </ul>
 </li>
-<li><p>@Import，它有几种方法导入，我只看了前两种</p>
+<li>IEngine：遍历整颗树<ul>
+<li>可以想象，搜索树中，小于进左子树，大于进右子树；而在规则树中，每条边的规则是固定的</li>
+</ul>
+</li>
+<li>好处：方便维护，可以把树结构存进数据库中</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240706175427996.png" alt="image-20240706175427996"></p>
+<h3 id="策略模式和模版模式"><a href="#策略模式和模版模式" class="headerlink" title="策略模式和模版模式"></a>策略模式和模版模式</h3><p>这两个非常简单</p>
 <ul>
-<li><p>普通导入，直接把要加载的那个类通过import指定就完事</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AppConfig1</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> MyRepository <span class="title function_">myRepository</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">MyRepository</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@Import(&#123;AppConfig1.class, .......&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainConfig</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>“ImportSelector”：我们可以通过这个ImportSelector类，去告诉Import应该加载哪些东西</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AppConfig1</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> MyRepository <span class="title function_">myRepository</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">MyRepository</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyImportSelector</span> <span class="keyword">implements</span> <span class="title class_">ImportSelector</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String[] selectImports(AnnotationMetadata importingClassMetadata) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">String</span>[] &#123; AppConfig1.class.getName(), ...... &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@Import(MyImportSelector.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainConfig</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>还有一个ImportBeanDefinitionRegistrar就不看了</p>
-</li>
+<li>策略模式：一个接口，多个实现，需要哪个策略用哪个</li>
+<li>模版模式：定义抽象类，定义流程，每个步骤都是一个抽奖方法。步骤具体的实现去继承类里面去做。</li>
 </ul>
-</li>
-</ul>
-<p>其实，自动配置就是通过其中一个方法实现的：是“ImportSelector”，只要selectImports能拿到要加载的类就好了。</p>
-<h3 id="知道了“配置”，可以看“自动配置”了"><a href="#知道了“配置”，可以看“自动配置”了" class="headerlink" title="知道了“配置”，可以看“自动配置”了"></a>知道了“配置”，可以看“自动配置”了</h3><p>实现自动装配的核心注解，就是@EnableAutoConfiguration注解</p>
-<p>当然我们在项目中看不到它，因为它藏在@SpringBootApplication中，@SpringBootApplication是三个</p>
+<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>功能：拆分出了核心流程与辅助流程</p>
+<p>实现也非常简单，只需要做两件事</p>
 <ul>
-<li><strong>@EnableAutoConfiguration：自动装配</strong></li>
-<li>@Configuration（无关）</li>
-<li>@ComponentScan（无关）</li>
+<li>定义各种listener，方法里去做要做的事</li>
+<li>定义一个Manager，负责注册和通知</li>
 </ul>
-<p>点进源码看的话，大概流程是：@EnableAutoConfiguration. —&gt; @import( AutoConfigurationImportSelector.class) –&gt; AutoConfigurationImportSelector的优雅实现</p>
-<h4 id="1-EnableAutoConfiguration"><a href="#1-EnableAutoConfiguration" class="headerlink" title="1. EnableAutoConfiguration"></a>1. EnableAutoConfiguration</h4><p>和上一节的小例子很像，import了一个AutoConfigurationImportSelector类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Import(AutoConfigurationImportSelector.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> EnableAutoConfiguration &#123;</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-AutoConfigurationImportSelector"><a href="#2-AutoConfigurationImportSelector" class="headerlink" title="2. AutoConfigurationImportSelector"></a>2. AutoConfigurationImportSelector</h4><p>那么，我们也在就剩最后一件事要做。实现这个ImportSelector类，让它能发现classpath中jar包的自动配置类。</p>
-<p><strong>那么，具体要怎么去发现呢，用Spring框架中的SpringFactories机制</strong></p>
-<ul>
-<li>核心逻辑就是去读取所有META-INF&#x2F;spring.factories，把里面的&lt;K,V&gt;对都给读出来</li>
-</ul>
-<h5 id="2-1-实现这个ImportSelector类，核心就是重写selectImports"><a href="#2-1-实现这个ImportSelector类，核心就是重写selectImports" class="headerlink" title="2.1 实现这个ImportSelector类，核心就是重写selectImports"></a>2.1 实现这个ImportSelector类，核心就是重写selectImports</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> String[] selectImports(AnnotationMetadata annotationMetadata) &#123;</span><br><span class="line">	<span class="keyword">if</span> (!isEnabled(annotationMetadata)) &#123;</span><br><span class="line">		<span class="keyword">return</span> NO_IMPORTS;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="type">AutoConfigurationMetadata</span> <span class="variable">autoConfigurationMetadata</span> <span class="operator">=</span> AutoConfigurationMetadataLoader</span><br><span class="line">			.loadMetadata(<span class="built_in">this</span>.beanClassLoader);</span><br><span class="line">   <span class="comment">// 自动配置的入口方法 getAutoConfigurationEntry</span></span><br><span class="line">	<span class="type">AutoConfigurationEntry</span> <span class="variable">autoConfigurationEntry</span> <span class="operator">=</span> getAutoConfigurationEntry(autoConfigurationMetadata,</span><br><span class="line">			annotationMetadata);</span><br><span class="line">	<span class="keyword">return</span> StringUtils.toStringArray(autoConfigurationEntry.getConfigurations());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><em><strong><u>虽然但是，网上教程都是说这里会调用String[] selectImports()方法。为什么我debug进的是public Iterable<Entry> selectImports() 方法，难道是我看的教程时间太久远了吗？先不管了。</u></strong></em></p>
-<h5 id="2-2-selectImports-—-getAutoConfigurationEntry（）"><a href="#2-2-selectImports-—-getAutoConfigurationEntry（）" class="headerlink" title="2.2 selectImports —-&gt;getAutoConfigurationEntry（）"></a>2.2 selectImports —-&gt;getAutoConfigurationEntry（）</h5><p>核心就是getCandidateConfigurations（）函数，里面调用了SpringFactoriesLoader.loadFactoryNames()方法</p>
-<p>获取了EnableAutoConfiguration作为key的所有类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">	<span class="keyword">protected</span> AutoConfigurationEntry <span class="title function_">getAutoConfigurationEntry</span><span class="params">(AutoConfigurationMetadata autoConfigurationMetadata,</span></span><br><span class="line"><span class="params">			AnnotationMetadata annotationMetadata)</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> (!isEnabled(annotationMetadata)) &#123;</span><br><span class="line">			<span class="keyword">return</span> EMPTY_ENTRY;</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="comment">// 获取EnableAutoConfiguration的属性，从spring.factories中获取所有对应的类</span></span><br><span class="line">		<span class="type">AnnotationAttributes</span> <span class="variable">attributes</span> <span class="operator">=</span> getAttributes(annotationMetadata);</span><br><span class="line">		List&lt;String&gt; configurations = getCandidateConfigurations(annotationMetadata, attributes);</span><br><span class="line">    <span class="comment">// 下面就是把不满足exclude和condition这些条件的删了</span></span><br><span class="line">		configurations = removeDuplicates(configurations);</span><br><span class="line">		Set&lt;String&gt; exclusions = getExclusions(annotationMetadata, attributes);</span><br><span class="line">		checkExcludedClasses(configurations, exclusions);</span><br><span class="line">		configurations.removeAll(exclusions);</span><br><span class="line">		configurations = filter(configurations, autoConfigurationMetadata);</span><br><span class="line">		fireAutoConfigurationImportEvents(configurations, exclusions);</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">AutoConfigurationEntry</span>(configurations, exclusions);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span> List&lt;String&gt; <span class="title function_">getCandidateConfigurations</span><span class="params">(AnnotationMetadata metadata, AnnotationAttributes attributes)</span> &#123;</span><br><span class="line">  <span class="comment">// 调用SpringFactoriesLoader</span></span><br><span class="line">		List&lt;String&gt; configurations = SpringFactoriesLoader.loadFactoryNames(getSpringFactoriesLoaderFactoryClass(),</span><br><span class="line">				getBeanClassLoader());</span><br><span class="line">   。。。。。。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="2-3-getAutoConfigurationEntry-–-SpringFactoriesLoader-loadFactoryNames"><a href="#2-3-getAutoConfigurationEntry-–-SpringFactoriesLoader-loadFactoryNames" class="headerlink" title="2.3 getAutoConfigurationEntry() –&gt; SpringFactoriesLoader.loadFactoryNames()"></a>2.3 getAutoConfigurationEntry() –&gt; SpringFactoriesLoader.loadFactoryNames()</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">FACTORIES_RESOURCE_LOCATION</span> <span class="operator">=</span> <span class="string">&quot;META-INF/spring.factories&quot;</span>;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// SpringFactoriesLoader.loadFactoryNames核心代码如下</span></span><br><span class="line"></span><br><span class="line">			<span class="comment">// 通过classLoader：从所有的jar包中找到META-INF/spring.factories文件</span></span><br><span class="line">			Enumeration&lt;URL&gt; urls = classLoader.getResources(FACTORIES_RESOURCE_LOCATION);</span><br><span class="line">			<span class="keyword">while</span> (urls.hasMoreElements()) &#123;</span><br><span class="line">        <span class="comment">// url: jar包中spring.factories的文件路径</span></span><br><span class="line">				<span class="type">URL</span> <span class="variable">url</span> <span class="operator">=</span> urls.nextElement();</span><br><span class="line">				<span class="type">UrlResource</span> <span class="variable">resource</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UrlResource</span>(url);</span><br><span class="line">        <span class="comment">// properties：所有&lt;K,V&gt;对</span></span><br><span class="line">				<span class="type">Properties</span> <span class="variable">properties</span> <span class="operator">=</span> PropertiesLoaderUtils.loadProperties(resource);</span><br><span class="line">				<span class="keyword">for</span> (Map.Entry&lt;?, ?&gt; entry : properties.entrySet()) &#123;</span><br><span class="line">					<span class="type">String</span> <span class="variable">factoryTypeName</span> <span class="operator">=</span> ((String) entry.getKey()).trim();</span><br><span class="line">					String[] factoryImplementationNames =</span><br><span class="line">							StringUtils.commaDelimitedListToStringArray((String) entry.getValue());</span><br><span class="line">					<span class="keyword">for</span> (String factoryImplementationName : factoryImplementationNames) &#123;</span><br><span class="line">						result.computeIfAbsent(factoryTypeName, key -&gt; <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;())</span><br><span class="line">								.add(factoryImplementationName.trim());</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h2 id="SPI和Springboot自动配置的关系"><a href="#SPI和Springboot自动配置的关系" class="headerlink" title="SPI和Springboot自动配置的关系"></a>SPI和Springboot自动配置的关系</h2><p>系统里的各个模块，往往有不同的实现方案，我们不允许代码里涉及具体的实现类。所以，SPI就是提供了一个机制：为某个接口寻找服务实现。在运行时发现和使用这些接口。</p>
-<table>
-<thead>
-<tr>
-<th>Java SPI</th>
-<th>SpringFactories</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>配置文件：META-INF&#x2F;services&#x2F;全限定接口名<br />内容：全限定类名（一个类名一行）</td>
-<td>META-INF&#x2F;spring.factories<br />内容：key1&#x3D;value1,value2,……</td>
-</tr>
-<tr>
-<td>怎么拿实例：ServiceLoader，返回对象实例</td>
-<td>怎么拿实例：SpringFactoriesLoader，返回类名</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240706214913020.png" alt="image-20240706214913020"></p>
 
       
     </div>
