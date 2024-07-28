@@ -123,18 +123,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">38</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -151,6 +151,158 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/bagu/springIOC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/bagu/springIOC/" class="post-title-link" itemprop="url">【1开发】【八股】springIOC</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/23277575/answer/169698662">https://www.zhihu.com/question/23277575/answer/169698662</a></p>
+<p><a target="_blank" rel="noopener" href="https://javadoop.com/post/spring-ioc">https://javadoop.com/post/spring-ioc</a></p>
+<p><a target="_blank" rel="noopener" href="https://javaguide.cn/system-design/framework/spring/ioc-and-aop.html#ioc-%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98">https://javaguide.cn/system-design/framework/spring/ioc-and-aop.html#ioc-解决了什么问题</a></p>
+</blockquote>
+<h2 id="知乎的一个非常典型的例子"><a href="#知乎的一个非常典型的例子" class="headerlink" title="知乎的一个非常典型的例子"></a>知乎的一个非常典型的例子</h2><p>IOC是<strong>依赖倒置原则</strong>的体现，是为了处理工程中的依赖关系。</p>
+<p>知乎的这个例子很好地解释了“依赖注入”的注入是什么。</p>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/v2-82e0c12a1b26f7979ed9241e169affda_1440w.webp" alt="img" style="zoom:50%;" />
+
+<p>这种方式是不好的，为什么？假如最末尾一个类的构造方法改了，完蛋，全部类的构造方法都要改。这种工程是不可维护的。</p>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/v2-c920a0540ce0651003a5326f6ef9891d_1440w.webp" alt="img"></p>
+<p>所以我们怎么办呢，当然就用我们的依赖注入：就是<strong>把底层类作为参数传入上层类</strong>。实现上层类对下层类的控制。</p>
+<h2 id="什么是IOC"><a href="#什么是IOC" class="headerlink" title="什么是IOC"></a>什么是IOC</h2><p>我们在springboot项目中</p>
+<ul>
+<li>不管是Dao，还是外部包的那些config</li>
+<li>我们从来都不会通过<strong>new</strong>的方式来创建，而是通过依赖注入的方式。</li>
+<li><strong>你只需要维护一个Configuration（可以是xml可以是一段代码），而不用每次初始化一辆车都要亲手去写那一大段初始化的代码</strong></li>
+</ul>
+<p>控制反转（描述的是对象的创建以及管理的问题）</p>
+<ul>
+<li>控制：对象创建的权利</li>
+<li>反转：控制权交给外部环境IOC容器</li>
+</ul>
+<p>好处</p>
+<ul>
+<li>对象之间的依赖程度降低</li>
+<li>资源变的容易管理<ul>
+<li>单例模式</li>
+<li>IOC容器负责bean的整个生命周期</li>
+</ul>
+</li>
+</ul>
+<h2 id="IOC原理"><a href="#IOC原理" class="headerlink" title="IOC原理"></a>IOC原理</h2><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708103644862.png" alt="image-20240708103644862" style="zoom:50%;" />
+
+<ol>
+<li>FileSystemXmlApplicationContext&#x2F;ClassPathXmlApplicationContext ：xml配置文件在系统中的路径</li>
+<li>AnnotationConfigApplicationContext：基于注解来使用</li>
+</ol>
+<h3 id="一个小例子"><a href="#一个小例子" class="headerlink" title="一个小例子"></a>一个小例子</h3><p>使用 ClassPathXmlApplicationContext 进行分析，方便理解整个构建流程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用我们的配置文件来启动一个 ApplicationContext</span></span><br><span class="line"><span class="type">ApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;classpath:application.xml&quot;</span>);</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;context 启动成功&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 从 context 中取出我们的 Bean，而不是用 new MessageServiceImpl() 这种方式</span></span><br><span class="line"><span class="type">MessageService</span> <span class="variable">messageService</span> <span class="operator">=</span> context.getBean(MessageService.class);</span><br><span class="line">System.out.println(messageService.getMessage());</span><br></pre></td></tr></table></figure>
+
+<p>那么，这里我们通过ApplicationContext拿到了Bean。那么ApplicationContext是如何创建实例Bean，并且往各个Bean中注入依赖的呢？</p>
+<h3 id="BeanFactory"><a href="#BeanFactory" class="headerlink" title="BeanFactory"></a>BeanFactory</h3><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708105257053.png" alt="image-20240708105257053" style="zoom:33%;" />
+
+<p>ApplicationContext其实就是一个BeanFactory</p>
+<h3 id="启动过程分析"><a href="#启动过程分析" class="headerlink" title="启动过程分析"></a>启动过程分析</h3><h4 id="1-构造方法"><a href="#1-构造方法" class="headerlink" title="1. 构造方法"></a>1. 构造方法</h4><p>先从构造方法开始，把configLocations（也就是XML地址）读进来</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">ClassPathXmlApplicationContext</span><span class="params">(String[] configLocations, <span class="type">boolean</span> refresh, ApplicationContext parent)</span></span><br><span class="line">		<span class="keyword">throws</span> BeansException &#123;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">super</span>(parent);</span><br><span class="line">	setConfigLocations(configLocations);</span><br><span class="line">	<span class="keyword">if</span> (refresh) &#123;</span><br><span class="line">		refresh();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-refresh-方法-–-（BeanFactory注册BeanDefinition-初始化所有单例beans"><a href="#2-refresh-方法-–-（BeanFactory注册BeanDefinition-初始化所有单例beans" class="headerlink" title="2. refresh()方法 – （BeanFactory注册BeanDefinition+初始化所有单例beans)"></a>2. refresh()方法 – （BeanFactory注册BeanDefinition+初始化所有单例beans)</h4><blockquote>
+<ol>
+<li>插一嘴，BeanFactory当然是Bean容器，那么Bean是什么呢？它其实准确来说叫BeanDefinition，我们自己定义的一个个Bean会转换成一个个BeanDefinition存在于Spring的BeanFactory中。</li>
+<li>BeanDefinition保存了所有的Bean信息：是哪个类，是否是单例的，等等</li>
+<li>所以，Bean是什么？在代码层面可以理解为：BeanDefinition的实例</li>
+</ol>
+</blockquote>
+<p>（太复杂，以后再慢慢看吧，先看核心的几步）</p>
+<ul>
+<li>obtainFreshBeanFactory（拿到BeanFactory）<ul>
+<li>这代表applicationContext其实内部持有了一个BeanFactory</li>
+<li>BeanDefinition注册到了BeanFactory中</li>
+<li>我们可以看到里面维护了一个<strong>ConcurrentHashMap</strong>，存beanName-&gt; beanDefinition</li>
+<li><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708165122143.png" alt="image-20240708165122143"></li>
+</ul>
+</li>
+<li>finishBeanFactoryInitialization（创建所有单例Bean，也就是getBean方法）<ul>
+<li><strong>实例化</strong>：使用反射创建Bean实例。</li>
+<li><strong>依赖注入</strong>：根据Bean定义中的依赖关系，将所需的依赖注入到Bean实例中。<ul>
+<li>（这里就是依赖倒置的概念，dfs，从上层往下层搜索，知乎的那个教程里写的）</li>
+<li><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708171643710.png" alt="image-20240708171643710"></li>
+</ul>
+</li>
+<li><strong>初始化</strong>：调用Bean的初始化方法（如配置的init-method或实现了InitializingBean接口的afterPropertiesSet方法）。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">refresh</span><span class="params">()</span> <span class="keyword">throws</span> BeansException, IllegalStateException &#123;</span><br><span class="line">			。。。。。。</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 这步比较关键，这步完成后，配置文件就会解析成一个个 Bean 定义，注册到 BeanFactory 中，</span></span><br><span class="line">      <span class="comment">// 当然，这里说的 Bean 还没有初始化，只是配置信息都提取出来了，</span></span><br><span class="line">      <span class="comment">// 注册也只是将这些信息都保存到了注册中心(说到底核心是一个 beanName-&gt; beanDefinition 的 map)</span></span><br><span class="line">      <span class="type">ConfigurableListableBeanFactory</span> <span class="variable">beanFactory</span> <span class="operator">=</span> obtainFreshBeanFactory();</span><br><span class="line">  </span><br><span class="line">  		。。。。。。</span><br><span class="line">        <span class="comment">// 重点，重点，重点</span></span><br><span class="line">        <span class="comment">// 初始化所有的 singleton beans</span></span><br><span class="line">        <span class="comment">//（lazy-init 的除外）</span></span><br><span class="line">        finishBeanFactoryInitialization(beanFactory);</span><br><span class="line">			</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -752,6 +904,7 @@
     <div class="post-body" itemprop="articleBody">
           <h1 id="整理答题思路"><a href="#整理答题思路" class="headerlink" title="整理答题思路"></a>整理答题思路</h1><blockquote>
 <p>这里暂时只放最最基本的面试题，汇总在这里，面试前看看，别最基础的也忘了。</p>
+<p>Java，并发，Mysql，Redis，消息队列（Kafka）、网络</p>
 </blockquote>
 <h3 id="Java-中的集合类型？哪些是线程安全的？"><a href="#Java-中的集合类型？哪些是线程安全的？" class="headerlink" title="Java 中的集合类型？哪些是线程安全的？"></a>Java 中的集合类型？哪些是线程安全的？</h3><p>List、Set、Map</p>
 <p>ConcurrentHashMap线程安全</p>
@@ -862,7 +1015,7 @@
 </li>
 <li><p>应用（大营销）</p>
 <ul>
-<li>项目背景：抽奖是高并发的，需要快速响应用户请求，聚合查询奖品信息</li>
+<li>项目背景：抽奖是高并发的，需要快速响应用户请求，（聚合查询奖品信息；风控、抽奖计算、实名验证并行计算；扫描task表）</li>
 <li>核心线程数：cpu核的两倍，即云服务器4核 * 2&#x3D;8（有很多网络通信，数据库操作，所以是IO密集性任务，有较多的空闲线程）</li>
 <li>最大线程数：8 * 2 &#x3D;16 </li>
 <li>阻塞队列：SynchronousQueue（提交后立即交给等待的线程处理，提高响应速度）</li>
@@ -877,6 +1030,7 @@
 </ul>
 <h3 id="线程池CompletableFuture"><a href="#线程池CompletableFuture" class="headerlink" title="线程池CompletableFuture"></a>线程池CompletableFuture</h3><ul>
 <li>添加任务：runAsync（参数：runnable，线程池）</li>
+<li>编排：thenCombine，thenAccept</li>
 <li>等待所有任务执行完毕：allof().join()</li>
 </ul>
 <h3 id="MySQL存储引擎（Innodb，MyISAM）"><a href="#MySQL存储引擎（Innodb，MyISAM）" class="headerlink" title="MySQL存储引擎（Innodb，MyISAM）"></a>MySQL存储引擎（Innodb，MyISAM）</h3><p>选Innodb（事务，行级锁，redo Log和Undo Log）</p>
@@ -1002,6 +1156,8 @@
 </ul>
 </li>
 </ul>
+<h3 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h3><p>单表单库数据量过大，连接数量过大，导致性能下降，做的一个负载均衡。</p>
+<p><strong>水平分库分表</strong>（用户信息，发奖订单，积分订单，活动订单），垂直分库分表</p>
 <h3 id="不停机扩容"><a href="#不停机扩容" class="headerlink" title="不停机扩容"></a>不停机扩容</h3><ol>
 <li>在线双写，查询走旧库（进行数据的同步和校验）</li>
 <li>在线双写，查询走新库</li>
@@ -1009,19 +1165,280 @@
 </ol>
 <h3 id="Redis用来干嘛"><a href="#Redis用来干嘛" class="headerlink" title="Redis用来干嘛"></a>Redis用来干嘛</h3><ul>
 <li>缓存<ul>
-<li>String：各种东西，比如库存，奖品</li>
+<li>String：各种东西，比如奖品，验证码</li>
 <li>Hash：getMap，奖品概率查找表</li>
 <li>List：所有的线程池信息</li>
 </ul>
 </li>
-<li>消息队列<ul>
+<li>阻塞队列+延时队列<ul>
 <li>库存趋势更新到mysql，不稳定</li>
+<li>阻塞队列（RBlockingQueue）：线程安全，在队列满或空时阻塞线程</li>
+<li>延时队列（RDelayedQueue）：在一个延迟时间后，才会被放入RBlockingQueue</li>
 </ul>
 </li>
 <li>分布式锁<ul>
 <li>库存扣减，防止超卖</li>
 </ul>
 </li>
+<li>发布，订阅<ul>
+<li>线程池修改</li>
+<li>发布：redissonClient.getTopic.pulish</li>
+<li>订阅：redissonClient.getTopic.addListener</li>
+</ul>
+</li>
+</ul>
+<h3 id="阻塞队列和延时队列的实现"><a href="#阻塞队列和延时队列的实现" class="headerlink" title="阻塞队列和延时队列的实现"></a>阻塞队列和延时队列的实现</h3><p>阻塞队列：lpush，brpop（阻塞）</p>
+<p>延时队列：zset，定期从zset中获取指定时间戳的</p>
+<h3 id="Redis中的常用命令"><a href="#Redis中的常用命令" class="headerlink" title="Redis中的常用命令"></a>Redis中的常用命令</h3><ul>
+<li>基本操作：set，get，decr</li>
+<li>分布式锁：SetIfAbsent，tryLock</li>
+<li>发布订阅：pulish，addListener</li>
+<li>获取Hash或List：getMap，getblockingqueue，getDelayedQueue</li>
+<li>其他：isExists，getLock</li>
+</ul>
+<h3 id="Redis为什么快"><a href="#Redis为什么快" class="headerlink" title="Redis为什么快"></a>Redis为什么快</h3><ul>
+<li>基于内存的数据存储</li>
+<li>单线程模型：避免了线程切换和锁竞争</li>
+<li>IO多路复用<ul>
+<li>select&#x2F;epoll机制，保证了单个线程能处理多个IO读写</li>
+<li>将socket句柄注册进epoll，然后epoll帮你监听哪些socket上有消息到达</li>
+<li>相比于read请求一直阻塞；只有epoll调用才会阻塞，收发客户消息是不会阻塞的</li>
+</ul>
+</li>
+<li>高效的数据结构</li>
+</ul>
+<h3 id="Redis-的持久化方式？RDB-和-AOF-的区别？Redis-宕机哪种恢复的比较快？"><a href="#Redis-的持久化方式？RDB-和-AOF-的区别？Redis-宕机哪种恢复的比较快？" class="headerlink" title="Redis 的持久化方式？RDB 和 AOF 的区别？Redis 宕机哪种恢复的比较快？"></a>Redis 的持久化方式？RDB 和 AOF 的区别？Redis 宕机哪种恢复的比较快？</h3><p><strong>两个持久化方式</strong></p>
+<ul>
+<li>RDB（Redis DataBase）：异步创建数据集的快照，不会阻塞<ul>
+<li>bgsava</li>
+<li>redis.conf中配置命令，发生多少次变更，多少秒后触发一次RDB</li>
+</ul>
+</li>
+<li>AOF（Append only file）：追加每个写操作到AOF文件中<ul>
+<li>流程1:将所有写命令追加到AOF buffer中</li>
+<li>流程2:持久化sync<ul>
+<li>每条写指令&#x2F;每秒&#x2F;只在Redis关闭时执行</li>
+</ul>
+</li>
+<li>流程3:重写<ul>
+<li>直接将Redis重写成一系列写命令</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>两者区别</strong></p>
+<p>RDB，文件小，对性能影响较小，但是容易造成数据丢失（性能是首要指标）</p>
+<p>AOF，文件大，实时性好，对性能影响较大（尽可能减少数据丢失）</p>
+<p>混合持久化：在AOF重写的同时，生成一份RDB快照，这份快照作为AOF文件的一部分，最后再附加新的写入命令。</p>
+<h3 id="什么是缓存击穿、缓存穿透、缓存雪崩"><a href="#什么是缓存击穿、缓存穿透、缓存雪崩" class="headerlink" title="什么是缓存击穿、缓存穿透、缓存雪崩"></a>什么是缓存击穿、缓存穿透、缓存雪崩</h3><p><strong>缓存击穿</strong></p>
+<p>热点数据在过期的那一刻，直达数据库。</p>
+<p>解决方案</p>
+<ul>
+<li><p>发现缓存中没有，对A这个数据加锁，拿到缓存再返回给用户</p>
+</li>
+<li><p>不断刷新过期时间</p>
+</li>
+</ul>
+<p><strong>缓存穿透</strong></p>
+<p>查询根本不存在的数据，那么也会直达数据库</p>
+<p>解决方案</p>
+<ul>
+<li>哪怕不存在的数据，也缓存空值（适用数据缺失较少场景，有数据不一致的风险）<ul>
+<li>需要设置较短的过期时间</li>
+</ul>
+</li>
+<li>加一个布隆过滤器（适用海量数据的场景）<ul>
+<li>告诉我们key一定不存在或者可能存在</li>
+<li>也就是多个hash映射，只要有一个为0，就说明不存在</li>
+</ul>
+</li>
+</ul>
+<p><strong>缓存雪崩</strong></p>
+<p>缓存大量过期，或者缓存服务器宕机</p>
+<p>解决方案</p>
+<ul>
+<li>集群部署</li>
+<li>使用多级缓存（Redis不可用了，也可以用本地缓存）</li>
+<li>设置不同的过期时间</li>
+</ul>
+<h3 id="如何保证数据的一致性"><a href="#如何保证数据的一致性" class="headerlink" title="如何保证数据的一致性"></a>如何保证数据的一致性</h3><p> 先写MySQL，再删除Redis。只会有一次不一致的情况，对于不是强一致性的业务，可以容忍。</p>
+<ul>
+<li>为什么删除缓存：删除缓存比更新缓存快的多</li>
+<li>为什么先更数据库：MySQL的IO慢的多，容易在Redis中产生脏数据</li>
+</ul>
+<p>假如对一致性要求很高呢（缓存删除失败，并发导致写入了脏数据）</p>
+<ul>
+<li>引入消息队列保证缓存被删除</li>
+<li>设置缓存过期时间兜底</li>
+</ul>
+<h3 id="怎么处理Redis中的热Key和大Key"><a href="#怎么处理Redis中的热Key和大Key" class="headerlink" title="怎么处理Redis中的热Key和大Key"></a>怎么处理Redis中的热Key和大Key</h3><p>QPS集中在特定的Key，那么就是热Key。</p>
+<p>如何处理</p>
+<ul>
+<li>把Key打到不同的Redis实例</li>
+<li>二级缓存</li>
+</ul>
+<h3 id="Redis主从复制，哨兵，集群"><a href="#Redis主从复制，哨兵，集群" class="headerlink" title="Redis主从复制，哨兵，集群"></a>Redis主从复制，哨兵，集群</h3><p>高可用：主从复制（手动切换），哨兵（自动切换，哨兵节点，选举一个负责故障转移）</p>
+<p>数据分区：集群（哈希槽，keys映射到实例）</p>
+<h3 id="消息队列的三个好处"><a href="#消息队列的三个好处" class="headerlink" title="消息队列的三个好处"></a>消息队列的三个好处</h3><p><strong>异步处理，减少响应时间（以发奖为例）</strong></p>
+<p>请求在写入消息队列就立即返回给用户了</p>
+<p><strong>削峰，限流（以发奖为例）</strong></p>
+<p>把要做的事务存储在消息队列中（压力转嫁到MQ），然后后端再慢慢根据自己的能力去消费这些消息，避免直接把后端服务打掉。</p>
+<p><strong>解耦</strong></p>
+<p>新增业务，只要对该类消息感兴趣，只需订阅该消息</p>
+<h3 id="为什么选择Kafka（send，KafkaListener）"><a href="#为什么选择Kafka（send，KafkaListener）" class="headerlink" title="为什么选择Kafka（send，KafkaListener）"></a>为什么选择Kafka（send，KafkaListener）</h3><p>极致的性能，超高吞吐量（百万级）；可以实现高可用，可以做到0消息丢失的情况；生态系统的兼容性非常好</p>
+<p>缺点，<strong>消息重复消费</strong>，造成轻微的影响。</p>
+<h3 id="保证Kafka的消费顺序"><a href="#保证Kafka的消费顺序" class="headerlink" title="保证Kafka的消费顺序"></a>保证Kafka的消费顺序</h3><p>Kafka一个topic里包含多个partition，只保证partition分区中的消息有序。所以send的时候指定分区（或者使用对象id作为key）。</p>
+<h3 id="保证Kafka的消息不丢失"><a href="#保证Kafka的消息不丢失" class="headerlink" title="保证Kafka的消息不丢失"></a>保证Kafka的消息不丢失</h3><p><strong>生产者丢失消息</strong></p>
+<ol>
+<li>send函数的返回值是ListenableFuture，添加回调函数，判定消息结果。</li>
+<li>设置重试次数稍微大一点</li>
+<li>将消息发送之前，写入task表，如果发送失败，定时任务去补偿。</li>
+</ol>
+<p><strong>消费者丢失消息</strong></p>
+<p>偏移量，当消费者自动提交了偏移量，但是还没消费就挂掉了。改成手动提交偏移量。</p>
+<p><strong>Kafka丢失消息</strong></p>
+<p>Kafka挂掉，多副本机制，但消息还没有同步。</p>
+<p>使用acks&#x3D;all，最安全的，但是延迟会很高</p>
+<h3 id="Kafka如何保证消息不重复消费"><a href="#Kafka如何保证消息不重复消费" class="headerlink" title="Kafka如何保证消息不重复消费"></a>Kafka如何保证消息不重复消费</h3><ul>
+<li>mysql幂等校验</li>
+<li>最根本的原因，已经消费的数据没有成功提交offset，拉取到消息再提交</li>
+</ul>
+<h3 id="网络模型"><a href="#网络模型" class="headerlink" title="网络模型"></a>网络模型</h3><p>应用层：HTTP、DNS（应用把应用数据传给下一层）</p>
+<p>传输层：TCP、UDP</p>
+<p>网络层：MAC</p>
+<p>网络接口层</p>
+<h3 id="输入HTTP流程"><a href="#输入HTTP流程" class="headerlink" title="输入HTTP流程"></a>输入HTTP流程</h3><ol>
+<li>HTTP get&#x2F;post</li>
+<li>DNS查询IP地址（根，顶级，权威）</li>
+<li>TCP三次握手</li>
+<li>ARP，获取MAC地址（广播，ARP缓存）</li>
+</ol>
+<h3 id="说说DNS的解析过程"><a href="#说说DNS的解析过程" class="headerlink" title="说说DNS的解析过程"></a>说说DNS的解析过程</h3><p>查看本地服务器的缓存，不然就走根服务器、顶级服务器、权限域名</p>
+<h3 id="HTTP1-0-1-1-2-0-3-0"><a href="#HTTP1-0-1-1-2-0-3-0" class="headerlink" title="HTTP1.0  1.1  2.0 3.0"></a>HTTP1.0  1.1  2.0 3.0</h3><p>短链接，长链接，多路复用，快速UDP链接</p>
+<h3 id="HTTP和HTTPS"><a href="#HTTP和HTTPS" class="headerlink" title="HTTP和HTTPS"></a>HTTP和HTTPS</h3><p>加了SSL&#x2F;TLS协议（非对称加密）</p>
+<ul>
+<li>非对称加密：服务端向客户端发送数字证书公钥，生成会话密钥</li>
+<li>双方用会话密钥加密通话内容</li>
+</ul>
+<h3 id="TCP三次握手，四次挥手"><a href="#TCP三次握手，四次挥手" class="headerlink" title="TCP三次握手，四次挥手"></a>TCP三次握手，四次挥手</h3><p>SYN（Synchronize，连接请求），seq（序列号），ack（应答）</p>
+<p>FIN（finish请求），多了一次等待数据完成，2MSL</p>
+<h3 id="堆和栈"><a href="#堆和栈" class="headerlink" title="堆和栈"></a>堆和栈</h3><p>线程：栈帧（局部变量，返回）</p>
+<p>堆：类，字符串常量</p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/DDD/DDD1%E6%A6%82%E5%BF%B5%E7%90%86%E8%AE%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/DDD/DDD1%E6%A6%82%E5%BF%B5%E7%90%86%E8%AE%BA/" class="post-title-link" itemprop="url">【1开发】【架构】DDD</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/DDD/" itemprop="url" rel="index"><span itemprop="name">DDD</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="MVC的缺点"><a href="#MVC的缺点" class="headerlink" title="MVC的缺点"></a>MVC的缺点</h2><p>三层结构：<strong>Service+数据模型</strong>的开发模式，扁平的平铺的代码开发。加上贫血模型（只允许getter&#x2F;setter）的开发模式，让行为对象的不断<strong>交叉使用</strong>。</p>
+<p>大杂烩，适用于前期简单快速的开发，后期不可维护。</p>
+<p>所以，我们要用DDD，通过聚合、领域服务，不与别人耦合在一块。把原来的<strong>众多Service+数据模型</strong>，拆分为独立的有边界的领域模块，每个领域内创建自己的对象、仓储等等。<strong>DDD 前期需要付出更多的设计成本，但对于软件的长周期迭代，这样的好处是非常大的。</strong></p>
+<h2 id="DDD的概念"><a href="#DDD的概念" class="headerlink" title="DDD的概念"></a>DDD的概念</h2><h3 id="充血模型"><a href="#充血模型" class="headerlink" title="充血模型"></a>充血模型</h3><p>定义：充血可以是整个包结构，一个包下包括了用于实现此包 Service 服务所需的各类零部件（模型、仓储、工厂），也可以被看做充血模型。</p>
+<h3 id="领域模型"><a href="#领域模型" class="headerlink" title="领域模型"></a>领域模型</h3><p>领域模型 &#x3D;  领域对象（实体、值对象、聚合）+仓储+领域服务</p>
+<ul>
+<li><p>领域对象</p>
+<ul>
+<li><p>实体：状态属性+行为动作（功能）</p>
+</li>
+<li><p>值对象：不可变</p>
+</li>
+<li><p>聚合：一组对象（事务中包含的所有实体）</p>
+</li>
+</ul>
+</li>
+<li><p>仓储</p>
+<ul>
+<li>依赖倒置，不直接引入外部的服务，而是通过定义借口的方式</li>
+</ul>
+</li>
+</ul>
+<h2 id="DDD四色建模（风暴事件）"><a href="#DDD四色建模（风暴事件）" class="headerlink" title="DDD四色建模（风暴事件）"></a>DDD四色建模（风暴事件）</h2><p>怎么建模呢，我们需要规范DDD的操作手段，让各个伙伴，在同一语言下完成系统建模。</p>
+<p><strong>流程：</strong></p>
+<ul>
+<li>先画一下用例图</li>
+<li>花费大量的时间，一起去找领域事件</li>
+<li>然后，添加决策命令、领域对象、业务流程串联领域对象</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240728110317998.png" alt="image-20240728110317998"></p>
+<p>操作手段（专有名词）：</p>
+<ul>
+<li>决策命令：用户发起的行为动作</li>
+<li>领域事件：完成态</li>
+<li>业务流程：</li>
+<li>领域对象：实体对象、值对象、聚合对象</li>
+<li>只读模型：数据库读操作</li>
 </ul>
 
       
@@ -1403,245 +1820,6 @@
 <li>设计 Redis 版本的注册中心，管理线程池核心信息。定时扫描线程池，上报到 Redis 注册中心，让各个接入该组件的应用实现线程池的统一管理。</li>
 <li>开发管理系统 监控和动态修改 线程池，通过Redis 的发布订阅能力，让对应的应用上的 sdk 监听和修改线程池，实现线程池的动态修改。</li>
 </ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/dbrouter/dbrouter1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/dbrouter/dbrouter1/" class="post-title-link" itemprop="url">【1开发】数据库动态路由组件记录1 - 线程池调研</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/mysql%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">mysql动态路由组件</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>参考学习：<a target="_blank" rel="noopener" href="https://shardingsphere.apache.org/index_zh.html">Apache ShardingSphere</a></p>
-</blockquote>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>动态路由组件的一个核心思路，就是分库和分表，所以我们核心要实现如下两件事</p>
-<ul>
-<li>分库：根据字段属性，动态切换数据源（改数据源）</li>
-<li>分表：根据字段属性，拦截修改sql语句（改from后面的那个表）</li>
-</ul>
-<p>所以可以简单设计动态路由的流程：</p>
-<ol>
-<li>根据字段计算hash值，存入threadlocal</li>
-<li>修改sql语句</li>
-<li>切换数据源</li>
-</ol>
-<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240703105637622.png" alt="image-20240703105637622"></p>
-<h2 id="流程1-初始化加载配置"><a href="#流程1-初始化加载配置" class="headerlink" title="流程1 初始化加载配置"></a>流程1 初始化加载配置</h2><p>重写springboot中EnvironmentAware的setEnvironment方法</p>
-<p>通过environment.getProperty（）方法，我们可以直接拿到yml中的配置，也就是我们对于分库分表的配置信息</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mini-db-router:</span><br><span class="line">  jdbc:</span><br><span class="line">    datasource:</span><br><span class="line">      dbCount: 2</span><br><span class="line">      tbCount: 4</span><br><span class="line">      default: db00</span><br><span class="line">      routerKey: userId</span><br><span class="line">      list: db01,db02</span><br><span class="line">      db00:</span><br><span class="line">        driver-class-name: com.mysql.cj.jdbc.Driver</span><br><span class="line">        url: ??</span><br><span class="line">        username: root</span><br><span class="line">        password: ??</span><br><span class="line">        type-class-name: com.zaxxer.hikari.HikariDataSource</span><br><span class="line">        pool:</span><br><span class="line">          pool-name: Retail_HikariCP</span><br><span class="line">          ...</span><br><span class="line">      db01:  ...</span><br><span class="line">      db02:  ...</span><br></pre></td></tr></table></figure>
-
-<p>实现EnvironmentAware，就可以拿上面的这些信息了</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataSourceAutoConfig</span> <span class="keyword">implements</span> <span class="title class_">EnvironmentAware</span> &#123;</span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setEnvironment</span><span class="params">(Environment environment)</span> &#123;</span><br><span class="line">       <span class="type">String</span> <span class="variable">prefix</span> <span class="operator">=</span> <span class="string">&quot;mini-db-router.jdbc.datasource.&quot;</span>;</span><br><span class="line"></span><br><span class="line">       dbCount = Integer.valueOf(environment.getProperty(prefix + <span class="string">&quot;dbCount&quot;</span>));</span><br><span class="line">       tbCount = Integer.valueOf(environment.getProperty(prefix + <span class="string">&quot;tbCount&quot;</span>));</span><br><span class="line">       routerKey = environment.getProperty(prefix + <span class="string">&quot;routerKey&quot;</span>);</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 分库分表数据源</span></span><br><span class="line">       <span class="type">String</span> <span class="variable">dataSources</span> <span class="operator">=</span> environment.getProperty(prefix + <span class="string">&quot;list&quot;</span>);</span><br><span class="line">       <span class="keyword">assert</span> dataSources != <span class="literal">null</span>;</span><br><span class="line">       <span class="keyword">for</span> (String dbInfo : dataSources.split(<span class="string">&quot;,&quot;</span>)) &#123;</span><br><span class="line">           Map&lt;String, Object&gt; dataSourceProps = PropertyUtil.handle(environment, prefix + dbInfo, Map.class);</span><br><span class="line">           dataSourceMap.put(dbInfo, dataSourceProps);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 默认数据源</span></span><br><span class="line">       <span class="type">String</span> <span class="variable">defaultData</span> <span class="operator">=</span> environment.getProperty(prefix + <span class="string">&quot;default&quot;</span>);</span><br><span class="line">       defaultDataSourceConfig = PropertyUtil.handle(environment, prefix + defaultData, Map.class);</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="流程2-AOP切面-通过注解-获取入参字段，并进行路由计算"><a href="#流程2-AOP切面-通过注解-获取入参字段，并进行路由计算" class="headerlink" title="流程2 AOP切面 通过注解 获取入参字段，并进行路由计算"></a>流程2 AOP切面 通过注解 获取入参字段，并进行路由计算</h2><p>既然要进行分库分表，我们首先要把用来分库分表的字段，以及其对应的值拿到手。</p>
-<p>那么第一步，用注解拿到对应的参数，并拿到对应的值。</p>
-<p>复习一下注解</p>
-<ul>
-<li><p>interface</p>
-<ul>
-<li><p>Retention(RetentionPolicy.RUNTIME) 运行时的注解</p>
-</li>
-<li><p>Target({ElementType.METHOD,ElementType.TYPE}) 修饰在方法或着类型上</p>
-</li>
-<li><p>String key() default “”;  注解的参数例如：DBRouter(key&#x3D;”userId”)</p>
-</li>
-</ul>
-</li>
-<li><p>Aspect - JoinPoint</p>
-<ul>
-<li>Pointcut 切点 （标记对应的注解）</li>
-<li>@Around(“aopPoint() &amp;&amp; @annotation(dbRouter)”)  （在该切点处运行）</li>
-<li>Around方法内些具体要做的事（拿字段参数，和对应的值）</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.METHOD,ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> DBRouter &#123;</span><br><span class="line">    <span class="comment">/** 分库分表字段 */</span></span><br><span class="line">    String <span class="title function_">key</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DBRouterJoinPoint</span> &#123;</span><br><span class="line">     <span class="meta">@Pointcut(&quot;@annotation(cn.czh.middleware.db.router.annotation.DBRouter)&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">aopPoint</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Around(&quot;aopPoint() &amp;&amp; @annotation(dbRouter)&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">doRouter</span><span class="params">(ProceedingJoinPoint jp, DBRouter dbRouter)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">dbKey</span> <span class="operator">=</span> dbRouter.key();</span><br><span class="line">				</span><br><span class="line">        <span class="comment">// 拿到参数的值，如果就是字段变量，直接拿；如果是对象，BeanUtils.getProperty拿</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">dbKeyAttr</span> <span class="operator">=</span> getAttrValue(dbKey, jp.getArgs());</span><br><span class="line">        dbRouterStrategy.doRouter(dbKeyAttr);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> jp.proceed();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            dbRouterStrategy.clear();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>拿到了值就可以调用doRouter函数，进行hash散列的计算。</p>
-<p>计算好的hash值存入threadlocal中</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DBContextHolder</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;String&gt; dbKey = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;String&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;String&gt; tbKey = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;String&gt;();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doRouter</span><span class="params">(String dbKeyAttr)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">size</span> <span class="operator">=</span> dbRouterConfig.getDbCount()*dbRouterConfig.getTbCount();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 扰动函数；在 JDK 的 HashMap 中，对于一个元素的存放，需要进行哈希散列。而为了让散列更加均匀，所以添加了扰动函数。</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">idx</span> <span class="operator">=</span> (size - <span class="number">1</span>) &amp; (dbKeyAttr.hashCode() ^ (dbKeyAttr.hashCode() &gt;&gt;&gt; <span class="number">16</span>));</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> <span class="variable">dbIdx</span> <span class="operator">=</span> idx / dbRouterConfig.getTbCount()+<span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">tbIdx</span> <span class="operator">=</span> idx - dbRouterConfig.getTbCount() * (dbIdx - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        DBContextHolder.setDBKey(String.format(<span class="string">&quot;%02d&quot;</span>, dbIdx));</span><br><span class="line">        DBContextHolder.setTBKey(String.format(<span class="string">&quot;%03d&quot;</span>, tbIdx));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="流程3-替换表名-（ibatis-plugin-Interceptor）"><a href="#流程3-替换表名-（ibatis-plugin-Interceptor）" class="headerlink" title="流程3 替换表名 （ibatis.plugin.Interceptor）"></a>流程3 替换表名 （ibatis.plugin.Interceptor）</h2><p>到了这个流程我们可以开始进行分表的操作。</p>
-<p>我们其实是用mybatis plugin去对sql语句做一个拦截。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Intercepts(&#123;@Signature(type = StatementHandler.class, method = &quot;prepare&quot;, args = &#123;Connection.class, Integer.class&#125;)&#125;)</span><br><span class="line">public class DynamicMybatisPlugin implements Interceptor &#123;</span><br></pre></td></tr></table></figure>
-
-<p>然后我们重写Interceptor中的intercept函数，拦截sql语句并修改</p>
-<ol>
-<li>invocation.getTarget().getBoundSql()拿到sql语句</li>
-<li>利用Pattern进行替换sql语句中对应的表名</li>
-<li>通过反射修改SQL语句</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public Object intercept(Invocation invocation) throws Throwable &#123;</span><br><span class="line">        // 获取StatementHandler</span><br><span class="line">        StatementHandler statementHandler = (StatementHandler) invocation.getTarget();</span><br><span class="line">				。。。。。。</span><br><span class="line">        // 获取sql 并替换</span><br><span class="line">        BoundSql boundSql = statementHandler.getBoundSql();</span><br><span class="line">        String sql = boundSql.getSql();</span><br><span class="line">				。。。。。。</span><br><span class="line">        String replaceSql = matcher.replaceAll(tableName + &quot;_&quot; + DBContextHolder.getTBKey());</span><br><span class="line"></span><br><span class="line">        // 通过反射修改SQL语句</span><br><span class="line">        Field field = boundSql.getClass().getDeclaredField(&quot;sql&quot;);</span><br><span class="line">        field.setAccessible(true);</span><br><span class="line">        field.set(boundSql, replaceSql);</span><br><span class="line">        field.setAccessible(false);</span><br><span class="line"></span><br><span class="line">        return invocation.proceed();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="流程4-切换数据源-（jdbc-datasource-lookup-AbstractRoutingDataSource）"><a href="#流程4-切换数据源-（jdbc-datasource-lookup-AbstractRoutingDataSource）" class="headerlink" title="流程4 切换数据源 （jdbc.datasource.lookup.AbstractRoutingDataSource）"></a>流程4 切换数据源 （jdbc.datasource.lookup.AbstractRoutingDataSource）</h2><p>根据yml里拿到的那几个数据源，使用AbstractRoutingDataSource替换默认数据源</p>
-<p>重写determineCurrentLookupKey，AbstractRoutingDataSource能够帮助我们根据threadlocal里的值动态切换数据源</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class DynamicDataSource extends AbstractRoutingDataSource &#123;</span><br><span class="line">    @Override</span><br><span class="line">    protected Object determineCurrentLookupKey() &#123;</span><br><span class="line">        return &quot;db&quot; + DBContextHolder.getDBKey();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Bean</span><br><span class="line">public DataSource dataSource() &#123;</span><br><span class="line">// 创建数据源</span><br><span class="line">Map&lt;Object, Object&gt; targetDataSources = new HashMap&lt;&gt;();</span><br><span class="line">for (String dbInfo : dataSourceMap.keySet()) &#123;</span><br><span class="line">Map&lt;String, Object&gt; objMap = dataSourceMap.get(dbInfo);</span><br><span class="line">targetDataSources.put(dbInfo, new DriverManagerDataSource(objMap.get(&quot;url&quot;).toString(), objMap.get(&quot;username&quot;).toString(), objMap.get(&quot;password&quot;).toString()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 设置数据源</span><br><span class="line">DynamicDataSource dynamicDataSource = new DynamicDataSource();</span><br><span class="line">dynamicDataSource.setTargetDataSources(targetDataSources);</span><br><span class="line">dynamicDataSource.setDefaultTargetDataSource(new DriverManagerDataSource(defaultDataSourceConfig.get(&quot;url&quot;).toString(), defaultDataSourceConfig.get(&quot;username&quot;).toString(), defaultDataSourceConfig.get(&quot;password&quot;).toString()));</span><br><span class="line"></span><br><span class="line">return dynamicDataSource;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/market/market1/" class="post-title-link" itemprop="url">【1开发】营销抽奖系统开发记录1 - 理清基本的营销场景</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="先看一下市面上常见的几种营销场景"><a href="#先看一下市面上常见的几种营销场景" class="headerlink" title="先看一下市面上常见的几种营销场景"></a>先看一下市面上常见的几种营销场景</h2><ol>
-<li>拼多多的砍一刀</li>
-<li>拼多多的农场，牧场</li>
-<li>掘金转盘抽奖</li>
-<li>出行打车好友助力得券</li>
-</ol>
-<p>本质上，都是通过app上的消费，赠送你各种优惠，来留存用户。</p>
-<h2 id="这里主要选择掘金抽奖为参考"><a href="#这里主要选择掘金抽奖为参考" class="headerlink" title="这里主要选择掘金抽奖为参考"></a>这里主要选择掘金抽奖为参考</h2><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240627220950725.png" alt="image-20240627220950725" style="zoom:50%;" />
-
-<p>这里选择：用户通过积分进行抽奖作为主要的场景。</p>
-<p>核心场景就是：用户通过某种行为动作（发帖、点赞）获得抽奖额度，然后进行抽奖。</p>
-<p>领域：暂时可以简单地划分出“积分账号”、“抽奖”、“奖品”这几个领域。后续随着开发再往里加。</p>
-<h2 id="现在可以画流程图理一下思路了"><a href="#现在可以画流程图理一下思路了" class="headerlink" title="现在可以画流程图理一下思路了"></a>现在可以画流程图理一下思路了</h2><p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/%E8%90%A5%E9%94%801.png" alt="营销1"></p>
-<p>一个整体的需求流程可以分为几块</p>
-<ol>
-<li>给用户创建一个<strong>营销账户</strong>，存放用户的积分数据</li>
-<li><strong>返利</strong>服务，基于用户的行为数据（打卡、消费等），增加各项积分</li>
-<li>抽奖，抽奖应该进行详细的<strong>抽奖规则</strong>构建，例如根据用户的积分数量更改奖品的优先级等。</li>
-</ol>
 
       
     </div>

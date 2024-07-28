@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="MVC的缺点三层结构：Service+数据模型的开发模式，扁平的平铺的代码开发。加上贫血模型（只允许getter&#x2F;setter）的开发模式，让行为对象的不断交叉使用。 大杂烩，适用于前期简单快速的开发，后期不可维护。 所以，我们要用DDD，通过聚合、领域服务，不与别人耦合在一块。把原来的众多Service+数据模型，拆分为独立的有边界的领域模块，每个领域内创建自己的对象、仓储等等。DDD">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【1开发】【架构】DDD">
+<meta property="og:url" content="http://example.com/2022/03/31/kaifa/DDD/DDD1%E6%A6%82%E5%BF%B5%E7%90%86%E8%AE%BA/index.html">
+<meta property="og:site_name" content="czh的学习小站">
+<meta property="og:description" content="MVC的缺点三层结构：Service+数据模型的开发模式，扁平的平铺的代码开发。加上贫血模型（只允许getter&#x2F;setter）的开发模式，让行为对象的不断交叉使用。 大杂烩，适用于前期简单快速的开发，后期不可维护。 所以，我们要用DDD，通过聚合、领域服务，不与别人耦合在一块。把原来的众多Service+数据模型，拆分为独立的有边界的领域模块，每个领域内创建自己的对象、仓储等等。DDD">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240728110317998.png">
+<meta property="article:published_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:modified_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:author" content="蔡正海">
+<meta property="article:tag" content="开发">
+<meta property="article:tag" content="八股">
+<meta property="article:tag" content="DDD">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240728110317998.png">
+
+
+<link rel="canonical" href="http://example.com/2022/03/31/kaifa/DDD/DDD1%E6%A6%82%E5%BF%B5%E7%90%86%E8%AE%BA/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/03/31/kaifa/DDD/DDD1%E6%A6%82%E5%BF%B5%E7%90%86%E8%AE%BA/","path":"2022/03/31/kaifa/DDD/DDD1概念理论/","title":"【1开发】【架构】DDD"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【1开发】【架构】DDD | czh的学习小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">czh的学习小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">自律</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MVC%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text">MVC的缺点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DDD%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="nav-number">2.</span> <span class="nav-text">DDD的概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%85%E8%A1%80%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.1.</span> <span class="nav-text">充血模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%86%E5%9F%9F%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">领域模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DDD%E5%9B%9B%E8%89%B2%E5%BB%BA%E6%A8%A1%EF%BC%88%E9%A3%8E%E6%9A%B4%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">DDD四色建模（风暴事件）</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蔡正海"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">蔡正海</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/DDD/DDD1%E6%A6%82%E5%BF%B5%E7%90%86%E8%AE%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【1开发】【架构】DDD | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【1开发】【架构】DDD
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/DDD/" itemprop="url" rel="index"><span itemprop="name">DDD</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="MVC的缺点"><a href="#MVC的缺点" class="headerlink" title="MVC的缺点"></a>MVC的缺点</h2><p>三层结构：<strong>Service+数据模型</strong>的开发模式，扁平的平铺的代码开发。加上贫血模型（只允许getter&#x2F;setter）的开发模式，让行为对象的不断<strong>交叉使用</strong>。</p>
+<p>大杂烩，适用于前期简单快速的开发，后期不可维护。</p>
+<p>所以，我们要用DDD，通过聚合、领域服务，不与别人耦合在一块。把原来的<strong>众多Service+数据模型</strong>，拆分为独立的有边界的领域模块，每个领域内创建自己的对象、仓储等等。<strong>DDD 前期需要付出更多的设计成本，但对于软件的长周期迭代，这样的好处是非常大的。</strong></p>
+<h2 id="DDD的概念"><a href="#DDD的概念" class="headerlink" title="DDD的概念"></a>DDD的概念</h2><h3 id="充血模型"><a href="#充血模型" class="headerlink" title="充血模型"></a>充血模型</h3><p>定义：充血可以是整个包结构，一个包下包括了用于实现此包 Service 服务所需的各类零部件（模型、仓储、工厂），也可以被看做充血模型。</p>
+<h3 id="领域模型"><a href="#领域模型" class="headerlink" title="领域模型"></a>领域模型</h3><p>领域模型 &#x3D;  领域对象（实体、值对象、聚合）+仓储+领域服务</p>
+<ul>
+<li><p>领域对象</p>
+<ul>
+<li><p>实体：状态属性+行为动作（功能）</p>
+</li>
+<li><p>值对象：不可变</p>
+</li>
+<li><p>聚合：一组对象（事务中包含的所有实体）</p>
+</li>
+</ul>
+</li>
+<li><p>仓储</p>
+<ul>
+<li>依赖倒置，不直接引入外部的服务，而是通过定义借口的方式</li>
+</ul>
+</li>
+</ul>
+<h2 id="DDD四色建模（风暴事件）"><a href="#DDD四色建模（风暴事件）" class="headerlink" title="DDD四色建模（风暴事件）"></a>DDD四色建模（风暴事件）</h2><p>怎么建模呢，我们需要规范DDD的操作手段，让各个伙伴，在同一语言下完成系统建模。</p>
+<p><strong>流程：</strong></p>
+<ul>
+<li>先画一下用例图</li>
+<li>花费大量的时间，一起去找领域事件</li>
+<li>然后，添加决策命令、领域对象、业务流程串联领域对象</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240728110317998.png" alt="image-20240728110317998"></p>
+<p>操作手段（专有名词）：</p>
+<ul>
+<li>决策命令：用户发起的行为动作</li>
+<li>领域事件：完成态</li>
+<li>业务流程：</li>
+<li>领域对象：实体对象、值对象、聚合对象</li>
+<li>只读模型：数据库读操作</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BC%80%E5%8F%91/" rel="tag"># 开发</a>
+              <a href="/tags/%E5%85%AB%E8%82%A1/" rel="tag"># 八股</a>
+              <a href="/tags/DDD/" rel="tag"># DDD</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/31/hello-world/" rel="prev" title="总 - 我的博客">
+                  <i class="fa fa-angle-left"></i> 总 - 我的博客
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/project/Dynamic-thread-pool/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A02/" rel="next" title="【1开发】动态线程池组件记录2 - 动态线程池的实现">
+                  【1开发】动态线程池组件记录2 - 动态线程池的实现 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2022 - 2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蔡正海</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

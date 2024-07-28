@@ -123,18 +123,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">38</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -151,6 +151,145 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/21/kaifa/bagu/IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/07/21/kaifa/bagu/IO%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h2><h3 id="TCP的最基本的Socket连接编程步骤"><a href="#TCP的最基本的Socket连接编程步骤" class="headerlink" title="TCP的最基本的Socket连接编程步骤"></a>TCP的最基本的Socket连接编程步骤</h3><ol>
+<li>服务端调用Socket（）和bind（）函数<ol>
+<li>为Socket绑定IP地址和端口</li>
+<li>为什么绑端口：通过TCP报文中的端口号，找到应用程序</li>
+<li>为什么绑IP：一台机器有多个网卡，对应多个IP地址</li>
+</ol>
+</li>
+<li>服务端listen（）函数，进入监听状态</li>
+<li>客户端调用connect（）发起连接</li>
+<li>服务器内核为每个Socket维护了两个队列<ol>
+<li>TCP半连接队列：还没有完成三次握手</li>
+<li>TCP全连接队列：完成三次握手</li>
+</ol>
+</li>
+<li>服务端accept（）函数，从内核获取客户端的连接</li>
+</ol>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240721104533722.png" alt="image-20240721104533722" style="zoom:33%;" />
+
+<h3 id="如何服务更多用户"><a href="#如何服务更多用户" class="headerlink" title="如何服务更多用户"></a>如何服务更多用户</h3><ol>
+<li>服务器单机理论多大连接多少客户端</li>
+</ol>
+<p>TCP连接：本机IP，本机端口，对端IP，对端端口</p>
+<p>最大TCP连接数：客户端IP数客户端IP数（2 ^ 32）* 客户端端 口数（2 ^ 16 ）&#x3D;2^48</p>
+<p>但注定不能这么多：文件描述符、系统内存</p>
+<p>C10k，并发1万请求，从硬件角度来说，2g千兆网卡，只需要保证每条请求200kb的内存和100kb的带宽。</p>
+<ol>
+<li>实际不行</li>
+</ol>
+<p>因为上面最基本的Socket，同步阻塞，只能满足一对一通信</p>
+<ul>
+<li>服务端还没处理完一个客户端的IO</li>
+<li>读写操作发生阻塞</li>
+</ul>
+<p>其他客户端都无法与服务端连接</p>
+<h3 id="多线程模型"><a href="#多线程模型" class="headerlink" title="多线程模型"></a>多线程模型</h3><p>父进程只负责accept（）建立连接</p>
+<p>线程池负责读写</p>
+<p>C10K，代表要维护1万个线程，操作系统不可能扛得住</p>
+<h3 id="IO多路复用-1"><a href="#IO多路复用-1" class="headerlink" title="IO多路复用"></a>IO多路复用</h3><p>使用一个进程来维护多个Socket，这就是I&#x2F;O多路复用。</p>
+<p>我们熟悉的 select&#x2F;poll&#x2F;epoll 内核提供给用户态的多路复用系统调用</p>
+<ul>
+<li>进程可以通过一个系统调用函数从内核中获取多个事件。</li>
+</ul>
+<p>select&#x2F;poll&#x2F;epoll 是如何获取网络事件？</p>
+<ul>
+<li>先把所有连接传给内核，之后内核返回产生了事件的连接</li>
+</ul>
+<h3 id="Select-poll"><a href="#Select-poll" class="headerlink" title="Select&#x2F;poll"></a>Select&#x2F;poll</h3><ol>
+<li>将已连接的Socket都放到一个文件描述符集合</li>
+<li>调用Select集合拷贝到内核</li>
+<li>内核检查是否有网络事件产生<ol>
+<li>遍历文件描述符集合，检查到有事件发生，标记Socket可读、可写</li>
+</ol>
+</li>
+<li>再将整个描述符集合拷贝回用户</li>
+<li>用户态遍历文件描述符集合找到可读、可写的Socket，再对其处理。</li>
+</ol>
+<p>两次遍历，两次拷贝，文件描述符集合</p>
+<p>Select、Poll区别：一个用固定长度的BitsMap；一个用动态数组，链表</p>
+<p>采用线性集合存储Socket集合，时间复杂度为O（n），也需要再用户态与内核态之间拷贝文件描述集合</p>
+<h3 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h3><p>epoll 通过两个方面，很好解决了 select&#x2F;poll 的问题。</p>
+<ol>
+<li>epoll在内核中用红黑树跟踪进程所有待检测的文件描述字。只需要传入一个待检测的socket，不用每次传入整个socket集合，避免大量拷贝</li>
+<li>使用事件驱动的机制，内核里维护了一个链表记录就绪事件，每当有事件发生，通过回调函数将其加入到就绪事件列表，当用户调用 <code>epoll_wait()</code> 函数时，只会返回有事件发生的文件描述符的个数，不需要轮询扫描。</li>
+</ol>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240721104607391.png" alt="image-20240721104607391" style="zoom: 50%;" />
+
+<p>边缘触发和水平触发</p>
+<ul>
+<li>边缘触发：当被Socket描述符上有可读事件发生，服务器端只会从epoll_wait中苏醒一次，因此一次性将内核中的数据读取完<ul>
+<li>epoll</li>
+<li>边缘触发模式一般和非阻塞 I&#x2F;O 搭配使用</li>
+<li>边缘触发的效率比水平触发的效率要高，减少 epoll_wait</li>
+</ul>
+</li>
+<li>水平触发：当被监控的 Socket 上有可读事件发生时，服务器端不断地从 epoll_wait 中苏醒，直到内核缓冲区数据被 read 函数读完才结束<ul>
+<li>select、poll、epoll默认</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -255,95 +394,6 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 这里就是产生jwt字符串的地方</span></span><br><span class="line"><span class="comment"> * jwt字符串包括三个部分</span></span><br><span class="line"><span class="comment"> * 1. header</span></span><br><span class="line"><span class="comment"> * -当前字符串的类型，一般都是“JWT”</span></span><br><span class="line"><span class="comment"> * -哪种算法加密，“HS256”或者其他的加密算法</span></span><br><span class="line"><span class="comment"> * 所以一般都是固定的，没有什么变化</span></span><br><span class="line"><span class="comment"> * 2. payload</span></span><br><span class="line"><span class="comment"> * 一般有四个最常见的标准字段（下面有）</span></span><br><span class="line"><span class="comment"> * iat：签发时间，也就是这个jwt什么时候生成的</span></span><br><span class="line"><span class="comment"> * jti：JWT的唯一标识</span></span><br><span class="line"><span class="comment"> * iss：签发人，一般都是username或者userId</span></span><br><span class="line"><span class="comment"> * exp：过期时间</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">protected</span> String <span class="title function_">encode</span><span class="params">(String issuer, <span class="type">long</span> ttlMillis, Map&lt;String, Object&gt; claims)</span> &#123;</span><br><span class="line">    <span class="comment">// iss签发人，ttlMillis生存时间，claims是指还想要在jwt中存储的一些非隐私信息</span></span><br><span class="line">    <span class="keyword">if</span> (claims == <span class="literal">null</span>) &#123;</span><br><span class="line">        claims = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">long</span> <span class="variable">nowMillis</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">    <span class="type">JwtBuilder</span> <span class="variable">builder</span> <span class="operator">=</span> Jwts.builder()</span><br><span class="line">            <span class="comment">// 荷载部分</span></span><br><span class="line">            .setClaims(claims)</span><br><span class="line">            <span class="comment">// 这个是JWT的唯一标识，一般设置成唯一的，这个方法可以生成唯一标识</span></span><br><span class="line">            .setId(UUID.randomUUID().toString())<span class="comment">//2.</span></span><br><span class="line">            <span class="comment">// 签发时间</span></span><br><span class="line">            .setIssuedAt(<span class="keyword">new</span> <span class="title class_">Date</span>(nowMillis))</span><br><span class="line">            <span class="comment">// 签发人，也就是JWT是给谁的（逻辑上一般都是username或者userId）</span></span><br><span class="line">            .setSubject(issuer)</span><br><span class="line">            .signWith(SignatureAlgorithm.HS256, base64EncodedSecretKey);<span class="comment">//这个地方是生成jwt使用的算法和秘钥</span></span><br><span class="line">    <span class="keyword">if</span> (ttlMillis &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">expMillis</span> <span class="operator">=</span> nowMillis + ttlMillis;</span><br><span class="line">        <span class="type">Date</span> <span class="variable">exp</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>(expMillis);<span class="comment">// 4. 过期时间，这个也是使用毫秒生成的，使用当前时间+前面传入的持续时间生成</span></span><br><span class="line">        builder.setExpiration(exp);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> builder.compact();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h2 id="Token和cookie的区别（待看）"><a href="#Token和cookie的区别（待看）" class="headerlink" title="Token和cookie的区别（待看）"></a>Token和cookie的区别（待看）</h2>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/openai/openai10/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/openai/openai10/" class="post-title-link" itemprop="url">【1开发】AI问答助手项目记录10 - 简历</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/AI%E9%97%AE%E7%AD%94%E5%8A%A9%E6%89%8B/" itemprop="url" rel="index"><span itemprop="name">AI问答助手</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>智能AI问答助手 </p>
-<p> 主要技术:Spring Boot、MyBatis、Redis、RabbitMQ、OKHttp3、React、TypeScript</p>
-<ol>
-<li><p>对接微信公众号 SDK，使用从微信公众号获取验证码的方式进行授权登录，使用JWT进行token校验</p>
-</li>
-<li><p>使用OKHttp3封装ChatGLM和openai的Java SDK，使用流式异步响应式框架开发应答接口，对接相关大模型</p>
-</li>
-<li><p>采用责任链模式实现规则过滤，包含敏感词、白名单、频次限制、账户状态、账户额度等</p>
-</li>
-<li><p>对接支付宝沙箱支付，实现商品支付功能，用户能购买大模型额度。同时使用Kafka进行异步发货，结合定时任务扫描实现超时关单、掉单补偿。</p>
-</li>
-</ol>
-
       
     </div>
 
@@ -632,6 +682,95 @@
 <h2 id="步骤二-支付宝支付回调"><a href="#步骤二-支付宝支付回调" class="headerlink" title="步骤二 支付宝支付回调"></a>步骤二 支付宝支付回调</h2><p>拿到支付成功的回调请求，更新订单为已支付，并发送MQ消息，进行发货</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 支付宝验签</span><br><span class="line">if (checkSignature) &#123;</span><br><span class="line">    // 更新订单</span><br><span class="line">    boolean isSuccess = orderService.changeOrderPaySuccess(tradeNo, alipayTradeNo, new BigDecimal(totalAmount).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP), dateFormat.parse(gmtPayment));</span><br><span class="line">    if (isSuccess) &#123;</span><br><span class="line">        eventBus.post(tradeNo);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/openai/openai10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/openai/openai10/" class="post-title-link" itemprop="url">【1开发】AI问答助手项目记录5 - 简历</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/AI%E9%97%AE%E7%AD%94%E5%8A%A9%E6%89%8B/" itemprop="url" rel="index"><span itemprop="name">AI问答助手</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>智能AI问答助手 </p>
+<p> 主要技术:Spring Boot、MyBatis、Redis、RabbitMQ、OKHttp3、React、TypeScript</p>
+<ol>
+<li><p>对接微信公众号 SDK，使用从微信公众号获取验证码的方式进行授权登录，使用JWT进行token校验</p>
+</li>
+<li><p>使用OKHttp3封装ChatGLM和openai的Java SDK，使用流式异步响应式框架开发应答接口，对接相关大模型</p>
+</li>
+<li><p>采用责任链模式实现规则过滤，包含敏感词、白名单、频次限制、账户状态、账户额度等</p>
+</li>
+<li><p>对接支付宝沙箱支付，实现商品支付功能，用户能购买大模型额度。同时使用Kafka进行异步发货，结合定时任务扫描实现超时关单、掉单补偿。</p>
+</li>
+</ol>
 
       
     </div>
@@ -988,158 +1127,6 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ProxyFactory</span> <span class="keyword">implements</span> <span class="title class_">MethodInterceptor</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//维护一个目标对象</span></span><br><span class="line">    <span class="keyword">private</span> Object target;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ProxyFactory</span><span class="params">(Object target)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//为目标对象生成代理对象</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">getProxyInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="comment">//工具类</span></span><br><span class="line">        <span class="type">Enhancer</span> <span class="variable">en</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Enhancer</span>();</span><br><span class="line">        <span class="comment">//设置父类</span></span><br><span class="line">        en.setSuperclass(target.getClass());</span><br><span class="line">        <span class="comment">//设置回调函数</span></span><br><span class="line">        en.setCallback(<span class="built_in">this</span>);</span><br><span class="line">        <span class="comment">//创建子类对象代理</span></span><br><span class="line">        <span class="keyword">return</span> en.create();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">intercept</span><span class="params">(Object obj, Method method, Object[] args, MethodProxy proxy)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;请问有什么可以帮到您？&quot;</span>);</span><br><span class="line">        <span class="comment">// 执行目标对象的方法</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">returnValue</span> <span class="operator">=</span> method.invoke(target, args);</span><br><span class="line">        System.out.println(<span class="string">&quot;问题已经解决啦！&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <h2 id="SpringAOP和AspectJ啥区别"><a href="#SpringAOP和AspectJ啥区别" class="headerlink" title="SpringAOP和AspectJ啥区别"></a>SpringAOP和AspectJ啥区别</h2>
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/bagu/springIOC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/bagu/springIOC/" class="post-title-link" itemprop="url">【1开发】【八股】springIOC</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/23277575/answer/169698662">https://www.zhihu.com/question/23277575/answer/169698662</a></p>
-<p><a target="_blank" rel="noopener" href="https://javadoop.com/post/spring-ioc">https://javadoop.com/post/spring-ioc</a></p>
-<p><a target="_blank" rel="noopener" href="https://javaguide.cn/system-design/framework/spring/ioc-and-aop.html#ioc-%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98">https://javaguide.cn/system-design/framework/spring/ioc-and-aop.html#ioc-解决了什么问题</a></p>
-</blockquote>
-<h2 id="知乎的一个非常典型的例子"><a href="#知乎的一个非常典型的例子" class="headerlink" title="知乎的一个非常典型的例子"></a>知乎的一个非常典型的例子</h2><p>IOC是<strong>依赖倒置原则</strong>的体现，是为了处理工程中的依赖关系。</p>
-<p>知乎的这个例子很好地解释了“依赖注入”的注入是什么。</p>
-<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/v2-82e0c12a1b26f7979ed9241e169affda_1440w.webp" alt="img" style="zoom:50%;" />
-
-<p>这种方式是不好的，为什么？假如最末尾一个类的构造方法改了，完蛋，全部类的构造方法都要改。这种工程是不可维护的。</p>
-<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/v2-c920a0540ce0651003a5326f6ef9891d_1440w.webp" alt="img"></p>
-<p>所以我们怎么办呢，当然就用我们的依赖注入：就是<strong>把底层类作为参数传入上层类</strong>。实现上层类对下层类的控制。</p>
-<h2 id="什么是IOC"><a href="#什么是IOC" class="headerlink" title="什么是IOC"></a>什么是IOC</h2><p>我们在springboot项目中</p>
-<ul>
-<li>不管是Dao，还是外部包的那些config</li>
-<li>我们从来都不会通过<strong>new</strong>的方式来创建，而是通过依赖注入的方式。</li>
-<li><strong>你只需要维护一个Configuration（可以是xml可以是一段代码），而不用每次初始化一辆车都要亲手去写那一大段初始化的代码</strong></li>
-</ul>
-<p>控制反转（描述的是对象的创建以及管理的问题）</p>
-<ul>
-<li>控制：对象创建的权利</li>
-<li>反转：控制权交给外部环境IOC容器</li>
-</ul>
-<p>好处</p>
-<ul>
-<li>对象之间的依赖程度降低</li>
-<li>资源变的容易管理<ul>
-<li>单例模式</li>
-<li>IOC容器负责bean的整个生命周期</li>
-</ul>
-</li>
-</ul>
-<h2 id="IOC原理"><a href="#IOC原理" class="headerlink" title="IOC原理"></a>IOC原理</h2><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708103644862.png" alt="image-20240708103644862" style="zoom:50%;" />
-
-<ol>
-<li>FileSystemXmlApplicationContext&#x2F;ClassPathXmlApplicationContext ：xml配置文件在系统中的路径</li>
-<li>AnnotationConfigApplicationContext：基于注解来使用</li>
-</ol>
-<h3 id="一个小例子"><a href="#一个小例子" class="headerlink" title="一个小例子"></a>一个小例子</h3><p>使用 ClassPathXmlApplicationContext 进行分析，方便理解整个构建流程</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用我们的配置文件来启动一个 ApplicationContext</span></span><br><span class="line"><span class="type">ApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;classpath:application.xml&quot;</span>);</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;context 启动成功&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 从 context 中取出我们的 Bean，而不是用 new MessageServiceImpl() 这种方式</span></span><br><span class="line"><span class="type">MessageService</span> <span class="variable">messageService</span> <span class="operator">=</span> context.getBean(MessageService.class);</span><br><span class="line">System.out.println(messageService.getMessage());</span><br></pre></td></tr></table></figure>
-
-<p>那么，这里我们通过ApplicationContext拿到了Bean。那么ApplicationContext是如何创建实例Bean，并且往各个Bean中注入依赖的呢？</p>
-<h3 id="BeanFactory"><a href="#BeanFactory" class="headerlink" title="BeanFactory"></a>BeanFactory</h3><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708105257053.png" alt="image-20240708105257053" style="zoom:33%;" />
-
-<p>ApplicationContext其实就是一个BeanFactory</p>
-<h3 id="启动过程分析"><a href="#启动过程分析" class="headerlink" title="启动过程分析"></a>启动过程分析</h3><h4 id="1-构造方法"><a href="#1-构造方法" class="headerlink" title="1. 构造方法"></a>1. 构造方法</h4><p>先从构造方法开始，把configLocations（也就是XML地址）读进来</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">ClassPathXmlApplicationContext</span><span class="params">(String[] configLocations, <span class="type">boolean</span> refresh, ApplicationContext parent)</span></span><br><span class="line">		<span class="keyword">throws</span> BeansException &#123;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">super</span>(parent);</span><br><span class="line">	setConfigLocations(configLocations);</span><br><span class="line">	<span class="keyword">if</span> (refresh) &#123;</span><br><span class="line">		refresh();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h4 id="2-refresh-方法-–-（BeanFactory注册BeanDefinition-初始化所有单例beans"><a href="#2-refresh-方法-–-（BeanFactory注册BeanDefinition-初始化所有单例beans" class="headerlink" title="2. refresh()方法 – （BeanFactory注册BeanDefinition+初始化所有单例beans)"></a>2. refresh()方法 – （BeanFactory注册BeanDefinition+初始化所有单例beans)</h4><blockquote>
-<ol>
-<li>插一嘴，BeanFactory当然是Bean容器，那么Bean是什么呢？它其实准确来说叫BeanDefinition，我们自己定义的一个个Bean会转换成一个个BeanDefinition存在于Spring的BeanFactory中。</li>
-<li>BeanDefinition保存了所有的Bean信息：是哪个类，是否是单例的，等等</li>
-<li>所以，Bean是什么？在代码层面可以理解为：BeanDefinition的实例</li>
-</ol>
-</blockquote>
-<p>（太复杂，以后再慢慢看吧，先看核心的几步）</p>
-<ul>
-<li>obtainFreshBeanFactory（拿到BeanFactory）<ul>
-<li>这代表applicationContext其实内部持有了一个BeanFactory</li>
-<li>BeanDefinition注册到了BeanFactory中</li>
-<li>我们可以看到里面维护了一个<strong>ConcurrentHashMap</strong>，存beanName-&gt; beanDefinition</li>
-<li><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708165122143.png" alt="image-20240708165122143"></li>
-</ul>
-</li>
-<li>finishBeanFactoryInitialization（创建所有单例Bean，也就是getBean方法）<ul>
-<li><strong>实例化</strong>：使用反射创建Bean实例。</li>
-<li><strong>依赖注入</strong>：根据Bean定义中的依赖关系，将所需的依赖注入到Bean实例中。<ul>
-<li>（这里就是依赖倒置的概念，dfs，从上层往下层搜索，知乎的那个教程里写的）</li>
-<li><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708171643710.png" alt="image-20240708171643710"></li>
-</ul>
-</li>
-<li><strong>初始化</strong>：调用Bean的初始化方法（如配置的init-method或实现了InitializingBean接口的afterPropertiesSet方法）。</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">refresh</span><span class="params">()</span> <span class="keyword">throws</span> BeansException, IllegalStateException &#123;</span><br><span class="line">			。。。。。。</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 这步比较关键，这步完成后，配置文件就会解析成一个个 Bean 定义，注册到 BeanFactory 中，</span></span><br><span class="line">      <span class="comment">// 当然，这里说的 Bean 还没有初始化，只是配置信息都提取出来了，</span></span><br><span class="line">      <span class="comment">// 注册也只是将这些信息都保存到了注册中心(说到底核心是一个 beanName-&gt; beanDefinition 的 map)</span></span><br><span class="line">      <span class="type">ConfigurableListableBeanFactory</span> <span class="variable">beanFactory</span> <span class="operator">=</span> obtainFreshBeanFactory();</span><br><span class="line">  </span><br><span class="line">  		。。。。。。</span><br><span class="line">        <span class="comment">// 重点，重点，重点</span></span><br><span class="line">        <span class="comment">// 初始化所有的 singleton beans</span></span><br><span class="line">        <span class="comment">//（lazy-init 的除外）</span></span><br><span class="line">        finishBeanFactoryInitialization(beanFactory);</span><br><span class="line">			</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
       
     </div>
 

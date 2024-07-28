@@ -123,18 +123,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">38</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -151,6 +151,216 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/market/market10/" class="post-title-link" itemprop="url">【1开发】营销抽奖系统开发记录9 - 简历</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="简历"><a href="#简历" class="headerlink" title="简历"></a>简历</h2><p>项目名称： 营销平台 - 幸运大转盘</p>
+<p><a target="_blank" rel="noopener" href="http://116.198.234.247/?userId=xiaofuge&activityId=100301">http://116.198.234.247/?userId=xiaofuge&amp;activityId=100301</a></p>
+<p>核心技术：SpringBoot、MyBatis、MySQL、Redis、Kafka、React</p>
+<p>项目描述：该项目是我参考字节掘金中幸运抽奖模块开发的一个幸运大转盘抽奖系统。该系统支持多种营销策略，如：用户积分，积分兑换抽奖次数，返利等；也支持各类差异化抽奖流程，如：消耗积分指定抽奖范围、抽奖N次解锁奖品等各类抽奖玩法。该系统采用DDD架构进行设计，将整个系统划分为抽奖活动、抽奖策略、奖品、积分、返利这五个领域。同时设计中运用到了责任链模式、组合模式、工厂模式等多种设计模式，提高了代码的可扩展性，并对抽奖的计算和秒杀做了设计的优化，可以支撑单机 4c8g 服务器 1100 TPS 的吞吐量，抽奖接口响应时长<code>160毫秒</code>左右。</p>
+<p>核心职责</p>
+<ul>
+<li><p>采用策略模式实现两种抽奖算法，一种是总体概率，空间复杂度为O(1)；一种是单项概率，将对应概率的概率的奖品提前映射到数组中，时间复杂度为O(1)。</p>
+</li>
+<li><p>根据不同的抽奖玩法，设计整体抽奖策略。在抽奖流程的抽象上，分为抽奖前和抽奖后，如抽奖前的人群判断、抽奖后兜底奖励等。设计模版模式定义抽奖流程，抽奖前调用责任链完成抽奖，抽奖后的动作使用组合模式的规则树进行动态处理。</p>
+</li>
+<li><p>抽奖是一种峰值流量高的业务场景，针对抽奖活动库存和奖品库存的扣减：采用了 Redis decr 分段消费和加锁兜底的设计，同时对于消费成功的库存，异步队列方式 + 定时任务更新库存。当库存扣减为0时，采用MQ对数据库库存清零并清空队列。减轻数据库压力并确保数据最终一致性。</p>
+</li>
+<li><p>针对打卡返利、积分兑换活动、抽奖下发奖品等流程，采用MQ，将积分支付和活动账户充值、抽奖和奖品下发等流程，进行解藕。并且通过task表进行补偿，确保消息成功消费。</p>
+</li>
+<li><p>对于用户账户、用户活动订单、积分返利订单等库表，采取分库分表的方式</p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/keyan/STE%20&%20SVA%20c7ffe06c60e64d2785d19e5636448aa9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/keyan/STE%20&%20SVA%20c7ffe06c60e64d2785d19e5636448aa9/" class="post-title-link" itemprop="url">【Research】STE & SVA</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%A7%91%E7%A0%94/" itemprop="url" rel="index"><span itemprop="name">科研</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="STE-SVA"><a href="#STE-SVA" class="headerlink" title="STE &amp; SVA"></a>STE &amp; SVA</h1><h2 id="如何写STE-assert-A⇒C-？"><a href="#如何写STE-assert-A⇒C-？" class="headerlink" title="如何写STE assert (A⇒C)？"></a>如何写STE assert (A⇒C)？</h2><p>以下面这种格式（轨迹公式）描述STE assert：</p>
+<p><img src="/STE%20&%20SVA%20c7ffe06c60e64d2785d19e5636448aa9/Untitled.png" alt="Untitled"></p>
+<p>前四行（电路中的各个节点在某一时刻是1或是0）很好理解，重点在于最后一行（guard蕴含式）。</p>
+<p>例如：“x → n is 1”（x是一个布尔变量，n是一个电路节点）， 意思就是当x成立时，n的值为1。换句话说，可以理解为表达的是“n is x”，即用布尔变量x指代n</p>
+<h2 id="FIFO"><a href="#FIFO" class="headerlink" title="FIFO"></a>FIFO</h2><h3 id="我们要说明FIFO应该满足什么性质？"><a href="#我们要说明FIFO应该满足什么性质？" class="headerlink" title="我们要说明FIFO应该满足什么性质？"></a>我们要说明FIFO应该满足什么性质？</h3><p>我们往FIFO里依次push数据1和数据2，那么pop的时候也应该按照数据1和数据2的顺序返回。</p>
+<h3 id="如何用STE-assert写？"><a href="#如何用STE-assert写？" class="headerlink" title="如何用STE assert写？"></a>如何用STE assert写？</h3><p>首先，我们定义几个布尔变量表达我们要push的数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;dataIn&lt;0&gt;0@2,dataIn&lt;1&gt;0@2&gt;,&lt;dataIn&lt;0&gt;0@4,dataIn&lt;1&gt;0@4&gt;</span><br></pre></td></tr></table></figure>
+
+<p>其中A⇒C的A相当于输入的约束：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rst0 is 1 and </span><br><span class="line">N N ( push0 is 1 and dataIn&lt;0&gt; is dataIn&lt;0&gt;0@2 and dataIn&lt;1&gt; is dataIn&lt;1&gt;0@2) and</span><br><span class="line">N N N N ( push0 is 1 and dataIn&lt;0&gt; is dataIn&lt;0&gt;0@4 and dataIn&lt;1&gt; is dataIn&lt;1&gt;0@4) and</span><br><span class="line">N N N N N (push0 is 0 and pop0 is 1) and </span><br><span class="line">N N N N N N N (push0 is 0 and pop0 is 1)</span><br></pre></td></tr></table></figure>
+
+<p>A⇒C的C相当于预期结果的约束：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">N N N N N N ( dataOut&lt;0&gt; is dataOut&lt;0&gt;0@2 and dataOut&lt;1&gt; is dataIn&lt;1&gt;0@2) and</span><br><span class="line">N N N N N N N N( dataOut&lt;0&gt; is dataOut&lt;0&gt;0@4 and dataOut&lt;1&gt; is dataIn&lt;1&gt;0@4)</span><br></pre></td></tr></table></figure>
+
+<h2 id="如何运行STE-？"><a href="#如何运行STE-？" class="headerlink" title="如何运行STE ？"></a>如何运行STE ？</h2><p>我们已经有了A⇒C</p>
+<p>那么根据A（前提条件），对这个电路进行三值模拟，那么会得到实际的结果，然后将其与C（预期结果）进行比对。</p>
+<h3 id="得到的波形图（forte追踪的结果）"><a href="#得到的波形图（forte追踪的结果）" class="headerlink" title="得到的波形图（forte追踪的结果）"></a>得到的波形图（forte追踪的结果）</h3><p>可以看到和一般的波形图有几个很明显的区别（区别是因为STE执行的是三值模拟，而不是01模拟）</p>
+<p>除了0和1，还有两种元素:</p>
+<ul>
+<li>X，代表可有可无，这些信息就可以不考虑进去了，也就为模拟减少了负担</li>
+<li>布尔变量，相当于我可以给某个电路节点给一个对应的布尔变量。</li>
+</ul>
+<p><img src="/STE%20&%20SVA%20c7ffe06c60e64d2785d19e5636448aa9/Untitled%201.png" alt="Untitled"></p>
+<h1 id="SVA"><a href="#SVA" class="headerlink" title="SVA"></a>SVA</h1><p>接下来使用 SVA 来对于 上述 STE 中描述的性质进行描述，即：我们往FIFO里依次push数据1和数据2，那么pop的时候也应该按照数据1和数据2的顺序返回。</p>
+<blockquote>
+<p>我们往 FIFO 里依次 push 数据 1 和数据 2，那么 pop 的时候也应该按照数据 1 和数据 2 的顺序返回。</p>
+</blockquote>
+<p>具体一下为：</p>
+<p>往 FIFO buffer 中依次 push 变量 data，那么后续发生 pop 数据时，会得到数据 data</p>
+<h2 id="SVA-中语法"><a href="#SVA-中语法" class="headerlink" title="SVA 中语法"></a>SVA 中语法</h2><p>对于描述该性质，那么涉及到更高级的时序上的语法。</p>
+<ul>
+<li>sequence [<em>]:  表达前面的条件成立若干次，(The [</em>] is an abbreviation for [*0:$])</li>
+<li>→: 蕴含</li>
+<li>变量</li>
+</ul>
+<h2 id="SVA-对该性质的定义"><a href="#SVA-对该性质的定义" class="headerlink" title="SVA 对该性质的定义"></a>SVA 对该性质的定义</h2><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sequence</span> a2c;</span><br><span class="line">	<span class="keyword">int</span> v;</span><br><span class="line">	(push == <span class="number">1</span>, v = dataIn) -&gt; ((push == <span class="number">0</span>) &amp;&amp; (pop == <span class="number">0</span>))[*] ##<span class="number">1</span> ((push == <span class="number">0</span>) &amp;&amp; (pop == <span class="number">1</span>)) ##<span class="number">1</span> (dataOut == v);</span><br><span class="line"><span class="keyword">endsequence</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">assert</span> <span class="keyword">property</span> (</span><br><span class="line">	@(<span class="keyword">posedge</span> clk) a;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>其含义为：</p>
+<p>当 push 为 1 时，捕获 dataIn 的值给 v，同时蕴含之后若干时刻 push 和 pop 都是 0，当 pop 为 1 的下一个时刻 dataOut &#x3D;&#x3D; v</p>
+<h1 id="Peek-and-Poke"><a href="#Peek-and-Poke" class="headerlink" title="Peek and Poke"></a>Peek and Poke</h1><p>Peek Poke 可以理解为测试</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">poke(dut.io.dataIn, <span class="number">3.</span><span class="type">U</span>)</span><br><span class="line">poke(dut.io.push, <span class="number">1.</span><span class="type">U</span>)</span><br><span class="line">step(<span class="number">1</span>)</span><br><span class="line">poke(dut.io.push, <span class="number">0.</span><span class="type">U</span>)</span><br><span class="line">poke(dut.io.pop, <span class="number">0.</span><span class="type">U</span>)</span><br><span class="line">step(<span class="number">1</span>)</span><br><span class="line">poke(dut.io.push, <span class="number">0.</span><span class="type">U</span>)</span><br><span class="line">poke(dut.io.pop, <span class="number">0.</span><span class="type">U</span>)</span><br><span class="line">step(<span class="number">1</span>)</span><br><span class="line">poke(dut.io.push, <span class="number">0.</span><span class="type">U</span>)</span><br><span class="line">poke(dut.io.pop, <span class="number">1.</span><span class="type">U</span>)</span><br><span class="line">step(<span class="number">1</span>)</span><br><span class="line">expect(dut.io.dataOut, <span class="number">3.</span><span class="type">U</span>)</span><br></pre></td></tr></table></figure>
+
+<p>需要构造一组测试序列。</p>
+<h1 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h1><p>抽象层次 PeekPoke &lt; STE ≤ SVA</p>
+<p>其中可以看到，由于 STE 中需要利用到三值模拟，因此其处于在 Bit-Level，同时其对于时序上的性质描述，对于时间不能做到任意，需要指定经过的时间，但是其对于每一位弹数据时 Symbol 的。</p>
+<p>在 SVA 中，更加抽象，对于数据可以用变量来描述，同时对于时序上的描述能力更强。</p>
+<p>但是这里的 STE 是可以利用工具进行求解的，但是这里 SVA 可能需要更强大的工具（收费软件？）</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
