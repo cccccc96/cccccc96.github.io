@@ -233,7 +233,7 @@
 <li>设置拦截器（因为要写入大模型token）</li>
 </ol>
 </li>
-<li>通过Retrofit封装OkHttp</li>
+<li>通过Retrofit封装OkHttp（方便测试）</li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 开启 Http 客户端</span></span><br><span class="line"><span class="type">OkHttpClient</span> <span class="variable">okHttpClient</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OkHttpClient</span></span><br><span class="line">        .Builder()</span><br><span class="line">        .addInterceptor(httpLoggingInterceptor)</span><br><span class="line">        .addInterceptor(<span class="keyword">new</span> <span class="title class_">OpenAiHTTPInterceptor</span>(configuration))</span><br><span class="line">        .connectTimeout(configuration.getConnectTimeout(), TimeUnit.SECONDS)</span><br><span class="line">        .writeTimeout(configuration.getWriteTimeout(), TimeUnit.SECONDS)</span><br><span class="line">        .readTimeout(configuration.getReadTimeout(), TimeUnit.SECONDS)</span><br><span class="line">        .build();</span><br><span class="line"></span><br><span class="line">configuration.setOkHttpClient(okHttpClient);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 创建 API 服务</span></span><br><span class="line"><span class="type">IOpenAiApi</span> <span class="variable">openAiApi</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Retrofit</span>.Builder()</span><br><span class="line">        .baseUrl(configuration.getApiHost())</span><br><span class="line">        .client(okHttpClient)</span><br><span class="line">        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())</span><br><span class="line">        .addConverterFactory(JacksonConverterFactory.create())</span><br><span class="line">        .build().create(IOpenAiApi.class);</span><br><span class="line"></span><br><span class="line">configuration.setOpenAiApi(openAiApi);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 实例化执行器</span></span><br><span class="line">HashMap&lt;Model, Executor&gt; executorGroup = configuration.newExecutorGroup();</span><br></pre></td></tr></table></figure>
 
@@ -270,8 +270,8 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/03/31/kaifa/project/openai/openai10/" rel="next" title="【1开发】AI问答助手项目记录5 - 简历">
-                  【1开发】AI问答助手项目记录5 - 简历 <i class="fa fa-angle-right"></i>
+                <a href="/2022/03/31/kaifa/project/openai/openai10/" rel="next" title="【1开发】AI问答助手项目记录5 - 项目最终结构">
+                  【1开发】AI问答助手项目记录5 - 项目最终结构 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>

@@ -483,7 +483,7 @@
 <li>设置拦截器（因为要写入大模型token）</li>
 </ol>
 </li>
-<li>通过Retrofit封装OkHttp</li>
+<li>通过Retrofit封装OkHttp（方便测试）</li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 开启 Http 客户端</span></span><br><span class="line"><span class="type">OkHttpClient</span> <span class="variable">okHttpClient</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OkHttpClient</span></span><br><span class="line">        .Builder()</span><br><span class="line">        .addInterceptor(httpLoggingInterceptor)</span><br><span class="line">        .addInterceptor(<span class="keyword">new</span> <span class="title class_">OpenAiHTTPInterceptor</span>(configuration))</span><br><span class="line">        .connectTimeout(configuration.getConnectTimeout(), TimeUnit.SECONDS)</span><br><span class="line">        .writeTimeout(configuration.getWriteTimeout(), TimeUnit.SECONDS)</span><br><span class="line">        .readTimeout(configuration.getReadTimeout(), TimeUnit.SECONDS)</span><br><span class="line">        .build();</span><br><span class="line"></span><br><span class="line">configuration.setOkHttpClient(okHttpClient);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 创建 API 服务</span></span><br><span class="line"><span class="type">IOpenAiApi</span> <span class="variable">openAiApi</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Retrofit</span>.Builder()</span><br><span class="line">        .baseUrl(configuration.getApiHost())</span><br><span class="line">        .client(okHttpClient)</span><br><span class="line">        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())</span><br><span class="line">        .addConverterFactory(JacksonConverterFactory.create())</span><br><span class="line">        .build().create(IOpenAiApi.class);</span><br><span class="line"></span><br><span class="line">configuration.setOpenAiApi(openAiApi);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 实例化执行器</span></span><br><span class="line">HashMap&lt;Model, Executor&gt; executorGroup = configuration.newExecutorGroup();</span><br></pre></td></tr></table></figure>
 
@@ -726,7 +726,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/openai/openai10/" class="post-title-link" itemprop="url">【1开发】AI问答助手项目记录5 - 简历</a>
+          <a href="/2022/03/31/kaifa/project/openai/openai10/" class="post-title-link" itemprop="url">【1开发】AI问答助手项目记录5 - 项目最终结构</a>
         </h2>
 
         <div class="post-meta-container">
@@ -759,18 +759,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p>智能AI问答助手 </p>
-<p> 主要技术:Spring Boot、MyBatis、Redis、RabbitMQ、OKHttp3、React、TypeScript</p>
-<ol>
-<li><p>对接微信公众号 SDK，使用从微信公众号获取验证码的方式进行授权登录，使用JWT进行token校验</p>
-</li>
-<li><p>使用OKHttp3封装ChatGLM和openai的Java SDK，使用流式异步响应式框架开发应答接口，对接相关大模型</p>
-</li>
-<li><p>采用责任链模式实现规则过滤，包含敏感词、白名单、频次限制、账户状态、账户额度等</p>
-</li>
-<li><p>对接支付宝沙箱支付，实现商品支付功能，用户能购买大模型额度。同时使用Kafka进行异步发货，结合定时任务扫描实现超时关单、掉单补偿。</p>
-</li>
-</ol>
+          <p>![OpenAI-第 6 页](<a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/cccccc96/cloudimg/main/OpenAI-%E7%AC%AC">https://raw.githubusercontent.com/cccccc96/cloudimg/main/OpenAI-第</a> 6 页.jpg)</p>
 
       
     </div>
