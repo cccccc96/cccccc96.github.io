@@ -22,7 +22,7 @@
 
     <meta name="description" content="参考学习：Apache ShardingSphere  思路动态路由组件的一个核心思路，就是分库和分表，所以我们核心要实现如下两件事  分库：根据字段属性，动态切换数据源（改数据源） 分表：根据字段属性，拦截修改sql语句（改from后面的那个表）  所以可以简单设计动态路由的流程：  根据字段计算hash值，存入threadlocal 修改sql语句 切换数据源   流程1 初始化加载配置重写">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【1开发】数据库动态路由组件记录1 - 线程池调研">
+<meta property="og:title" content="【1开发】数据库动态路由组件记录1 - 路由组件">
 <meta property="og:url" content="http://example.com/2022/03/31/kaifa/project/dbrouter/dbrouter1/index.html">
 <meta property="og:site_name" content="czh的学习小站">
 <meta property="og:description" content="参考学习：Apache ShardingSphere  思路动态路由组件的一个核心思路，就是分库和分表，所以我们核心要实现如下两件事  分库：根据字段属性，动态切换数据源（改数据源） 分表：根据字段属性，拦截修改sql语句（改from后面的那个表）  所以可以简单设计动态路由的流程：  根据字段计算hash值，存入threadlocal 修改sql语句 切换数据源   流程1 初始化加载配置重写">
@@ -41,10 +41,10 @@
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/03/31/kaifa/project/dbrouter/dbrouter1/","path":"2022/03/31/kaifa/project/dbrouter/dbrouter1/","title":"【1开发】数据库动态路由组件记录1 - 线程池调研"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/03/31/kaifa/project/dbrouter/dbrouter1/","path":"2022/03/31/kaifa/project/dbrouter/dbrouter1/","title":"【1开发】数据库动态路由组件记录1 - 路由组件"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>【1开发】数据库动态路由组件记录1 - 线程池调研 | czh的学习小站</title>
+<title>【1开发】数据库动态路由组件记录1 - 路由组件 | czh的学习小站</title>
   
 
 
@@ -183,12 +183,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="【1开发】数据库动态路由组件记录1 - 线程池调研 | czh的学习小站">
+      <meta itemprop="name" content="【1开发】数据库动态路由组件记录1 - 路由组件 | czh的学习小站">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          【1开发】数据库动态路由组件记录1 - 线程池调研
+          【1开发】数据库动态路由组件记录1 - 路由组件
         </h1>
 
         <div class="post-meta-container">
