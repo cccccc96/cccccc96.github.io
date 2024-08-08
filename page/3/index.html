@@ -123,7 +123,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-count">46</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -134,7 +134,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -151,6 +151,1598 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/bagu/springIOC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/bagu/springIOC/" class="post-title-link" itemprop="url">【1开发】【八股】springIOC</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/23277575/answer/169698662">https://www.zhihu.com/question/23277575/answer/169698662</a></p>
+<p><a target="_blank" rel="noopener" href="https://javadoop.com/post/spring-ioc">https://javadoop.com/post/spring-ioc</a></p>
+<p><a target="_blank" rel="noopener" href="https://javaguide.cn/system-design/framework/spring/ioc-and-aop.html#ioc-%E8%A7%A3%E5%86%B3%E4%BA%86%E4%BB%80%E4%B9%88%E9%97%AE%E9%A2%98">https://javaguide.cn/system-design/framework/spring/ioc-and-aop.html#ioc-解决了什么问题</a></p>
+</blockquote>
+<h2 id="知乎的一个非常典型的例子"><a href="#知乎的一个非常典型的例子" class="headerlink" title="知乎的一个非常典型的例子"></a>知乎的一个非常典型的例子</h2><p>IOC是<strong>依赖倒置原则</strong>的体现，是为了处理工程中的依赖关系。</p>
+<p>知乎的这个例子很好地解释了“依赖注入”的注入是什么。</p>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/v2-82e0c12a1b26f7979ed9241e169affda_1440w.webp" alt="img" style="zoom:50%;" />
+
+<p>这种方式是不好的，为什么？假如最末尾一个类的构造方法改了，完蛋，全部类的构造方法都要改。这种工程是不可维护的。</p>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/v2-c920a0540ce0651003a5326f6ef9891d_1440w.webp" alt="img"></p>
+<p>所以我们怎么办呢，当然就用我们的依赖注入：就是<strong>把底层类作为参数传入上层类</strong>。实现上层类对下层类的控制。</p>
+<h2 id="什么是IOC"><a href="#什么是IOC" class="headerlink" title="什么是IOC"></a>什么是IOC</h2><p>我们在springboot项目中</p>
+<ul>
+<li>不管是Dao，还是外部包的那些config</li>
+<li>我们从来都不会通过<strong>new</strong>的方式来创建，而是通过依赖注入的方式。</li>
+<li><strong>你只需要维护一个Configuration（可以是xml可以是一段代码），而不用每次初始化一辆车都要亲手去写那一大段初始化的代码</strong></li>
+</ul>
+<p>控制反转（描述的是对象的创建以及管理的问题）</p>
+<ul>
+<li>控制：对象创建的权利</li>
+<li>反转：控制权交给外部环境IOC容器</li>
+</ul>
+<p>好处</p>
+<ul>
+<li>对象之间的依赖程度降低</li>
+<li>资源变的容易管理<ul>
+<li>单例模式</li>
+<li>IOC容器负责bean的整个生命周期</li>
+</ul>
+</li>
+</ul>
+<h2 id="IOC原理"><a href="#IOC原理" class="headerlink" title="IOC原理"></a>IOC原理</h2><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708103644862.png" alt="image-20240708103644862" style="zoom:50%;" />
+
+<ol>
+<li>FileSystemXmlApplicationContext&#x2F;ClassPathXmlApplicationContext ：xml配置文件在系统中的路径</li>
+<li>AnnotationConfigApplicationContext：基于注解来使用</li>
+</ol>
+<h3 id="一个小例子"><a href="#一个小例子" class="headerlink" title="一个小例子"></a>一个小例子</h3><p>使用 ClassPathXmlApplicationContext 进行分析，方便理解整个构建流程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用我们的配置文件来启动一个 ApplicationContext</span></span><br><span class="line"><span class="type">ApplicationContext</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;classpath:application.xml&quot;</span>);</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">&quot;context 启动成功&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 从 context 中取出我们的 Bean，而不是用 new MessageServiceImpl() 这种方式</span></span><br><span class="line"><span class="type">MessageService</span> <span class="variable">messageService</span> <span class="operator">=</span> context.getBean(MessageService.class);</span><br><span class="line">System.out.println(messageService.getMessage());</span><br></pre></td></tr></table></figure>
+
+<p>那么，这里我们通过ApplicationContext拿到了Bean。那么ApplicationContext是如何创建实例Bean，并且往各个Bean中注入依赖的呢？</p>
+<h3 id="BeanFactory"><a href="#BeanFactory" class="headerlink" title="BeanFactory"></a>BeanFactory</h3><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708105257053.png" alt="image-20240708105257053" style="zoom:33%;" />
+
+<p>ApplicationContext其实就是一个BeanFactory</p>
+<h3 id="启动过程分析"><a href="#启动过程分析" class="headerlink" title="启动过程分析"></a>启动过程分析</h3><h4 id="1-构造方法"><a href="#1-构造方法" class="headerlink" title="1. 构造方法"></a>1. 构造方法</h4><p>先从构造方法开始，把configLocations（也就是XML地址）读进来</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="title function_">ClassPathXmlApplicationContext</span><span class="params">(String[] configLocations, <span class="type">boolean</span> refresh, ApplicationContext parent)</span></span><br><span class="line">		<span class="keyword">throws</span> BeansException &#123;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">super</span>(parent);</span><br><span class="line">	setConfigLocations(configLocations);</span><br><span class="line">	<span class="keyword">if</span> (refresh) &#123;</span><br><span class="line">		refresh();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-refresh-方法-–-（BeanFactory注册BeanDefinition-初始化所有单例beans"><a href="#2-refresh-方法-–-（BeanFactory注册BeanDefinition-初始化所有单例beans" class="headerlink" title="2. refresh()方法 – （BeanFactory注册BeanDefinition+初始化所有单例beans)"></a>2. refresh()方法 – （BeanFactory注册BeanDefinition+初始化所有单例beans)</h4><blockquote>
+<ol>
+<li>插一嘴，BeanFactory当然是Bean容器，那么Bean是什么呢？它其实准确来说叫BeanDefinition，我们自己定义的一个个Bean会转换成一个个BeanDefinition存在于Spring的BeanFactory中。</li>
+<li>BeanDefinition保存了所有的Bean信息：是哪个类，是否是单例的，等等</li>
+<li>所以，Bean是什么？在代码层面可以理解为：BeanDefinition的实例</li>
+</ol>
+</blockquote>
+<p>（太复杂，以后再慢慢看吧，先看核心的几步）</p>
+<ul>
+<li>obtainFreshBeanFactory（拿到BeanFactory）<ul>
+<li>这代表applicationContext其实内部持有了一个BeanFactory</li>
+<li>BeanDefinition注册到了BeanFactory中</li>
+<li>我们可以看到里面维护了一个<strong>ConcurrentHashMap</strong>，存beanName-&gt; beanDefinition</li>
+<li><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708165122143.png" alt="image-20240708165122143"></li>
+</ul>
+</li>
+<li>finishBeanFactoryInitialization（创建所有单例Bean，也就是getBean方法）<ul>
+<li><strong>实例化</strong>：使用反射创建Bean实例。</li>
+<li><strong>依赖注入</strong>：根据Bean定义中的依赖关系，将所需的依赖注入到Bean实例中。<ul>
+<li>（这里就是依赖倒置的概念，dfs，从上层往下层搜索，知乎的那个教程里写的）</li>
+<li><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240708171643710.png" alt="image-20240708171643710"></li>
+</ul>
+</li>
+<li><strong>初始化</strong>：调用Bean的初始化方法（如配置的init-method或实现了InitializingBean接口的afterPropertiesSet方法）。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">refresh</span><span class="params">()</span> <span class="keyword">throws</span> BeansException, IllegalStateException &#123;</span><br><span class="line">			。。。。。。</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 这步比较关键，这步完成后，配置文件就会解析成一个个 Bean 定义，注册到 BeanFactory 中，</span></span><br><span class="line">      <span class="comment">// 当然，这里说的 Bean 还没有初始化，只是配置信息都提取出来了，</span></span><br><span class="line">      <span class="comment">// 注册也只是将这些信息都保存到了注册中心(说到底核心是一个 beanName-&gt; beanDefinition 的 map)</span></span><br><span class="line">      <span class="type">ConfigurableListableBeanFactory</span> <span class="variable">beanFactory</span> <span class="operator">=</span> obtainFreshBeanFactory();</span><br><span class="line">  </span><br><span class="line">  		。。。。。。</span><br><span class="line">        <span class="comment">// 重点，重点，重点</span></span><br><span class="line">        <span class="comment">// 初始化所有的 singleton beans</span></span><br><span class="line">        <span class="comment">//（lazy-init 的除外）</span></span><br><span class="line">        finishBeanFactoryInitialization(beanFactory);</span><br><span class="line">			</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/bagu/springboot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/bagu/springboot%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">【1开发】【八股】springboot自动配置</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Springboot-自动配置是啥"><a href="#Springboot-自动配置是啥" class="headerlink" title="Springboot 自动配置是啥"></a>Springboot 自动配置是啥</h2><p>举两个例子</p>
+<ol>
+<li>我在dbrouter里有这样一个类DataSourceAutoConfig，在spring.factories里配置了EnableAutoConfiguration</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataSourceAutoConfig</span> <span class="keyword">implements</span> <span class="title class_">EnvironmentAware</span></span><br><span class="line"><span class="comment">//spring.factories</span></span><br><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.czh.middleware.db.router.config.DataSourceAutoConfig</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在项目中，有一个RedisClientConfig类，有@Configuration注解</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableConfigurationProperties(RedisClientConfigProperties.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RedisClientConfig</span> </span><br><span class="line"><span class="comment">//spring.factories</span></span><br><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.redisson.spring.starter.RedissonAutoConfiguration</span><br></pre></td></tr></table></figure>
+
+<p>这种形式就叫自动配置（顾名思义，配置作用当然就是省去繁琐的XML-bean配置，引入外部jar包加上几个注解就完事。至于jar包中有哪些自动配置类，类名是啥这些用户都不关心）</p>
+<h3 id="简单看看，一个自动配置的Config里应该包含什么"><a href="#简单看看，一个自动配置的Config里应该包含什么" class="headerlink" title="简单看看，一个自动配置的Config里应该包含什么"></a>简单看看，一个自动配置的Config里应该包含什么</h3><p>应该包含三个下面三种类型的注解</p>
+<ol>
+<li>@Configuration： 有了这个注解，类底下那些bean才会被spring给创建出来</li>
+<li>@ConfigurationProperties：配置属性，你得把yml那些信息读进来嘛</li>
+<li>@ConditionalOnClass：条件注解，当然还有很多其他的。你希望在满足一定条件的时候，这个config才有效。</li>
+</ol>
+<h2 id="Springboot-自动配置原理"><a href="#Springboot-自动配置原理" class="headerlink" title="Springboot 自动配置原理"></a>Springboot 自动配置原理</h2><p>看网上的资料，自动配置的核心是基于下面两个概念，扩展成@EnableAutoConfiguration：</p>
+<ul>
+<li>ImportSelector</li>
+<li>spring.factories</li>
+</ul>
+<h5 id="面渣逆袭上的的一张图"><a href="#面渣逆袭上的的一张图" class="headerlink" title="面渣逆袭上的的一张图"></a>面渣逆袭上的的一张图</h5><p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/spring-df77ee15-2ff0-4ec7-8e65-e4ebb8ba88f1.png" alt="三分恶面渣逆袭：SpringBoot自动配置原理"></p>
+<h3 id="要看“自动配置”，当然得先看“配置”"><a href="#要看“自动配置”，当然得先看“配置”" class="headerlink" title="要看“自动配置”，当然得先看“配置”"></a>要看“自动配置”，当然得先看“配置”</h3><p>springboot要怎么加载一个配置，方法有两个：“ComponentScan”和“Import”。</p>
+<ul>
+<li><p>@ComponentScan，它会自动扫描@Component、@Service、@Repository和 @Controller这些个注解</p>
+<ul>
+<li>还可以配置basePackages、basePackageClasses指定包和类所在的包（当然这些和这里无关）</li>
+</ul>
+</li>
+<li><p>@Import，它有几种方法导入，我只看了前两种</p>
+<ul>
+<li><p>普通导入，直接把要加载的那个类通过import指定就完事</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AppConfig1</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> MyRepository <span class="title function_">myRepository</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">MyRepository</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@Import(&#123;AppConfig1.class, .......&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainConfig</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>“ImportSelector”：我们可以通过这个ImportSelector类，去告诉Import应该加载哪些东西</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AppConfig1</span> &#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="keyword">public</span> MyRepository <span class="title function_">myRepository</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">MyRepository</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyImportSelector</span> <span class="keyword">implements</span> <span class="title class_">ImportSelector</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String[] selectImports(AnnotationMetadata importingClassMetadata) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">String</span>[] &#123; AppConfig1.class.getName(), ...... &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@Import(MyImportSelector.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainConfig</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>还有一个ImportBeanDefinitionRegistrar就不看了</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>其实，自动配置就是通过其中一个方法实现的：是“ImportSelector”，只要selectImports能拿到要加载的类就好了。</p>
+<h3 id="知道了“配置”，可以看“自动配置”了"><a href="#知道了“配置”，可以看“自动配置”了" class="headerlink" title="知道了“配置”，可以看“自动配置”了"></a>知道了“配置”，可以看“自动配置”了</h3><p>实现自动装配的核心注解，就是@EnableAutoConfiguration注解</p>
+<p>当然我们在项目中看不到它，因为它藏在@SpringBootApplication中，@SpringBootApplication是三个</p>
+<ul>
+<li><strong>@EnableAutoConfiguration：自动装配</strong></li>
+<li>@Configuration（无关）</li>
+<li>@ComponentScan（无关）</li>
+</ul>
+<p>点进源码看的话，大概流程是：@EnableAutoConfiguration. —&gt; @import( AutoConfigurationImportSelector.class) –&gt; AutoConfigurationImportSelector的优雅实现</p>
+<h4 id="1-EnableAutoConfiguration"><a href="#1-EnableAutoConfiguration" class="headerlink" title="1. EnableAutoConfiguration"></a>1. EnableAutoConfiguration</h4><p>和上一节的小例子很像，import了一个AutoConfigurationImportSelector类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Import(AutoConfigurationImportSelector.class)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> EnableAutoConfiguration &#123;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-AutoConfigurationImportSelector"><a href="#2-AutoConfigurationImportSelector" class="headerlink" title="2. AutoConfigurationImportSelector"></a>2. AutoConfigurationImportSelector</h4><p>那么，我们也在就剩最后一件事要做。实现这个ImportSelector类，让它能发现classpath中jar包的自动配置类。</p>
+<p><strong>那么，具体要怎么去发现呢，用Spring框架中的SpringFactories机制</strong></p>
+<ul>
+<li>核心逻辑就是去读取所有META-INF&#x2F;spring.factories，把里面的&lt;K,V&gt;对都给读出来</li>
+</ul>
+<h5 id="2-1-实现这个ImportSelector类，核心就是重写selectImports"><a href="#2-1-实现这个ImportSelector类，核心就是重写selectImports" class="headerlink" title="2.1 实现这个ImportSelector类，核心就是重写selectImports"></a>2.1 实现这个ImportSelector类，核心就是重写selectImports</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> String[] selectImports(AnnotationMetadata annotationMetadata) &#123;</span><br><span class="line">	<span class="keyword">if</span> (!isEnabled(annotationMetadata)) &#123;</span><br><span class="line">		<span class="keyword">return</span> NO_IMPORTS;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="type">AutoConfigurationMetadata</span> <span class="variable">autoConfigurationMetadata</span> <span class="operator">=</span> AutoConfigurationMetadataLoader</span><br><span class="line">			.loadMetadata(<span class="built_in">this</span>.beanClassLoader);</span><br><span class="line">   <span class="comment">// 自动配置的入口方法 getAutoConfigurationEntry</span></span><br><span class="line">	<span class="type">AutoConfigurationEntry</span> <span class="variable">autoConfigurationEntry</span> <span class="operator">=</span> getAutoConfigurationEntry(autoConfigurationMetadata,</span><br><span class="line">			annotationMetadata);</span><br><span class="line">	<span class="keyword">return</span> StringUtils.toStringArray(autoConfigurationEntry.getConfigurations());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><em><strong><u>虽然但是，网上教程都是说这里会调用String[] selectImports()方法。为什么我debug进的是public Iterable<Entry> selectImports() 方法，难道是我看的教程时间太久远了吗？先不管了。</u></strong></em></p>
+<h5 id="2-2-selectImports-—-getAutoConfigurationEntry（）"><a href="#2-2-selectImports-—-getAutoConfigurationEntry（）" class="headerlink" title="2.2 selectImports —-&gt;getAutoConfigurationEntry（）"></a>2.2 selectImports —-&gt;getAutoConfigurationEntry（）</h5><p>核心就是getCandidateConfigurations（）函数，里面调用了SpringFactoriesLoader.loadFactoryNames()方法</p>
+<p>获取了EnableAutoConfiguration作为key的所有类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">	<span class="keyword">protected</span> AutoConfigurationEntry <span class="title function_">getAutoConfigurationEntry</span><span class="params">(AutoConfigurationMetadata autoConfigurationMetadata,</span></span><br><span class="line"><span class="params">			AnnotationMetadata annotationMetadata)</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> (!isEnabled(annotationMetadata)) &#123;</span><br><span class="line">			<span class="keyword">return</span> EMPTY_ENTRY;</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="comment">// 获取EnableAutoConfiguration的属性，从spring.factories中获取所有对应的类</span></span><br><span class="line">		<span class="type">AnnotationAttributes</span> <span class="variable">attributes</span> <span class="operator">=</span> getAttributes(annotationMetadata);</span><br><span class="line">		List&lt;String&gt; configurations = getCandidateConfigurations(annotationMetadata, attributes);</span><br><span class="line">    <span class="comment">// 下面就是把不满足exclude和condition这些条件的删了</span></span><br><span class="line">		configurations = removeDuplicates(configurations);</span><br><span class="line">		Set&lt;String&gt; exclusions = getExclusions(annotationMetadata, attributes);</span><br><span class="line">		checkExcludedClasses(configurations, exclusions);</span><br><span class="line">		configurations.removeAll(exclusions);</span><br><span class="line">		configurations = filter(configurations, autoConfigurationMetadata);</span><br><span class="line">		fireAutoConfigurationImportEvents(configurations, exclusions);</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">AutoConfigurationEntry</span>(configurations, exclusions);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span> List&lt;String&gt; <span class="title function_">getCandidateConfigurations</span><span class="params">(AnnotationMetadata metadata, AnnotationAttributes attributes)</span> &#123;</span><br><span class="line">  <span class="comment">// 调用SpringFactoriesLoader</span></span><br><span class="line">		List&lt;String&gt; configurations = SpringFactoriesLoader.loadFactoryNames(getSpringFactoriesLoaderFactoryClass(),</span><br><span class="line">				getBeanClassLoader());</span><br><span class="line">   。。。。。。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-3-getAutoConfigurationEntry-–-SpringFactoriesLoader-loadFactoryNames"><a href="#2-3-getAutoConfigurationEntry-–-SpringFactoriesLoader-loadFactoryNames" class="headerlink" title="2.3 getAutoConfigurationEntry() –&gt; SpringFactoriesLoader.loadFactoryNames()"></a>2.3 getAutoConfigurationEntry() –&gt; SpringFactoriesLoader.loadFactoryNames()</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">FACTORIES_RESOURCE_LOCATION</span> <span class="operator">=</span> <span class="string">&quot;META-INF/spring.factories&quot;</span>;</span><br><span class="line"></span><br><span class="line">			<span class="comment">// SpringFactoriesLoader.loadFactoryNames核心代码如下</span></span><br><span class="line"></span><br><span class="line">			<span class="comment">// 通过classLoader：从所有的jar包中找到META-INF/spring.factories文件</span></span><br><span class="line">			Enumeration&lt;URL&gt; urls = classLoader.getResources(FACTORIES_RESOURCE_LOCATION);</span><br><span class="line">			<span class="keyword">while</span> (urls.hasMoreElements()) &#123;</span><br><span class="line">        <span class="comment">// url: jar包中spring.factories的文件路径</span></span><br><span class="line">				<span class="type">URL</span> <span class="variable">url</span> <span class="operator">=</span> urls.nextElement();</span><br><span class="line">				<span class="type">UrlResource</span> <span class="variable">resource</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UrlResource</span>(url);</span><br><span class="line">        <span class="comment">// properties：所有&lt;K,V&gt;对</span></span><br><span class="line">				<span class="type">Properties</span> <span class="variable">properties</span> <span class="operator">=</span> PropertiesLoaderUtils.loadProperties(resource);</span><br><span class="line">				<span class="keyword">for</span> (Map.Entry&lt;?, ?&gt; entry : properties.entrySet()) &#123;</span><br><span class="line">					<span class="type">String</span> <span class="variable">factoryTypeName</span> <span class="operator">=</span> ((String) entry.getKey()).trim();</span><br><span class="line">					String[] factoryImplementationNames =</span><br><span class="line">							StringUtils.commaDelimitedListToStringArray((String) entry.getValue());</span><br><span class="line">					<span class="keyword">for</span> (String factoryImplementationName : factoryImplementationNames) &#123;</span><br><span class="line">						result.computeIfAbsent(factoryTypeName, key -&gt; <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;())</span><br><span class="line">								.add(factoryImplementationName.trim());</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h2 id="SPI和Springboot自动配置的关系"><a href="#SPI和Springboot自动配置的关系" class="headerlink" title="SPI和Springboot自动配置的关系"></a>SPI和Springboot自动配置的关系</h2><p>系统里的各个模块，往往有不同的实现方案，我们不允许代码里涉及具体的实现类。所以，SPI就是提供了一个机制：为某个接口寻找服务实现。在运行时发现和使用这些接口。</p>
+<table>
+<thead>
+<tr>
+<th>Java SPI</th>
+<th>SpringFactories</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>配置文件：META-INF&#x2F;services&#x2F;全限定接口名<br />内容：全限定类名（一个类名一行）</td>
+<td>META-INF&#x2F;spring.factories<br />内容：key1&#x3D;value1,value2,……</td>
+</tr>
+<tr>
+<td>怎么拿实例：ServiceLoader，返回对象实例</td>
+<td>怎么拿实例：SpringFactoriesLoader，返回类名</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/10%E5%B0%8F%E6%97%B6Java%E8%BF%9B%E9%98%B6%E6%8A%80%E6%9C%AF%E6%A0%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/10%E5%B0%8F%E6%97%B6Java%E8%BF%9B%E9%98%B6%E6%8A%80%E6%9C%AF%E6%A0%88/" class="post-title-link" itemprop="url">【1开发】【八股】压测</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%9D%A2%E7%BB%8F/" itemprop="url" rel="index"><span itemprop="name">面经</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="如何压测"><a href="#如何压测" class="headerlink" title="如何压测"></a>如何压测</h1><h3 id="RT、TPS、资源利用率"><a href="#RT、TPS、资源利用率" class="headerlink" title="RT、TPS、资源利用率"></a>RT、TPS、资源利用率</h3><p>影响因素：</p>
+<ul>
+<li>数据库读写、网络IO、逻辑计算复杂度、缓存</li>
+<li>JVM</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240717134417860.png" alt="image-20240717134417860"></p>
+<p>三个区，在轻度负载区，RT基本不变，在重度负载区</p>
+<h3 id="一个简单的JMeter例子"><a href="#一个简单的JMeter例子" class="headerlink" title="一个简单的JMeter例子"></a>一个简单的JMeter例子</h3><ol>
+<li><p>线程组配置</p>
+<ol>
+<li>线程数：发送http请求的线程数量（50）</li>
+<li>循环次数：循环执行多少次操作（2000）</li>
+<li>ramp-up：预热时间，要在多久内，创建线程</li>
+</ol>
+</li>
+<li><p>curl导入http请求</p>
+</li>
+<li><p>设置断言</p>
+<ol>
+<li>响应断言：code包含0000</li>
+<li>断言持续时间：3s</li>
+</ol>
+</li>
+<li><p>报告</p>
+<ol>
+<li>聚合报告（响应时间，吞吐量，KB）</li>
+<li>RT、TPS（插件）</li>
+<li>cpu、内存（perform插件）</li>
+</ol>
+</li>
+</ol>
+<h3 id="性能关键指标"><a href="#性能关键指标" class="headerlink" title="性能关键指标"></a>性能关键指标</h3><p>TPS、QPS、RT这些就不说，TPS和QPS越大越好，RT响应时间越好越好。</p>
+<p>硬件指标，带宽，CPU平均负载(top)。</p>
+<h3 id="TPS上限是多少"><a href="#TPS上限是多少" class="headerlink" title="TPS上限是多少"></a>TPS上限是多少</h3><p>和RT，服务端的线程数有关；当然还有带宽</p>
+<h2 id="梯度压测"><a href="#梯度压测" class="headerlink" title="梯度压测"></a>梯度压测</h2><p><strong>一点一点压力提上去，分析性能瓶颈</strong></p>
+<h2 id="重点1-低延时的接口压测（查询奖品列表）"><a href="#重点1-低延时的接口压测（查询奖品列表）" class="headerlink" title="**重点1  低延时的接口压测（查询奖品列表）"></a>**重点1  低延时的接口压测（查询奖品列表）</h2><p><strong>配置情况</strong></p>
+<ul>
+<li><p>线程梯度:5、10、15、20、25、30、35、40个线程；循环请求次数5000次</p>
+</li>
+<li><p>配置断言:超过3s，响应状态码不为1000，则为无效请求</p>
+</li>
+</ul>
+<p><strong>测试结果TPS</strong></p>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240718222919726.png" alt="image-20240718222919726"></p>
+<p><strong>测试结果RT</strong></p>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240718222953489.png" alt="image-20240718222953489"></p>
+<p><strong>测试结果CPU负载</strong></p>
+<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240718223749894.png" alt="image-20240718223749894" style="zoom: 33%;" />
+
+<p><strong>结论</strong></p>
+<p>随着压力的上升，<strong>TPS不再增加</strong>，响应时间逐渐在增加，偶尔发生异常。但是<strong>CPU负载不高</strong>，说明<strong>瓶颈在带宽</strong>上。</p>
+<p><strong>优化方案</strong></p>
+<ul>
+<li>方案01 – 降低数据包大小</li>
+<li>方案02 – 提升带宽，在内网压测</li>
+</ul>
+<h2 id="重点2-高延时的接口压测（积分兑换-抽奖）"><a href="#重点2-高延时的接口压测（积分兑换-抽奖）" class="headerlink" title="**重点2 高延时的接口压测（积分兑换&#x2F;抽奖）"></a>**重点2 高延时的接口压测（积分兑换&#x2F;抽奖）</h2><ul>
+<li><p>线程梯度:100、200、300、400、500、600、700、800个线程; </p>
+</li>
+<li><p>（为什么线程数要设置的多呢，因为要让TPS上去）</p>
+</li>
+<li><p>循环请求次数200次</p>
+</li>
+</ul>
+<p><strong>测试结果RT</strong></p>
+<p>基本在120</p>
+<p>**测试结果CPU负载 **</p>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240719172051966.png" alt="image-20240719172051966"></p>
+<p><strong>结论</strong></p>
+<p>在<strong>高延时</strong>场景下，服务瓶颈主要在<strong>容器最大并发线程数</strong>，卡在容器端</p>
+<p>且异常率较高，与阻塞式IO模型有关系</p>
+<h2 id="优化点"><a href="#优化点" class="headerlink" title="优化点"></a>优化点</h2><ul>
+<li>tomcat线程数</li>
+<li>数据库连接池：HikariCP</li>
+<li>mysql最大连接数</li>
+<li>JVM</li>
+<li>线程池</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/bagu/%E6%89%8B%E6%92%95%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/bagu/%E6%89%8B%E6%92%95%E5%A4%9A%E7%BA%BF%E7%A8%8B%E9%A2%98/" class="post-title-link" itemprop="url">【1开发】【八股】手撕多线程</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="以下面几道经典题为例，如何快速解决手撕多线程题目"><a href="#以下面几道经典题为例，如何快速解决手撕多线程题目" class="headerlink" title="以下面几道经典题为例，如何快速解决手撕多线程题目"></a>以下面几道经典题为例，如何快速解决手撕多线程题目</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://javakeeper.starfish.ink/java/JUC/%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C%E9%97%AE%E9%A2%98.html#%E4%BD%BF%E7%94%A8-lock">https://javakeeper.starfish.ink/java/JUC/%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C%E9%97%AE%E9%A2%98.html#%E4%BD%BF%E7%94%A8-lock</a></p>
+</blockquote>
+<ol>
+<li>三个线程分别打印 A，B，C，要求这三个线程一起运行，打印 n 次，输出形如“ABCABCABC….”的字符串</li>
+<li>两个线程交替打印 0~100 的奇偶数</li>
+<li>通过 N 个线程顺序循环打印从 0 至 100</li>
+<li>多线程按顺序调用，A-&gt;B-&gt;C，AA 打印 5 次，BB 打印10 次，CC 打印 15 次，重复 10 次</li>
+<li>用两个线程，一个输出字母，一个输出数字，交替输出 1A2B3C4D…26Z</li>
+</ol>
+<h3 id="Lock（题目1）"><a href="#Lock（题目1）" class="headerlink" title="Lock（题目1）"></a>Lock（题目1）</h3><p>三个线程循环打印，怎么打印呢？</p>
+<p>三个线程都去抢锁</p>
+<ul>
+<li>当然只有轮到你了你才能打印</li>
+<li>不然的话什么都不干就把锁释放了。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Print_N_ABC_lock</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> times=<span class="number">10</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">state</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">Lock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">(<span class="type">int</span> myState,String toPrint)</span>&#123;</span><br><span class="line">        <span class="type">int</span> i=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span>(i&lt;times)&#123;</span><br><span class="line">            lock.lock();</span><br><span class="line">            <span class="keyword">if</span>(state%<span class="number">3</span>==myState)&#123;</span><br><span class="line">                state++;</span><br><span class="line">                i++;</span><br><span class="line">                System.out.println(toPrint);</span><br><span class="line">            &#125;</span><br><span class="line">            lock.unlock();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Print_N_ABC_lock</span> <span class="variable">printNAbcLock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Print_N_ABC_lock</span>();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">0</span>,<span class="string">&quot;A&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">1</span>,<span class="string">&quot;B&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">2</span>,<span class="string">&quot;C&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="Wait-Notify-题目1"><a href="#Wait-Notify-题目1" class="headerlink" title="Wait&#x2F;Notify(题目1)"></a>Wait&#x2F;Notify(题目1)</h3><p>万精油解法。</p>
+<blockquote>
+<p>稍微总结一下：</p>
+<ul>
+<li>加入是只有两个线程，那么直接通知，然后wait就完事</li>
+<li>如果是三个线程以上，那么得写个while循环在里面待着</li>
+</ul>
+</blockquote>
+<p>用sychronized。没轮到你就一直在while循环里等着（当然你得wait()，释放锁）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Print_N_ABC_WaitAndNotify</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> times=<span class="number">10</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">state</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Object</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">(<span class="type">int</span> myState,String toPrint)</span>  &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;times;i++)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock) &#123;</span><br><span class="line">                <span class="keyword">while</span> (state % <span class="number">3</span> != myState) &#123;</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        lock.wait();</span><br><span class="line">                    &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                        e.printStackTrace();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                state++;</span><br><span class="line">                System.out.println(toPrint);</span><br><span class="line">                lock.notifyAll();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Print_N_ABC_WaitAndNotify</span> <span class="variable">printNAbcLock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Print_N_ABC_WaitAndNotify</span>();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">0</span>,<span class="string">&quot;A&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">1</span>,<span class="string">&quot;B&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;</span><br><span class="line">            printNAbcLock.print(<span class="number">2</span>,<span class="string">&quot;C&quot;</span>);</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Wait-Notify-题目2"><a href="#Wait-Notify-题目2" class="headerlink" title="Wait&#x2F;Notify(题目2)"></a>Wait&#x2F;Notify(题目2)</h3><p>同样的，synchronized+wait&#x2F;notify。只是这里只有两个线程，连判断条件都不用了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Print_Ji_OU_WaitAndNotify</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>  <span class="variable">size</span> <span class="operator">=</span> <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">Object</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(count&lt;=size)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (lock)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    System.out.println(count);</span><br><span class="line">                    count++;</span><br><span class="line">                    lock.notifyAll();</span><br><span class="line">                    lock.wait();</span><br><span class="line">                &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//防止有子线程被阻塞未被唤醒，导致主线程不退出</span></span><br><span class="line">                lock.notifyAll();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">        <span class="type">Print_Ji_OU_WaitAndNotify</span> <span class="variable">printJiOuWaitAndNotify</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Print_Ji_OU_WaitAndNotify</span>();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;printJiOuWaitAndNotify.print();&#125;).start();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(()-&gt;&#123;printJiOuWaitAndNotify.print();&#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Wait-Notify-题目5"><a href="#Wait-Notify-题目5" class="headerlink" title="Wait&#x2F;Notify(题目5)"></a>Wait&#x2F;Notify(题目5)</h3><p>和题目二一样</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">public class Print_A1B2C3_WaitAndNotify &#123;</span><br><span class="line">    private int num = 1;</span><br><span class="line">    private char c = &#x27;A&#x27;;</span><br><span class="line">    private final static Object lock = new Object();</span><br><span class="line"></span><br><span class="line">    public void print(boolean flag)&#123;</span><br><span class="line">        synchronized (lock)&#123;</span><br><span class="line">            for(int i=0;i&lt;26;i++)&#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    if(flag==false) &#123;</span><br><span class="line">                        System.out.println(num+i);</span><br><span class="line">                    &#125;else&#123;</span><br><span class="line">                        System.out.println((char)(c+i));</span><br><span class="line">                    &#125;</span><br><span class="line">                    lock.notifyAll();</span><br><span class="line">                    lock.wait();</span><br><span class="line">                &#125;catch (Exception e)&#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    public static void main(String[] args)&#123;</span><br><span class="line">        Print_A1B2C3_WaitAndNotify printA1B2C3WaitAndNotify = new Print_A1B2C3_WaitAndNotify();</span><br><span class="line">        new Thread(()-&gt;&#123;printA1B2C3WaitAndNotify.print(false);&#125;).start();</span><br><span class="line">        new Thread(()-&gt;&#123;printA1B2C3WaitAndNotify.print(true);&#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/mianjing/mianjing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/mianjing/mianjing/" class="post-title-link" itemprop="url">【1开发】【八股】面经</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h2><p>组合模式规则树（单例）</p>
+<p>公众号重试</p>
+<h2 id="用到了什么设计模式"><a href="#用到了什么设计模式" class="headerlink" title="用到了什么设计模式"></a>用到了什么设计模式</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/cccccc96/Interview/tree/main/Design%20Pattern">https://github.com/cccccc96/Interview/tree/main/Design%20Pattern</a></p>
+</blockquote>
+<p>在抽奖的规则过滤中，用到了责任链和组合模式。最核心的作用就是把if else进行拆分，便于后期维护。</p>
+<p>对于不同的抽奖策略采用了抽奖模式。</p>
+<p>对于流程开发，采用了模版模式</p>
+<h3 id="责任链"><a href="#责任链" class="headerlink" title="责任链"></a>责任链</h3><p>故名思义，责任链就是一个链表，唯一的区别就是我们为每个节点做一个实现（因为每个节点要实现不同的功能）。</p>
+<p>所以我们执行责任链就是遍历这个链表，每个节点可能会拦截掉，或是继续下一个节点。</p>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240706161127811.png" alt="image-20240706161127811"></p>
+<h3 id="组合模式-规则树模型"><a href="#组合模式-规则树模型" class="headerlink" title="组合模式-规则树模型"></a>组合模式-规则树模型</h3><p>故名思义，规则树模型就是一个树形结构。可以想象一个B+树，根据大小进行遍历。那么，规则树也是类似，只是每个树节点有不同的规则。</p>
+<ul>
+<li>Filter（树节点）：拿不同种类的信息（年龄信息&#x2F;性别信息）<ul>
+<li>filter(): 遍历所有子边，哪个边符合，则找到对应的下一个子节点</li>
+</ul>
+</li>
+<li>IEngine：遍历整颗树<ul>
+<li>可以想象，搜索树中，小于进左子树，大于进右子树；而在规则树中，每条边的规则是固定的</li>
+</ul>
+</li>
+<li>好处：方便维护，可以把树结构存进数据库中</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240706175427996.png" alt="image-20240706175427996"></p>
+<h3 id="策略模式和模版模式"><a href="#策略模式和模版模式" class="headerlink" title="策略模式和模版模式"></a>策略模式和模版模式</h3><p>这两个非常简单</p>
+<ul>
+<li>策略模式：一个接口，多个实现，需要哪个策略用哪个</li>
+<li>模版模式：定义抽象类，定义流程，每个步骤都是一个抽奖方法。步骤具体的实现去继承类里面去做。</li>
+</ul>
+<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>功能：拆分出了核心流程与辅助流程</p>
+<p>实现也非常简单，只需要做两件事</p>
+<ul>
+<li>定义各种listener，方法里去做要做的事</li>
+<li>定义一个Manager，负责注册和通知</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240706214913020.png" alt="image-20240706214913020"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/mianjing/%E8%87%AA%E6%B5%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/mianjing/%E8%87%AA%E6%B5%8B/" class="post-title-link" itemprop="url">【1开发】【八股】面经自测</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="整理答题思路"><a href="#整理答题思路" class="headerlink" title="整理答题思路"></a>整理答题思路</h1><blockquote>
+<p>这里暂时只放最最基本的面试题，汇总在这里，面试前看看，别最基础的也忘了。</p>
+<p>Java，并发，Mysql，Redis，消息队列（Kafka）、网络</p>
+</blockquote>
+<h3 id="Java-中的集合类型？哪些是线程安全的？"><a href="#Java-中的集合类型？哪些是线程安全的？" class="headerlink" title="Java 中的集合类型？哪些是线程安全的？"></a>Java 中的集合类型？哪些是线程安全的？</h3><p>List、Set、Map</p>
+<p>ConcurrentHashMap线程安全</p>
+<h3 id="hashmap-的底层实现原理、put-方法实现流程、扩容机制？和Redis区别"><a href="#hashmap-的底层实现原理、put-方法实现流程、扩容机制？和Redis区别" class="headerlink" title="hashmap 的底层实现原理、put()方法实现流程、扩容机制？和Redis区别"></a>hashmap 的底层实现原理、put()方法实现流程、扩容机制？和Redis区别</h3><p>底层实现原理就不赘述了，关键词记一下，别忘了</p>
+<ul>
+<li><p><strong>结构：</strong></p>
+<ul>
+<li>桶数组，链表、红黑树</li>
+<li>hashcode()高16位和低16位异或，</li>
+</ul>
+</li>
+<li><p><strong>put：</strong></p>
+<ul>
+<li>覆盖？链表尾差&#x2F;红黑树？（是否需要树话，是否需要扩容）</li>
+</ul>
+</li>
+<li><p><strong>扩容：</strong></p>
+<ul>
+<li>2^n次方，0.75，8，64</li>
+</ul>
+</li>
+</ul>
+<p>和Redis区别，<strong>一个分布式，一个单机</strong></p>
+<h3 id="HashMap-为什么不安全，ConcurrentHashMap"><a href="#HashMap-为什么不安全，ConcurrentHashMap" class="headerlink" title="HashMap 为什么不安全，ConcurrentHashMap"></a>HashMap 为什么不安全，ConcurrentHashMap</h3><p>当然不安全</p>
+<ul>
+<li>两个<strong>同时put</strong>，应该用链表的，会被覆盖</li>
+<li><strong>get和put</strong>同时，这时候rehash了，就get null了</li>
+</ul>
+<p>ConcurrentHashMap原理（<strong>synchronized</strong>锁桶数组上的节点）（<strong>自旋+CAS</strong>避免不必要的锁）</p>
+<ul>
+<li>CAS+自旋 初始化数组</li>
+<li>CAS （散列到的节点是空，CAS写入）</li>
+<li>CAS+synchronized （进行扩容）</li>
+<li>synchronized（正常写入数据）</li>
+</ul>
+<h3 id="进程和线程的区别"><a href="#进程和线程的区别" class="headerlink" title="进程和线程的区别"></a>进程和线程的区别</h3><ul>
+<li>进程（JVM进程）<ul>
+<li>多核CPU，同时刻</li>
+</ul>
+</li>
+<li>线程<ul>
+<li>多个子任务通过事件片轮转，不同时刻</li>
+<li>Java虚拟机：<ul>
+<li>共享资源：堆、方法区</li>
+<li>线程：程序计数器、栈</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="线程的生命周期和状态？"><a href="#线程的生命周期和状态？" class="headerlink" title="线程的生命周期和状态？"></a>线程的生命周期和状态？</h3><p><strong>6个状态</strong></p>
+<ul>
+<li>正常：<ul>
+<li>new，run，terminate</li>
+</ul>
+</li>
+<li>wait、sleep、lock</li>
+</ul>
+<h3 id="sleep-和-wait-的区别"><a href="#sleep-和-wait-的区别" class="headerlink" title="sleep 和 wait 的区别"></a>sleep 和 wait 的区别</h3><p>sleep：线程，不释放锁</p>
+<p>wait：对象，释放锁</p>
+<h3 id="ThreadLocal与Synchronized区别"><a href="#ThreadLocal与Synchronized区别" class="headerlink" title="ThreadLocal与Synchronized区别"></a>ThreadLocal与Synchronized区别</h3><p>线程副本；加锁</p>
+<p>空间换时间；时间换空间</p>
+<p>Synchronized失去了并发性。</p>
+<h3 id="ThreadLocal-的实现原理？线程安全"><a href="#ThreadLocal-的实现原理？线程安全" class="headerlink" title="ThreadLocal 的实现原理？线程安全"></a>ThreadLocal 的实现原理？线程安全</h3><ul>
+<li>ThreadLocalMap：弱引用（ThreadLocal），强引用（局部变量本身）</li>
+<li>斐波那契散列，开放定址法，扩容（先清理，再判断是否需要扩容）</li>
+<li>线程不安全，弱引用没了，强引用还在。记得remove</li>
+</ul>
+<h3 id="Java-内存模型（JMM）"><a href="#Java-内存模型（JMM）" class="headerlink" title="Java 内存模型（JMM）"></a>Java 内存模型（JMM）</h3><p>抽象模型，主存与本地内存</p>
+<p>并发问题：可见性（volitile），原子性（synchronized），有序性（volitile）</p>
+<p>指令重排，happens-before</p>
+<h3 id="Volitile"><a href="#Volitile" class="headerlink" title="Volitile"></a>Volitile</h3><p><strong>可见性</strong>：读写屏障</p>
+<p><strong>有序性</strong>：禁止指令重排</p>
+<h3 id="synchronized和volatile的区别"><a href="#synchronized和volatile的区别" class="headerlink" title="synchronized和volatile的区别"></a>synchronized和volatile的区别</h3><p>代码块，方法，类（原子）</p>
+<p>有序性（volatile）</p>
+<h3 id="synchronized实现原理？可重入？锁升级？"><a href="#synchronized实现原理？可重入？锁升级？" class="headerlink" title="synchronized实现原理？可重入？锁升级？"></a>synchronized实现原理？可重入？锁升级？</h3><p><strong>实现原理（可重入）</strong></p>
+<ul>
+<li>ObjectMonitor：CAS获取Owner，_recursions ++（可重入的），_EntryList</li>
+</ul>
+<p><strong>锁升级</strong></p>
+<ul>
+<li><p>对象头的Mark Word</p>
+</li>
+<li><p>无锁，偏向锁（长时间同一线程获取锁），轻量锁（锁在不同时刻，不涉及上下文切换），重量锁（）</p>
+</li>
+<li><p>流程</p>
+<ul>
+<li>偏向锁（记下这个线程ID）</li>
+<li>—-（CAS修改线程ID失败）—-&gt; 轻量锁</li>
+<li>—-（自旋获取锁，避免立即进入阻塞）—–&gt;  重量级锁</li>
+</ul>
+</li>
+</ul>
+<h3 id="ReentrantLock和Synchronized区别"><a href="#ReentrantLock和Synchronized区别" class="headerlink" title="ReentrantLock和Synchronized区别"></a>ReentrantLock和Synchronized区别</h3><ul>
+<li>公平锁（FIFO）和非公平锁；非公平锁</li>
+<li>AQS；底层</li>
+</ul>
+<h3 id="CAS和ABA"><a href="#CAS和ABA" class="headerlink" title="CAS和ABA"></a>CAS和ABA</h3><p>乐观锁（相比之下synchronized是悲观锁）</p>
+<p>A改为B，又改为A，CAS操作线程<strong>无法知晓该位置的值已经被修改过</strong>了（<strong>改进：通过版本号</strong>）</p>
+<h2 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h2><ul>
+<li><p>好处</p>
+<ul>
+<li><strong>降低资源消耗</strong>：重复利用已创建的线程</li>
+<li><strong>提高响应速度</strong>：任务到达时，无需等待线程创建</li>
+<li><strong>提高线程的可管理性</strong>：线程是稀缺资源，使用线程进行统一的分配、调优和监控</li>
+<li><strong>提供更多更强大的功能</strong>：ScheduledThreadPoolExecutor</li>
+</ul>
+</li>
+<li><p>应用（大营销）</p>
+<ul>
+<li>项目背景：抽奖是高并发的，需要快速响应用户请求，（聚合查询奖品信息；风控、抽奖计算、实名验证并行计算；扫描task表）</li>
+<li>核心线程数：cpu核的两倍，即云服务器4核 * 2&#x3D;8（有很多网络通信，数据库操作，所以是IO密集性任务，有较多的空闲线程）</li>
+<li>最大线程数：8 * 2 &#x3D;16 </li>
+<li>阻塞队列：SynchronousQueue（提交后立即交给等待的线程处理，提高响应速度）</li>
+<li>拒绝策略：CallerRunsPolicy（由调用线程来执行该任务，保证了任务能成功执行）</li>
+</ul>
+</li>
+</ul>
+<h3 id="线程池工作流程"><a href="#线程池工作流程" class="headerlink" title="线程池工作流程"></a>线程池工作流程</h3><p>核心线程—&gt; 任务队列 —&gt; 核心队列 —&gt;拒绝策略</p>
+<ul>
+<li>用start：run， start</li>
+<li>是否需要返回值：execute，submit</li>
+</ul>
+<h3 id="线程池CompletableFuture"><a href="#线程池CompletableFuture" class="headerlink" title="线程池CompletableFuture"></a>线程池CompletableFuture</h3><ul>
+<li>添加任务：runAsync（参数：runnable，线程池）</li>
+<li>编排：thenCombine，thenAccept</li>
+<li>等待所有任务执行完毕：allof().join()</li>
+</ul>
+<h3 id="MySQL存储引擎（Innodb，MyISAM）"><a href="#MySQL存储引擎（Innodb，MyISAM）" class="headerlink" title="MySQL存储引擎（Innodb，MyISAM）"></a>MySQL存储引擎（Innodb，MyISAM）</h3><p>选Innodb（事务，行级锁，redo Log和Undo Log）</p>
+<h3 id="三大日志"><a href="#三大日志" class="headerlink" title="三大日志"></a>三大日志</h3><ul>
+<li>binlog（用于主从复制）<ul>
+<li>索引文件（所有日志文件的顺序），<strong>日志文件</strong>（所有DDL、DML）</li>
+</ul>
+</li>
+<li>redolog<ul>
+<li>物理数据页的修改操作</li>
+</ul>
+</li>
+</ul>
+<h3 id="更新语句的两阶段提交"><a href="#更新语句的两阶段提交" class="headerlink" title="更新语句的两阶段提交"></a>更新语句的两阶段提交</h3><p>保证两个日志的逻辑一致</p>
+<ul>
+<li><p>流程</p>
+<ul>
+<li><p>写入redolog，并将状态修改为prepare</p>
+</li>
+<li><p>写入binlog</p>
+</li>
+<li><p>提交事务，并在redo log中设置为commit</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="MySQL执行一条SQL语句的流程"><a href="#MySQL执行一条SQL语句的流程" class="headerlink" title="MySQL执行一条SQL语句的流程"></a>MySQL执行一条SQL语句的流程</h3><ul>
+<li>连接器：开始处理这个请求</li>
+<li>解析器：检查语句是否符合SQL语法规则</li>
+<li>优化器：索引</li>
+<li>执行器：通过具体的存储引擎，进行数据读写</li>
+</ul>
+<h3 id="定位慢SQL"><a href="#定位慢SQL" class="headerlink" title="定位慢SQL"></a>定位慢SQL</h3><ul>
+<li>“SET GLOBAL slow_query_log”；mysqldumpslow去日志文件里找</li>
+<li>Explain分析如何执行SQL语句的<ul>
+<li>索引问题：possiable_keys（能用到的索引），key（实际用到的索引）</li>
+<li>IO开销问题：rows（要遍历的行数），filtered（有效行数&#x2F;扫描行数比值）字段来查看</li>
+</ul>
+</li>
+<li>优化<ul>
+<li>避免不必要的列</li>
+<li>索引优化<ul>
+<li>覆盖索引（最左前缀原则，必须包含最左的）</li>
+<li>适当使用前缀索引</li>
+<li>避免使用&lt;&gt;</li>
+</ul>
+</li>
+<li>分页优化<ul>
+<li>延迟关联（先检索出需要的id）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="MySQL索引有哪些"><a href="#MySQL索引有哪些" class="headerlink" title="MySQL索引有哪些"></a>MySQL索引有哪些</h3><ul>
+<li>主键（id），唯一索引（幂等id），普通索引</li>
+<li>聚簇索引（主键，直接指向内存地址），非聚簇索引（普通索引，叶子节点存的主键ID，需要回表）</li>
+</ul>
+<h3 id="雪花算法"><a href="#雪花算法" class="headerlink" title="雪花算法"></a>雪花算法</h3><p>相比UUID64位更小，时间戳也有一定的连续性</p>
+<p>分布式唯一ID（64位）hutool</p>
+<ul>
+<li>时间戳（41）</li>
+<li>机器表示（workid，datacenter）（10）</li>
+<li>自增序列（12）</li>
+</ul>
+<h3 id="MySQL加索引需要注意些什么"><a href="#MySQL加索引需要注意些什么" class="headerlink" title="MySQL加索引需要注意些什么"></a>MySQL加索引需要注意些什么</h3><ul>
+<li>选择合适的列<ul>
+<li>经常作为查询条件、排序条件、分组条件的列是建立索引的好候选（where，order by，group by）</li>
+<li>频繁更新的不要建立索引</li>
+<li>区分度低的（例如性别）</li>
+</ul>
+</li>
+<li>避免过多的索引<ul>
+<li>每个索引都需要占用额外的磁盘空间</li>
+<li>更新，所有的索引都需要更新</li>
+</ul>
+</li>
+<li>利用前缀索引和索引列的顺序</li>
+</ul>
+<h3 id="索引失效的情况"><a href="#索引失效的情况" class="headerlink" title="索引失效的情况"></a>索引失效的情况</h3><p>Where里函数，&lt;&gt;，最左匹配，or两边索引不一致</p>
+<h3 id="MySQL为什么用B-树"><a href="#MySQL为什么用B-树" class="headerlink" title="MySQL为什么用B+树"></a>MySQL为什么用B+树</h3><ul>
+<li>尽量减少读写次数（相比搜索树）</li>
+<li>只在叶子节点存数据（相比B树会在每个节点存数据，那么能存的东西就少了）；叶子结点有序链表，范围查询更方便</li>
+</ul>
+<h3 id="MySQL有哪些锁"><a href="#MySQL有哪些锁" class="headerlink" title="MySQL有哪些锁"></a>MySQL有哪些锁</h3><ul>
+<li>读写锁<ul>
+<li>读锁：for share mode（读锁是能获取的）</li>
+<li>写锁：for update mode（读写锁都不能获取）</li>
+</ul>
+</li>
+<li>行锁，表锁<ul>
+<li>行锁：记录锁，间隙锁、临键锁（用来坚决欢度）</li>
+<li>表锁：意向锁</li>
+</ul>
+</li>
+<li>乐观锁、悲观锁<ul>
+<li>乐观锁：MVCC（冲突提交才检查）</li>
+<li>悲观锁：for update</li>
+</ul>
+</li>
+</ul>
+<h3 id="MySQL事务的四个特性"><a href="#MySQL事务的四个特性" class="headerlink" title="MySQL事务的四个特性"></a>MySQL事务的四个特性</h3><ul>
+<li><p>A（undo log）</p>
+</li>
+<li><p>D（redo log）</p>
+</li>
+<li><p>I（MVCC）</p>
+</li>
+<li><p>C</p>
+</li>
+</ul>
+<h3 id="MySQL事务的隔离级别"><a href="#MySQL事务的隔离级别" class="headerlink" title="MySQL事务的隔离级别"></a>MySQL事务的隔离级别</h3><p>脏读（读取未提交的数据），不可重复读（另一个事务修改了值并提交，两次相同查询结果不同），幻读（另一个事务插入，发现多了一条数据）。</p>
+<p>读未提交，读已提交（MVCC，每次读取生成一个readview），可重复读（MVCC，第一次读取的时候生成一个readview），串行化（加锁）。</p>
+<h3 id="MySQL事务中MVCC的实现"><a href="#MySQL事务中MVCC的实现" class="headerlink" title="MySQL事务中MVCC的实现"></a>MySQL事务中MVCC的实现</h3><ul>
+<li>版本链<ul>
+<li>隐藏列：创建该版本的事务ID，undo指针</li>
+</ul>
+</li>
+<li>ReadView<ul>
+<li>作用：确定哪些版本的行记录是可见的</li>
+<li>四个属性：创建该ReadView的事务id，活跃id列表，最小事务id，最大事务id</li>
+<li>下面的情况是可见（也就是已经提交了）：比最小事务id小；在最小事务id和最大事务id之间且不在活跃id中</li>
+</ul>
+</li>
+</ul>
+<h3 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h3><p>单表单库数据量过大，连接数量过大，导致性能下降，做的一个负载均衡。</p>
+<p><strong>水平分库分表</strong>（用户信息，发奖订单，积分订单，活动订单），垂直分库分表</p>
+<h3 id="不停机扩容"><a href="#不停机扩容" class="headerlink" title="不停机扩容"></a>不停机扩容</h3><ol>
+<li>在线双写，查询走旧库（进行数据的同步和校验）</li>
+<li>在线双写，查询走新库</li>
+<li>过一段时间，确定没有请求之后，就可以下线老库</li>
+</ol>
+<h3 id="Redis用来干嘛"><a href="#Redis用来干嘛" class="headerlink" title="Redis用来干嘛"></a>Redis用来干嘛</h3><ul>
+<li>缓存<ul>
+<li>String：各种东西，比如奖品，验证码</li>
+<li>Hash：getMap，奖品概率查找表</li>
+<li>List：所有的线程池信息</li>
+</ul>
+</li>
+<li>阻塞队列+延时队列<ul>
+<li>库存趋势更新到mysql，不稳定</li>
+<li>阻塞队列（RBlockingQueue）：线程安全，在队列满或空时阻塞线程</li>
+<li>延时队列（RDelayedQueue）：在一个延迟时间后，才会被放入RBlockingQueue</li>
+</ul>
+</li>
+<li>分布式锁<ul>
+<li>库存扣减，防止超卖</li>
+</ul>
+</li>
+<li>发布，订阅<ul>
+<li>线程池修改</li>
+<li>发布：redissonClient.getTopic.pulish</li>
+<li>订阅：redissonClient.getTopic.addListener</li>
+</ul>
+</li>
+</ul>
+<h3 id="阻塞队列和延时队列的实现"><a href="#阻塞队列和延时队列的实现" class="headerlink" title="阻塞队列和延时队列的实现"></a>阻塞队列和延时队列的实现</h3><p>阻塞队列：lpush，brpop（阻塞）</p>
+<p>延时队列：zset，定期从zset中获取指定时间戳的</p>
+<h3 id="Redis中的常用命令"><a href="#Redis中的常用命令" class="headerlink" title="Redis中的常用命令"></a>Redis中的常用命令</h3><ul>
+<li>基本操作：set，get，decr</li>
+<li>分布式锁：SetIfAbsent，tryLock</li>
+<li>发布订阅：pulish，addListener</li>
+<li>获取Hash或List：getMap，getblockingqueue，getDelayedQueue</li>
+<li>其他：isExists，getLock</li>
+</ul>
+<h3 id="Redis为什么快"><a href="#Redis为什么快" class="headerlink" title="Redis为什么快"></a>Redis为什么快</h3><ul>
+<li>基于内存的数据存储</li>
+<li>单线程模型：避免了线程切换和锁竞争</li>
+<li>IO多路复用<ul>
+<li>select&#x2F;epoll机制，保证了单个线程能处理多个IO读写</li>
+<li>将socket句柄注册进epoll，然后epoll帮你监听哪些socket上有消息到达</li>
+<li>相比于read请求一直阻塞；只有epoll调用才会阻塞，收发客户消息是不会阻塞的</li>
+</ul>
+</li>
+<li>高效的数据结构</li>
+</ul>
+<h3 id="Redis-的持久化方式？RDB-和-AOF-的区别？Redis-宕机哪种恢复的比较快？"><a href="#Redis-的持久化方式？RDB-和-AOF-的区别？Redis-宕机哪种恢复的比较快？" class="headerlink" title="Redis 的持久化方式？RDB 和 AOF 的区别？Redis 宕机哪种恢复的比较快？"></a>Redis 的持久化方式？RDB 和 AOF 的区别？Redis 宕机哪种恢复的比较快？</h3><p><strong>两个持久化方式</strong></p>
+<ul>
+<li>RDB（Redis DataBase）：异步创建数据集的快照，不会阻塞<ul>
+<li>bgsava</li>
+<li>redis.conf中配置命令，发生多少次变更，多少秒后触发一次RDB</li>
+</ul>
+</li>
+<li>AOF（Append only file）：追加每个写操作到AOF文件中<ul>
+<li>流程1:将所有写命令追加到AOF buffer中</li>
+<li>流程2:持久化sync<ul>
+<li>每条写指令&#x2F;每秒&#x2F;只在Redis关闭时执行</li>
+</ul>
+</li>
+<li>流程3:重写<ul>
+<li>直接将Redis重写成一系列写命令</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>两者区别</strong></p>
+<p>RDB，文件小，对性能影响较小，但是容易造成数据丢失（性能是首要指标）</p>
+<p>AOF，文件大，实时性好，对性能影响较大（尽可能减少数据丢失）</p>
+<p>混合持久化：在AOF重写的同时，生成一份RDB快照，这份快照作为AOF文件的一部分，最后再附加新的写入命令。</p>
+<h3 id="什么是缓存击穿、缓存穿透、缓存雪崩"><a href="#什么是缓存击穿、缓存穿透、缓存雪崩" class="headerlink" title="什么是缓存击穿、缓存穿透、缓存雪崩"></a>什么是缓存击穿、缓存穿透、缓存雪崩</h3><p><strong>缓存击穿</strong></p>
+<p>热点数据在过期的那一刻，直达数据库。</p>
+<p>解决方案</p>
+<ul>
+<li><p>发现缓存中没有，对A这个数据加锁，拿到缓存再返回给用户</p>
+</li>
+<li><p>不断刷新过期时间</p>
+</li>
+</ul>
+<p><strong>缓存穿透</strong></p>
+<p>查询根本不存在的数据，那么也会直达数据库</p>
+<p>解决方案</p>
+<ul>
+<li>哪怕不存在的数据，也缓存空值（适用数据缺失较少场景，有数据不一致的风险）<ul>
+<li>需要设置较短的过期时间</li>
+</ul>
+</li>
+<li>加一个布隆过滤器（适用海量数据的场景）<ul>
+<li>告诉我们key一定不存在或者可能存在</li>
+<li>也就是多个hash映射，只要有一个为0，就说明不存在</li>
+</ul>
+</li>
+</ul>
+<p><strong>缓存雪崩</strong></p>
+<p>缓存大量过期，或者缓存服务器宕机</p>
+<p>解决方案</p>
+<ul>
+<li>集群部署</li>
+<li>使用多级缓存（Redis不可用了，也可以用本地缓存）</li>
+<li>设置不同的过期时间</li>
+</ul>
+<h3 id="如何保证数据的一致性"><a href="#如何保证数据的一致性" class="headerlink" title="如何保证数据的一致性"></a>如何保证数据的一致性</h3><p> 先写MySQL，再删除Redis。只会有一次不一致的情况，对于不是强一致性的业务，可以容忍。</p>
+<ul>
+<li>为什么删除缓存：删除缓存比更新缓存快的多</li>
+<li>为什么先更数据库：MySQL的IO慢的多，容易在Redis中产生脏数据</li>
+</ul>
+<p>假如对一致性要求很高呢（缓存删除失败，并发导致写入了脏数据）</p>
+<ul>
+<li>引入消息队列保证缓存被删除</li>
+<li>设置缓存过期时间兜底</li>
+</ul>
+<h3 id="怎么处理Redis中的热Key和大Key"><a href="#怎么处理Redis中的热Key和大Key" class="headerlink" title="怎么处理Redis中的热Key和大Key"></a>怎么处理Redis中的热Key和大Key</h3><p>QPS集中在特定的Key，那么就是热Key。</p>
+<p>如何处理</p>
+<ul>
+<li>把Key打到不同的Redis实例</li>
+<li>二级缓存</li>
+</ul>
+<h3 id="Redis主从复制，哨兵，集群"><a href="#Redis主从复制，哨兵，集群" class="headerlink" title="Redis主从复制，哨兵，集群"></a>Redis主从复制，哨兵，集群</h3><p>高可用：主从复制（手动切换），哨兵（自动切换，哨兵节点，选举一个负责故障转移）</p>
+<p>数据分区：集群（哈希槽，keys映射到实例）</p>
+<h3 id="消息队列的三个好处"><a href="#消息队列的三个好处" class="headerlink" title="消息队列的三个好处"></a>消息队列的三个好处</h3><p><strong>异步处理，减少响应时间（以发奖为例）</strong></p>
+<p>请求在写入消息队列就立即返回给用户了</p>
+<p><strong>削峰，限流（以发奖为例）</strong></p>
+<p>把要做的事务存储在消息队列中（压力转嫁到MQ），然后后端再慢慢根据自己的能力去消费这些消息，避免直接把后端服务打掉。</p>
+<p><strong>解耦</strong></p>
+<p>新增业务，只要对该类消息感兴趣，只需订阅该消息</p>
+<h3 id="为什么选择Kafka（send，KafkaListener）"><a href="#为什么选择Kafka（send，KafkaListener）" class="headerlink" title="为什么选择Kafka（send，KafkaListener）"></a>为什么选择Kafka（send，KafkaListener）</h3><p>极致的性能，超高吞吐量（百万级）；可以实现高可用，可以做到0消息丢失的情况；生态系统的兼容性非常好</p>
+<p>缺点，<strong>消息重复消费</strong>，造成轻微的影响。</p>
+<h3 id="保证Kafka的消费顺序"><a href="#保证Kafka的消费顺序" class="headerlink" title="保证Kafka的消费顺序"></a>保证Kafka的消费顺序</h3><p>Kafka一个topic里包含多个partition，只保证partition分区中的消息有序。所以send的时候指定分区（或者使用对象id作为key）。</p>
+<h3 id="保证Kafka的消息不丢失"><a href="#保证Kafka的消息不丢失" class="headerlink" title="保证Kafka的消息不丢失"></a>保证Kafka的消息不丢失</h3><p><strong>生产者丢失消息</strong></p>
+<ol>
+<li>send函数的返回值是ListenableFuture，添加回调函数，判定消息结果。</li>
+<li>设置重试次数稍微大一点</li>
+<li>将消息发送之前，写入task表，如果发送失败，定时任务去补偿。</li>
+</ol>
+<p><strong>消费者丢失消息</strong></p>
+<p>偏移量，当消费者自动提交了偏移量，但是还没消费就挂掉了。改成手动提交偏移量。</p>
+<p><strong>Kafka丢失消息</strong></p>
+<p>Kafka挂掉，多副本机制，但消息还没有同步。</p>
+<p>使用acks&#x3D;all，最安全的，但是延迟会很高</p>
+<h3 id="Kafka如何保证消息不重复消费"><a href="#Kafka如何保证消息不重复消费" class="headerlink" title="Kafka如何保证消息不重复消费"></a>Kafka如何保证消息不重复消费</h3><ul>
+<li>mysql幂等校验</li>
+<li>最根本的原因，已经消费的数据没有成功提交offset，拉取到消息再提交</li>
+</ul>
+<h3 id="网络模型"><a href="#网络模型" class="headerlink" title="网络模型"></a>网络模型</h3><p>应用层：HTTP、DNS（应用把应用数据传给下一层）</p>
+<p>传输层：TCP、UDP</p>
+<p>网络层：MAC</p>
+<p>网络接口层</p>
+<h3 id="输入HTTP流程"><a href="#输入HTTP流程" class="headerlink" title="输入HTTP流程"></a>输入HTTP流程</h3><ol>
+<li>HTTP get&#x2F;post</li>
+<li>DNS查询IP地址（根，顶级，权威）</li>
+<li>TCP三次握手</li>
+<li>ARP，获取MAC地址（广播，ARP缓存）</li>
+</ol>
+<h3 id="说说DNS的解析过程"><a href="#说说DNS的解析过程" class="headerlink" title="说说DNS的解析过程"></a>说说DNS的解析过程</h3><p>查看本地服务器的缓存，不然就走根服务器、顶级服务器、权限域名</p>
+<h3 id="HTTP1-0-1-1-2-0-3-0"><a href="#HTTP1-0-1-1-2-0-3-0" class="headerlink" title="HTTP1.0  1.1  2.0 3.0"></a>HTTP1.0  1.1  2.0 3.0</h3><p>短链接，长链接，多路复用，快速UDP链接</p>
+<h3 id="HTTP和HTTPS"><a href="#HTTP和HTTPS" class="headerlink" title="HTTP和HTTPS"></a>HTTP和HTTPS</h3><p>加了SSL&#x2F;TLS协议（非对称加密）</p>
+<ul>
+<li>非对称加密：服务端向客户端发送数字证书公钥，生成会话密钥</li>
+<li>双方用会话密钥加密通话内容</li>
+</ul>
+<h3 id="TCP三次握手，四次挥手"><a href="#TCP三次握手，四次挥手" class="headerlink" title="TCP三次握手，四次挥手"></a>TCP三次握手，四次挥手</h3><p>SYN（Synchronize，连接请求），seq（序列号），ack（应答）</p>
+<p>FIN（finish请求），多了一次等待数据完成，2MSL</p>
+<h3 id="堆和栈"><a href="#堆和栈" class="headerlink" title="堆和栈"></a>堆和栈</h3><p>线程：栈帧（局部变量，返回）</p>
+<p>堆：类，字符串常量</p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/DDD/DDD1%E6%A6%82%E5%BF%B5%E7%90%86%E8%AE%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/DDD/DDD1%E6%A6%82%E5%BF%B5%E7%90%86%E8%AE%BA/" class="post-title-link" itemprop="url">【1开发】【架构】DDD</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="MVC的缺点"><a href="#MVC的缺点" class="headerlink" title="MVC的缺点"></a>MVC的缺点</h2><p>三层结构：<strong>Service+数据模型</strong>的开发模式，扁平的平铺的代码开发。加上贫血模型（只允许getter&#x2F;setter）的开发模式，让行为对象的不断<strong>交叉使用</strong>。</p>
+<p>大杂烩，适用于前期简单快速的开发，后期不可维护。</p>
+<p>所以，我们要用DDD，通过聚合、领域服务，不与别人耦合在一块。把原来的<strong>众多Service+数据模型</strong>，拆分为独立的有边界的领域模块，每个领域内创建自己的对象、仓储等等。<strong>DDD 前期需要付出更多的设计成本，但对于软件的长周期迭代，这样的好处是非常大的。</strong></p>
+<h2 id="DDD的概念"><a href="#DDD的概念" class="headerlink" title="DDD的概念"></a>DDD的概念</h2><h3 id="充血模型"><a href="#充血模型" class="headerlink" title="充血模型"></a>充血模型</h3><p>定义：充血可以是整个包结构，一个包下包括了用于实现此包 Service 服务所需的各类零部件（模型、仓储、工厂），也可以被看做充血模型。</p>
+<h3 id="领域模型"><a href="#领域模型" class="headerlink" title="领域模型"></a>领域模型</h3><p>领域模型 &#x3D;  领域对象（实体、值对象、聚合）+仓储+领域服务</p>
+<ul>
+<li><p>领域对象</p>
+<ul>
+<li><p>实体：状态属性+行为动作（功能）</p>
+</li>
+<li><p>值对象：不可变</p>
+</li>
+<li><p>聚合：一组对象（事务中包含的所有实体）</p>
+</li>
+</ul>
+</li>
+<li><p>仓储</p>
+<ul>
+<li>依赖倒置，不直接引入外部的服务，而是通过定义借口的方式</li>
+</ul>
+</li>
+</ul>
+<h2 id="DDD四色建模（风暴事件）"><a href="#DDD四色建模（风暴事件）" class="headerlink" title="DDD四色建模（风暴事件）"></a>DDD四色建模（风暴事件）</h2><p>怎么建模呢，我们需要规范DDD的操作手段，让各个伙伴，在同一语言下完成系统建模。</p>
+<p><strong>流程：</strong></p>
+<ul>
+<li>先画一下用例图</li>
+<li>花费大量的时间，一起去找领域事件</li>
+<li>然后，添加决策命令、领域对象、业务流程串联领域对象</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240728110317998.png" alt="image-20240728110317998"></p>
+<p>操作手段（专有名词）：</p>
+<ul>
+<li>决策命令：用户发起的行为动作</li>
+<li>领域事件：完成态</li>
+<li>业务流程：</li>
+<li>领域对象：实体对象、值对象、聚合对象</li>
+<li>只读模型：数据库读操作</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/Dynamic-thread-pool/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/Dynamic-thread-pool/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A01/" class="post-title-link" itemprop="url">【1开发】动态线程池组件记录1 - 线程池调研</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">动态线程池组件</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h1><blockquote>
+<p>学习资料：Java线程池实现原理及其在美团业务中的实践</p>
+</blockquote>
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><h2 id="线程池（是什么）"><a href="#线程池（是什么）" class="headerlink" title="线程池（是什么）"></a>线程池（是什么）</h2><p>池化思想管理线程，好处</p>
+<ul>
+<li><strong>降低资源消耗</strong>：重复利用已创建的线程</li>
+<li><strong>提高响应速度</strong>：任务到达时，无需等待线程创建</li>
+<li><strong>提高线程的可管理性</strong>：线程是稀缺资源，使用线程进行统一的分配、调优和监控</li>
+<li><strong>提供更多更强大的功能</strong>：ScheduledThreadPoolExecutor</li>
+</ul>
+<h2 id="线程池解决的问题（为什么）"><a href="#线程池解决的问题（为什么）" class="headerlink" title="线程池解决的问题（为什么）"></a>线程池解决的问题（为什么）</h2><p>线程是稀缺资源，不能够确定在任意时刻中，有多少任务需要执行，有多少资源需要投入</p>
+<ul>
+<li>频繁申请&#x2F;销毁资源，带来额外的消耗</li>
+<li>对资源无限申请，易引发系统资源耗尽的风险</li>
+</ul>
+<p>池化思想：</p>
+<ul>
+<li>内存池</li>
+<li>连接池</li>
+<li>实例池</li>
+</ul>
+<h1 id="线程池核心设计与实现"><a href="#线程池核心设计与实现" class="headerlink" title="线程池核心设计与实现"></a>线程池核心设计与实现</h1><h2 id="总体设计"><a href="#总体设计" class="headerlink" title="总体设计"></a>总体设计</h2><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154427652.png" alt="image-20240702154427652" style="zoom:50%;" />
+
+<ul>
+<li>顶层接口Exector：<ul>
+<li>任务提交和任务执行解藕</li>
+<li>用户只需要将Runnable提交到Executor中</li>
+</ul>
+</li>
+<li>ExecutorService：<ul>
+<li>补充执行任务的能力，生成Future</li>
+<li>管控线程池，停止线程池的运行</li>
+</ul>
+</li>
+<li>AbstractExecutorService：<ul>
+<li>抽象类，串联执行任务的流程</li>
+</ul>
+</li>
+<li>ThreadPoolExecutor<ul>
+<li>实现类</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154449505.png" alt="image-20240702154449505"></p>
+<p>线程池内部实际上构建了一个生产者消费者模型，将线程和任务两者解藕，缓冲任务，复用线程。</p>
+<p>任务管理（生产者）</p>
+<ul>
+<li>直接申请线程执行任务</li>
+<li>缓冲队列中等待线程执行</li>
+<li>拒绝该任务</li>
+</ul>
+<p>线程管理（消费者）</p>
+<ul>
+<li>它们被统⼀维护在线程池内，根据任务请求进⾏线程的分配</li>
+</ul>
+<h2 id="生命周期管理"><a href="#生命周期管理" class="headerlink" title="生命周期管理"></a>生命周期管理</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="type">AtomicInteger</span> <span class="variable">ctl</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicInteger</span>(ctlOf(RUNNING, <span class="number">0</span>));</span><br></pre></td></tr></table></figure>
+
+<p>维护两个值：运行状态（runState），工作线程数量（workerCount）</p>
+<p>运行状态有五种：</p>
+<ul>
+<li>RUNNING：正常运行</li>
+<li>SHUTDOWN：不再接收新任务，能继续处理</li>
+<li>STOP：不接受新任务，中断线程</li>
+<li>TIDYING：</li>
+<li>TERMINATED</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154505795.png" alt="image-20240702154505795"></p>
+<h2 id="任务执行机制"><a href="#任务执行机制" class="headerlink" title="任务执行机制"></a>任务执行机制</h2><h3 id="任务调度"><a href="#任务调度" class="headerlink" title="任务调度"></a>任务调度</h3><ul>
+<li>先看核心线程有没有满</li>
+<li>再看阻塞队列</li>
+<li>最后看最大线程数</li>
+<li>都不行，就拒绝</li>
+</ul>
+<h3 id="任务缓冲（阻塞队列）"><a href="#任务缓冲（阻塞队列）" class="headerlink" title="任务缓冲（阻塞队列）"></a>任务缓冲（阻塞队列）</h3><p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154521689.png" alt="image-20240702154521689"></p>
+<h3 id="任务申请"><a href="#任务申请" class="headerlink" title="任务申请"></a>任务申请</h3><p>⼀种是任务直接由新创建的线程执⾏。</p>
+<p>另⼀种是线程从任务队列中获取任务然后执⾏，执⾏完任务的空闲线程会再次去从队列中申请任务再去执⾏。</p>
+<h3 id="任务拒绝"><a href="#任务拒绝" class="headerlink" title="任务拒绝"></a>任务拒绝</h3><p>任务队列满，线程池满，采取任务拒绝策略</p>
+<ul>
+<li>丢弃任务，抛出异常</li>
+<li>丢弃任务，不抛出异常</li>
+<li>丢弃最前面的任务，提交被拒绝的任务</li>
+<li>由调用线程处理该任务</li>
+</ul>
+<h2 id="Worker线程管理"><a href="#Worker线程管理" class="headerlink" title="Worker线程管理"></a>Worker线程管理</h2><p>thread是在调⽤构造⽅法时通过ThreadFactory来创建的线程，可以⽤来执⾏任务；firstTask⽤它来保存传⼊的第⼀个任务，这个任务可以有也可以为null。如果这个值是⾮空的，那么线程就会在启动初期⽴即执⾏这个任务，也就对应核⼼线程创建时的情况；如果这个值是null，那么就需要创建⼀个线程去执⾏任务列表（workQueue）中的任务，也就是⾮核⼼线程的创建。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Worker</span> <span class="keyword">extends</span> <span class="title class_">AbstractQueuedSynchronizer</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span>&#123;</span><br><span class="line"> <span class="keyword">final</span> Thread thread;<span class="comment">//Worker持有的线程</span></span><br><span class="line"> Runnable firstTask;<span class="comment">//初始化的任务，可以为null</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154538532.png" alt="image-20240702154538532">Worker集成AQS，独占锁，比如回收场景</p>
+<ul>
+<li>Lock方法一旦获取了锁，代表该线程在执行任务，不能中断回收</li>
+<li>不是独占，空闲，可以回收</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702154555686.png" alt="image-20240702154555686"></p>
+<p>Worker线程执行任务</p>
+<ol>
+<li>while循环不断getTask()方法来获取任务<ol>
+<li>如果getTask为null则跳出循环，销毁线程</li>
+</ol>
+</li>
+<li>判断线程池是否stop</li>
+<li>执行任务</li>
+</ol>
+<h1 id="实践场景"><a href="#实践场景" class="headerlink" title="实践场景"></a>实践场景</h1><h2 id="1-快速响应用户请求"><a href="#1-快速响应用户请求" class="headerlink" title="1 - 快速响应用户请求"></a>1 - 快速响应用户请求</h2><h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>实时请求，⽐如说⽤户要查看⼀个商品的信息，那么我们需要将商品维度的⼀系列信息如商品的价格、优惠、库存、图⽚等等聚合起来，展示给⽤户。</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>不设置队列去缓冲并发任务，调高corePoolSize和maxPoolSize去尽可能创造多的线程快速执⾏任务。</p>
+<h2 id="2-快速处理批量任务"><a href="#2-快速处理批量任务" class="headerlink" title="2 - 快速处理批量任务"></a>2 - 快速处理批量任务</h2><h3 id="描述-1"><a href="#描述-1" class="headerlink" title="描述"></a>描述</h3><p>离线任务，需要快速执行，统计报表</p>
+<h3 id="分析-1"><a href="#分析-1" class="headerlink" title="分析"></a>分析</h3><p>不需要瞬时完成，吞吐量优先。设置队列去缓冲并发任务，调整合适的corePoolSize去设置处理任务的线程数。在这⾥，设置的线程数过多可能还会引发线程上下⽂切换频繁的问题，也会降低处理任务的速度，降低吞吐量。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/Dynamic-thread-pool/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/Dynamic-thread-pool/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A02/" class="post-title-link" itemprop="url">【1开发】动态线程池组件记录2 - 动态线程池的实现</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E5%8A%A8%E6%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">动态线程池组件</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="总流程"><a href="#总流程" class="headerlink" title="总流程"></a>总流程</h1><p>虽然线程池的参数配置有一些规范，但实际场景中，线程池的参数并不好一次就配置好。同时需要做监控处理，知道整个线程的消耗情况，所以需要动态线程池。</p>
+<p>核心流程如下：</p>
+<ul>
+<li>线程池核心信息的获取，核心线程数、最大线程数、活跃线程数、队列类型、队列任务数、队列剩余可用任务数</li>
+<li>设计 Redis 版本的注册中心，通过 SDK 上报方式到 Redis 注册中心，做统一的管理，让各个接入动态线程池的组件都能统一管理。</li>
+<li>通过Redis 的发布订阅能力，通过推送指定的主题，让对应的应用上的 sdk 监听和处置线程池。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240702173453723.png" alt="image-20240702173453723"></p>
+<h2 id="流程1-如何采集应用中的线程池信息"><a href="#流程1-如何采集应用中的线程池信息" class="headerlink" title="流程1 如何采集应用中的线程池信息"></a>流程1 如何采集应用中的线程池信息</h2><p>首先，我们需要一个接口，能实现线程池的配置查询和配置更新</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IDynamicThreadPoolService</span> &#123;</span><br><span class="line"></span><br><span class="line">    List&lt;ThreadPoolConfigEntity&gt; <span class="title function_">queryThreadPoolList</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    ThreadPoolConfigEntity <span class="title function_">queryThreadPoolConfigByName</span><span class="params">(String threadPoolName)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">updateThreadPoolConfig</span><span class="params">(ThreadPoolConfigEntity threadPoolConfigEntity)</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其次，我们需要构建一个bean对象将上述接口注入进应用中。</p>
+<ul>
+<li>拿到应用的applicationContext和所有threadPoolExecutor</li>
+<li>构造DynamicThreadPoolService</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Bean(&quot;dynamicThreadPollService&quot;)</span></span><br><span class="line"><span class="keyword">public</span> DynamicThreadPoolService <span class="title function_">dynamicThreadPollService</span><span class="params">(ApplicationContext applicationContext, Map&lt;String, ThreadPoolExecutor&gt; threadPoolExecutorMap, RedissonClient redissonClient)</span> &#123;</span><br><span class="line">    applicationName = applicationContext.getEnvironment().getProperty(<span class="string">&quot;spring.application.name&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (StringUtils.isBlank(applicationName)) &#123;</span><br><span class="line">        applicationName = <span class="string">&quot;缺省的&quot;</span>;</span><br><span class="line">        logger.warn(<span class="string">&quot;动态线程池，启动提示。SpringBoot 应用未配置 spring.application.name 无法获取到应用名称！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取缓存数据，设置本地线程池配置</span></span><br><span class="line">    Set&lt;String&gt; threadPoolKeys = threadPoolExecutorMap.keySet();</span><br><span class="line">    <span class="keyword">for</span> (String threadPoolKey : threadPoolKeys) &#123;</span><br><span class="line">        <span class="type">ThreadPoolConfigEntity</span> <span class="variable">threadPoolConfigEntity</span> <span class="operator">=</span> redissonClient.&lt;ThreadPoolConfigEntity&gt;getBucket(RegistryEnumVO.THREAD_POOL_CONFIG_PARAMETER_LIST_KEY.getKey() + <span class="string">&quot;_&quot;</span> + applicationName + <span class="string">&quot;_&quot;</span> + threadPoolKey).get();</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> == threadPoolConfigEntity) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="type">ThreadPoolExecutor</span> <span class="variable">threadPoolExecutor</span> <span class="operator">=</span> threadPoolExecutorMap.get(threadPoolKey);</span><br><span class="line">        threadPoolExecutor.setCorePoolSize(threadPoolConfigEntity.getCorePoolSize());</span><br><span class="line">        threadPoolExecutor.setMaximumPoolSize(threadPoolConfigEntity.getMaximumPoolSize());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">DynamicThreadPoolService</span>(applicationName, threadPoolExecutorMap);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>启动自动配置 resources&#x2F;META-INF&#x2F;spring.factories（spi）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">org.springframework.boot.autoconfigure.EnableAutoConfiguration=cn.czh.middleware.dynamic.thread.pool.sdk.config.DynamicThreadPoolAutoConfig</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="流程2-线程池数据上报"><a href="#流程2-线程池数据上报" class="headerlink" title="流程2 线程池数据上报"></a>流程2 线程池数据上报</h2><p>设置定时任务：线程池配置信息上报到Redis配置中心</p>
+<blockquote>
+<p>小bug：admin和组件里的涉及到redis解码，包名要保持一致</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">reportThreadPoolConfigParameter</span><span class="params">(ThreadPoolConfigEntity threadPoolConfigEntity)</span> &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">cacheKey</span> <span class="operator">=</span> RegistryEnumVO.THREAD_POOL_CONFIG_PARAMETER_LIST_KEY.getKey() + <span class="string">&quot;_&quot;</span> + threadPoolConfigEntity.getAppName() + <span class="string">&quot;_&quot;</span> + threadPoolConfigEntity.getThreadPoolName();</span><br><span class="line">    RBucket&lt;ThreadPoolConfigEntity&gt; bucket = redissonClient.getBucket(cacheKey);</span><br><span class="line">    bucket.set(threadPoolConfigEntity, Duration.ofDays(<span class="number">30</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="流程3-订阅发布消息，变更线程池"><a href="#流程3-订阅发布消息，变更线程池" class="headerlink" title="流程3 订阅发布消息，变更线程池"></a>流程3 订阅发布消息，变更线程池</h2><p>监听消息，更新线程池配置，重新上报。</p>
+<p>具体的线程池更新，直接调用线程池的set函数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onMessage</span><span class="params">(CharSequence charSequence, ThreadPoolConfigEntity threadPoolConfigEntity)</span> &#123;</span><br><span class="line">    logger.info(<span class="string">&quot;动态线程池，调整线程池配置。线程池名称:&#123;&#125; 核心线程数:&#123;&#125; 最大线程数:&#123;&#125;&quot;</span>, threadPoolConfigEntity.getThreadPoolName(), threadPoolConfigEntity.getPoolSize(), threadPoolConfigEntity.getMaximumPoolSize());</span><br><span class="line">    dynamicThreadPoolService.updateThreadPoolConfig(threadPoolConfigEntity);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 更新后上报最新数据</span></span><br><span class="line">    List&lt;ThreadPoolConfigEntity&gt; threadPoolConfigEntities = dynamicThreadPoolService.queryThreadPoolList();</span><br><span class="line">    registry.reportThreadPool(threadPoolConfigEntities);</span><br><span class="line"></span><br><span class="line">    <span class="type">ThreadPoolConfigEntity</span> <span class="variable">threadPoolConfigEntityCurrent</span> <span class="operator">=</span> dynamicThreadPoolService.queryThreadPoolConfigByName(threadPoolConfigEntity.getThreadPoolName());</span><br><span class="line">    registry.reportThreadPoolConfigParameter(threadPoolConfigEntityCurrent);</span><br><span class="line">    logger.info(<span class="string">&quot;动态线程池，上报线程池配置：&#123;&#125;&quot;</span>, JSON.toJSONString(threadPoolConfigEntity));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="流程4-管理端工程搭建"><a href="#流程4-管理端工程搭建" class="headerlink" title="流程4 管理端工程搭建"></a>流程4 管理端工程搭建</h2><p>本质上，就是往数据中心发送一条更新线程池配置的消息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">@RequestMapping(value = &quot;update_thread_pool_config&quot;, method = RequestMethod.POST)</span><br><span class="line">public Response&lt;Boolean&gt; updateThreadPoolConfig(@RequestBody ThreadPoolConfigEntity request) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        log.info(&quot;修改线程池配置开始 &#123;&#125; &#123;&#125; &#123;&#125;&quot;, request.getAppName(), request.getThreadPoolName(), JSON.toJSONString(request));</span><br><span class="line">        RTopic topic = redissonClient.getTopic(&quot;DYNAMIC_THREAD_POOL_REDIS_TOPIC&quot; + &quot;_&quot; + request.getAppName());</span><br><span class="line">        topic.publish(request);</span><br><span class="line">        log.info(&quot;修改线程池配置完成 &#123;&#125; &#123;&#125;&quot;, request.getAppName(), request.getThreadPoolName());</span><br><span class="line">        return Response.&lt;Boolean&gt;builder()</span><br><span class="line">                .code(Response.Code.SUCCESS.getCode())</span><br><span class="line">                .info(Response.Code.SUCCESS.getInfo())</span><br><span class="line">                .data(true)</span><br><span class="line">                .build();</span><br><span class="line">    &#125; catch (Exception e) &#123;</span><br><span class="line">        log.error(&quot;修改线程池配置异常 &#123;&#125;&quot;, JSON.toJSONString(request), e);</span><br><span class="line">        return Response.&lt;Boolean&gt;builder()</span><br><span class="line">                .code(Response.Code.UN_ERROR.getCode())</span><br><span class="line">                .info(Response.Code.UN_ERROR.getInfo())</span><br><span class="line">                .data(false)</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -275,959 +1867,8 @@
 
 <h2 id="流程4-切换数据源-（jdbc-datasource-lookup-AbstractRoutingDataSource）"><a href="#流程4-切换数据源-（jdbc-datasource-lookup-AbstractRoutingDataSource）" class="headerlink" title="流程4 切换数据源 （jdbc.datasource.lookup.AbstractRoutingDataSource）"></a>流程4 切换数据源 （jdbc.datasource.lookup.AbstractRoutingDataSource）</h2><p>根据yml里拿到的那几个数据源，使用AbstractRoutingDataSource替换默认数据源</p>
 <p>重写determineCurrentLookupKey，AbstractRoutingDataSource能够帮助我们根据threadlocal里的值动态切换数据源</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">public class DynamicDataSource extends AbstractRoutingDataSource &#123;</span><br><span class="line">    @Override</span><br><span class="line">    protected Object determineCurrentLookupKey() &#123;</span><br><span class="line">        return &quot;db&quot; + DBContextHolder.getDBKey();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Bean</span><br><span class="line">public DataSource dataSource() &#123;</span><br><span class="line">// 创建数据源</span><br><span class="line">Map&lt;Object, Object&gt; targetDataSources = new HashMap&lt;&gt;();</span><br><span class="line">for (String dbInfo : dataSourceMap.keySet()) &#123;</span><br><span class="line">Map&lt;String, Object&gt; objMap = dataSourceMap.get(dbInfo);</span><br><span class="line">targetDataSources.put(dbInfo, new DriverManagerDataSource(objMap.get(&quot;url&quot;).toString(), objMap.get(&quot;username&quot;).toString(), objMap.get(&quot;password&quot;).toString()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 设置数据源</span><br><span class="line">DynamicDataSource dynamicDataSource = new DynamicDataSource();</span><br><span class="line">dynamicDataSource.setTargetDataSources(targetDataSources);</span><br><span class="line">dynamicDataSource.setDefaultTargetDataSource(new DriverManagerDataSource(defaultDataSourceConfig.get(&quot;url&quot;).toString(), defaultDataSourceConfig.get(&quot;username&quot;).toString(), defaultDataSourceConfig.get(&quot;password&quot;).toString()));</span><br><span class="line"></span><br><span class="line">return dynamicDataSource;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DynamicDataSource</span> <span class="keyword">extends</span> <span class="title class_">AbstractRoutingDataSource</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Object <span class="title function_">determineCurrentLookupKey</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;db&quot;</span> + DBContextHolder.getDBKey();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="keyword">public</span> DataSource <span class="title function_">dataSource</span><span class="params">()</span> &#123;</span><br><span class="line"><span class="comment">// 创建数据源</span></span><br><span class="line">Map&lt;Object, Object&gt; targetDataSources = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"><span class="keyword">for</span> (String dbInfo : dataSourceMap.keySet()) &#123;</span><br><span class="line">Map&lt;String, Object&gt; objMap = dataSourceMap.get(dbInfo);</span><br><span class="line">targetDataSources.put(dbInfo, <span class="keyword">new</span> <span class="title class_">DriverManagerDataSource</span>(objMap.get(<span class="string">&quot;url&quot;</span>).toString(), objMap.get(<span class="string">&quot;username&quot;</span>).toString(), objMap.get(<span class="string">&quot;password&quot;</span>).toString()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置数据源</span></span><br><span class="line"><span class="type">DynamicDataSource</span> <span class="variable">dynamicDataSource</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DynamicDataSource</span>();</span><br><span class="line">dynamicDataSource.setTargetDataSources(targetDataSources);</span><br><span class="line">dynamicDataSource.setDefaultTargetDataSource(<span class="keyword">new</span> <span class="title class_">DriverManagerDataSource</span>(defaultDataSourceConfig.get(<span class="string">&quot;url&quot;</span>).toString(), defaultDataSourceConfig.get(<span class="string">&quot;username&quot;</span>).toString(), defaultDataSourceConfig.get(<span class="string">&quot;password&quot;</span>).toString()));</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> dynamicDataSource;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/market/market1/" class="post-title-link" itemprop="url">【1开发】营销抽奖系统开发记录1 - 理清基本的营销场景</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="先看一下市面上常见的几种营销场景"><a href="#先看一下市面上常见的几种营销场景" class="headerlink" title="先看一下市面上常见的几种营销场景"></a>先看一下市面上常见的几种营销场景</h2><ol>
-<li>拼多多的砍一刀</li>
-<li>拼多多的农场，牧场</li>
-<li>掘金转盘抽奖</li>
-<li>出行打车好友助力得券</li>
-</ol>
-<p>本质上，都是通过app上的消费，赠送你各种优惠，来留存用户。</p>
-<h2 id="这里主要选择掘金抽奖为参考"><a href="#这里主要选择掘金抽奖为参考" class="headerlink" title="这里主要选择掘金抽奖为参考"></a>这里主要选择掘金抽奖为参考</h2><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240627220950725.png" alt="image-20240627220950725" style="zoom:50%;" />
-
-<p>这里选择：用户通过积分进行抽奖作为主要的场景。</p>
-<p>核心场景就是：用户通过某种行为动作（发帖、点赞）获得抽奖额度，然后进行抽奖。</p>
-<p>领域：暂时可以简单地划分出“积分账号”、“抽奖”、“奖品”这几个领域。后续随着开发再往里加。</p>
-<h2 id="现在可以画流程图理一下思路了"><a href="#现在可以画流程图理一下思路了" class="headerlink" title="现在可以画流程图理一下思路了"></a>现在可以画流程图理一下思路了</h2><p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/%E8%90%A5%E9%94%801.png" alt="营销1"></p>
-<p>一个整体的需求流程可以分为几块</p>
-<ol>
-<li>给用户创建一个<strong>营销账户</strong>，存放用户的积分数据</li>
-<li><strong>返利</strong>服务，基于用户的行为数据（打卡、消费等），增加各项积分</li>
-<li>抽奖，抽奖应该进行详细的<strong>抽奖规则</strong>构建，例如根据用户的积分数量更改奖品的优先级等。</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/market/market2/" class="post-title-link" itemprop="url">【1开发】营销抽奖系统开发记录2 - DDD vs MVC</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="贫血模型和充血模型"><a href="#贫血模型和充血模型" class="headerlink" title="贫血模型和充血模型"></a>贫血模型和充血模型</h2><p>关于DDD和MVC的讨论，总是离不开这两个模型。在软件开发中，尤其是</p>
-<h3 id="贫血模型"><a href="#贫血模型" class="headerlink" title="贫血模型"></a>贫血模型</h3><p>数据访问层主要包含数据，而不包含业务逻辑（也就是只做getter&#x2F;setter）。业务逻辑只在service层中出现。</p>
-<h3 id="充血模型"><a href="#充血模型" class="headerlink" title="充血模型"></a>充血模型</h3><p>将业务逻辑和数据操作放在同一层处理，这种设计模式可以更好地处理复杂的业务逻辑和数据操作，因为业务逻辑和数据操作在同一层处理，可以减少代码的冗余和提高代码的复用性。</p>
-<h2 id="为什么选DDD，比起MVC好在哪里"><a href="#为什么选DDD，比起MVC好在哪里" class="headerlink" title="为什么选DDD，比起MVC好在哪里"></a>为什么选DDD，比起MVC好在哪里</h2><p>MVC这种贫血对象<strong>腐化</strong>的根本，就是<strong>对象、服务、组件的交叉混乱</strong>使用。</p>
-<h3 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h3><p>首先对于MVC而言：</p>
-<ol>
-<li>一个dao层操作数据库</li>
-<li>接着是domain层里的po、vo、enum这些贫血对象（贫血，也就是只有对象，没有操作的逻辑）。</li>
-<li>然后是service，http</li>
-</ol>
-<p>会产生什么问题？</p>
-<ol>
-<li>第一个service在domain里定义好了一个vo贫血对象， </li>
-<li>serivce里也经常会发生平行的调用，我要实现一个东西，发现另一个service实现好了，那么直接拿去用了</li>
-<li>不区分业务服务和基础功能</li>
-</ol>
-<p>总结一下，就是服务和服务，服务和对象之间，横向，外部，交叉怎么调用都行。很混乱，没有定义出一些约束和规范。因此能快速实现需求，但是对大项目的后期维护造成了困难。</p>
-<h3 id="DDD"><a href="#DDD" class="headerlink" title="DDD"></a>DDD</h3><p>所以，DDD相较于MVC最大的改变就是由<strong>贫血模型</strong>转变为<strong>充血模型</strong>，把你对应的仓储服务、对象、服务都写到你自己的分包模块下。你要修改，就改自己领域模块下的，不能改别人的。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/market/market3/" class="post-title-link" itemprop="url">【1开发】营销抽奖系统开发记录3 - Domain1_抽奖策略 库表设计</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="抽奖策略-–-领域"><a href="#抽奖策略-–-领域" class="headerlink" title="抽奖策略 – 领域"></a>抽奖策略 – 领域</h2><p>“抽奖策略”领域，当用户点击抽奖按钮，后台如何计算用户该拿到什么奖品。</p>
-<p>最简单的：不同的奖品定义了不同的概率，我们取这个区间的随机数，定位到奖品。</p>
-<p>再复杂一点：增加抽奖规则，例如10连抽会有保底，黑号了抽不到奖</p>
-<p>考虑抽奖前、后需要执行的策略如下</p>
-<ol>
-<li>用户黑名单</li>
-<li>用户积分权重（不同权重给到不同奖品）</li>
-<li>库存是否满足</li>
-<li>用户抽奖次数（某些奖品只有用户达到抽奖次数才会给）</li>
-<li>兜底奖品（不管怎么样至少会给一点积分）</li>
-</ol>
-<h2 id="库表"><a href="#库表" class="headerlink" title="库表"></a>库表</h2><p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240627222455179.png" alt="image-20240627222455179"></p>
-<p>Strategy</p>
-<ul>
-<li>策略id</li>
-</ul>
-<p>Award</p>
-<ul>
-<li>奖品id</li>
-</ul>
-<p>Strategy_rule</p>
-<ul>
-<li>策略id</li>
-<li>规则类型</li>
-<li>规则值</li>
-</ul>
-<p>Strategy_award</p>
-<ul>
-<li>策略id</li>
-<li>奖品id</li>
-<li>规则树模型</li>
-<li>概率</li>
-<li>总库存</li>
-<li>剩余库存</li>
-</ul>
-<p>rule_tree&#x2F;rule_tree_node&#x2F;rule_tree_line</p>
-<ul>
-<li>根节点&#x2F;每个节点&#x2F;每条边</li>
-<li>也就是每个节点都是一个规则，根据计算都会算出一个值，根据这个值来选择边</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/market/market4/" class="post-title-link" itemprop="url">【1开发】营销抽奖系统开发记录4 - Domain1_抽奖策略 具体实现</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="两种抽奖算法"><a href="#两种抽奖算法" class="headerlink" title="两种抽奖算法"></a>两种抽奖算法</h2><h3 id="时间-or-空间"><a href="#时间-or-空间" class="headerlink" title="时间 or 空间"></a>时间 or 空间</h3><p><strong>第一种抽奖算法：循环对比</strong></p>
-<ul>
-<li><p>例如：”A:0.1;B:0.2;C:0.7”</p>
-</li>
-<li><p>计算出随机数 ：</p>
-<ul>
-<li>例如：0.25</li>
-</ul>
-</li>
-<li><p>根据奖品的概率依次遍历，知道概率达到奖品的范围：</p>
-<ul>
-<li>例如：先遍历A，不在0.1；</li>
-<li>再遍历B，在(0.1+0.2&#x3D;0.3)的范围内，得到B奖品</li>
-</ul>
-</li>
-<li><p>时间O(n) ，空间O(1)</p>
-</li>
-</ul>
-<p><strong>第二种抽奖算法：索引获取</strong></p>
-<ul>
-<li>例如：”A:0.1;B:0.2;C:0.7”</li>
-<li>奖品提前放到List&#x2F;Map中：【A,B,B,C,C,C,C,C,C,C】</li>
-<li>计算出随机数</li>
-<li>通过List直接拿到对应的奖品</li>
-<li>时间O(1) ，空间O(n)</li>
-</ul>
-<p><strong>选择</strong></p>
-<ul>
-<li>对于抽奖这样的高并发场景，无疑是第二种索引获取更实用，保证接口的更快响应</li>
-<li>但是也有些极端场景，例如奖品概率为0.000001，这时候空间上的开销就过大了。</li>
-</ul>
-<h2 id="Service1-–-抽奖装配-（Redis预热）"><a href="#Service1-–-抽奖装配-（Redis预热）" class="headerlink" title="Service1 – 抽奖装配 （Redis预热）"></a>Service1 – 抽奖装配 （Redis预热）</h2><p><strong>全量概率</strong></p>
-<p>对于第二种抽奖算法，提前构造奖品概率索引Map，放入Redis中。构造的方式也很简单，根据概率的最小精度，确认Map大小，依次遍历奖品，累加概率，存入Map。</p>
-<p><strong>权重概率</strong></p>
-<p>与普通概率类似，区别在于会配置不同的权重会对应不同的奖品列表，根据指定的奖品列表，构造奖品索引概率Map，放入Redis中。</p>
-<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628102840907.png" alt="image-20240628102840907" style="zoom:50%;" />
-
-<p>预热上图中的全量概率奖品查找表和权重概率奖品查找表</p>
-<h2 id="Service2-–-抽奖前置规则"><a href="#Service2-–-抽奖前置规则" class="headerlink" title="Service2 – 抽奖前置规则"></a>Service2 – 抽奖前置规则</h2><p>主要根据用户特性进行校验</p>
-<ul>
-<li>黑名单</li>
-<li>积分额度大小</li>
-<li>默认抽奖规则</li>
-</ul>
-<p>实现方式：责任链</p>
-<p>也就是说，我们把所有前置规则实现（Bean），再根据mysql中策略的规则设定，将用到bean串成一个链表。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 链表节点</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ILogicChain</span> &#123;</span><br><span class="line">    DefaultChainFactory.StrategyAwardVO <span class="title function_">logic</span><span class="params">(String userId, Long strategyId)</span>;</span><br><span class="line">    ILogicChain <span class="title function_">appendNext</span><span class="params">(ILogicChain next)</span>;</span><br><span class="line">    ILogicChain <span class="title function_">next</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 链表节点实现</span></span><br><span class="line"><span class="meta">@Component(&quot;rule_blacklist&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BlackListLogicChain</span> <span class="keyword">extends</span> <span class="title class_">AbstractLogicChain</span></span><br><span class="line"><span class="meta">@Component(&quot;default&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DefaultLogicChain</span> <span class="keyword">extends</span> <span class="title class_">AbstractLogicChain</span></span><br><span class="line"><span class="meta">@Component(&quot;rule_weight&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RuleWeightLogicChain</span> <span class="keyword">extends</span> <span class="title class_">AbstractLogicChain</span></span><br><span class="line">  </span><br><span class="line"><span class="comment">// 3. 工厂，根据mysql动态构造责任链</span></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DefaultChainFactory</span> &#123;</span><br><span class="line">	<span class="comment">// spring注入</span></span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, ILogicChain&gt; logicChainGroup;</span><br><span class="line">  <span class="comment">// 查询当前策略的rules，构造责任链</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<blockquote>
-<p>注意，这里使用单例模式是有问题的：</p>
-<p>一开始规则实现的bean是默认的单例模式，因此动态生成责任链会有并发问题。假设策略1的规则(rule1,rule2,rule3)，bean1-&gt;bean2-&gt;bean3；后面又来了策略2的规则(rule2,rule4,rule6)，那么bean2-&gt;bean4-&gt;bean6。那么策略1的规则就被覆盖了</p>
-<p>因此后面修改为原型模式，@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)</p>
-</blockquote>
-<h2 id="Service3-–-抽奖后置规则"><a href="#Service3-–-抽奖后置规则" class="headerlink" title="Service3 – 抽奖后置规则"></a>Service3 – 抽奖后置规则</h2><p>执行完抽奖算法之后，我们拿到了奖品，需要进行抽奖后置规则计算，例如库存校验规则、抽奖次数校验规则，兜底奖励规则。</p>
-<p>打个比方：先进行次数校验，如果满足，进入库存校验；反之，进入兜底奖励。</p>
-<p>显然，这是一个分支结构，所以用规则树模型。</p>
-<p>之前，我们已经定义了库表结构，所以我们首先把规则树模型结构从mysql中读进来。</p>
-<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628163520288.png" alt="image-20240628163520288" style="zoom: 33%;" />
-
-<p>实现起来，与抽奖前置规则类似，只是树形结构比起链表结构实现稍微复杂一些。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 树形节点</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ILogicTreeNode</span> &#123;</span><br><span class="line">  logic()</span><br><span class="line">&#125;</span><br><span class="line">  </span><br><span class="line"><span class="comment">// 2. 节点实现</span></span><br><span class="line"><span class="meta">@Component(&quot;rule_lock&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RuleLockLogicTreeNode</span> <span class="keyword">implements</span> <span class="title class_">ILogicTreeNode</span>&#123;</span><br><span class="line">  logic()&#123;</span><br><span class="line">    <span class="comment">// 查询用户抽奖次数，并计算</span></span><br><span class="line">    <span class="comment">// 返回结果【满足？不满足？】</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Component(&quot;rule_luck_award&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RuleLuckAwardLogicTreeNode</span> <span class="keyword">implements</span> <span class="title class_">ILogicTreeNode</span> </span><br><span class="line">......</span><br><span class="line">  </span><br><span class="line"><span class="comment">// 3. 查询用户抽奖次数</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DecisionTreeEngine</span> <span class="keyword">implements</span> <span class="title class_">IDecisionTreeEngine</span> &#123;</span><br><span class="line">		<span class="comment">// 注入bean</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, ILogicTreeNode&gt; logicTreeNodeGroup;</span><br><span class="line">		<span class="comment">// 从数据库中读取的规则树模型</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> RuleTreeVO ruleTreeVO;</span><br><span class="line">  	<span class="comment">// 执行规则树</span></span><br><span class="line">    process()&#123;</span><br><span class="line">      <span class="comment">// 从根节点走到叶子节点</span></span><br><span class="line">      <span class="keyword">while</span>(node)&#123;</span><br><span class="line">        <span class="comment">// 执行logic函数，根据计算值选择走哪条边</span></span><br><span class="line">        value = node.logic();</span><br><span class="line">        node=next(node,value)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">  </span><br></pre></td></tr></table></figure>
-
-<h2 id="特别地，不超卖库存规则实现"><a href="#特别地，不超卖库存规则实现" class="headerlink" title="特别地，不超卖库存规则实现"></a>特别地，不超卖库存规则实现</h2><p>“库表”这个库表属性非常，在高并发场景下，非常容易多个请求直接打到这一行上面。</p>
-<p>比如数据库表有一条记录是库存，如果是通过锁这一条表记录更新库存为10、9、8的话，就会出现大量的用户在应用用获得数据库的连接后，等待前一个用户更新完库表记录后释放锁，让下一个用户进入在扣减。</p>
-<p>这样随着用户参与量的增加，就会有非常多的用户处于等待状态，而等待的用户是持久数据库的连接的，这个连接资源非常宝贵，你占用了应用中其他的请求就进不来，最终导致一个请求要几分钟才能得到响应。【前台的用户越着急，越疯狂点击，直至越来越卡到崩溃】</p>
-<p>所以，我们需要把这个扣减的动作放到缓存里</p>
-<ol>
-<li>decr扣减库存</li>
-<li>使用setnx加锁兜底，防止超卖【decr是原子操作，正常情况是不会有问题的，但是可能有情况，运营手动修改库存】</li>
-<li>同时将扣减动作放入MQ，缓慢修改mysql库存</li>
-</ol>
-<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628174750154.png" alt="image-20240628174750154" style="zoom: 50%;" />
-
-<h2 id="串联抽奖规则"><a href="#串联抽奖规则" class="headerlink" title="串联抽奖规则"></a>串联抽奖规则</h2><p>至此，我们就可以实现一个基本的抽奖流程</p>
-<ul>
-<li>输入：用户id，活动id</li>
-<li>执行抽奖（包含相关抽奖过滤）</li>
-<li>输出：奖品</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628204228690.png" alt="image-20240628204228690"></p>
-<h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><ol>
-<li>策略装配，将策略信息装配到缓存中；&#x2F;api&#x2F;v1&#x2F;raffle&#x2F;strategy_armory</li>
-<li>查询奖品列表；&#x2F;api&#x2F;v1&#x2F;raffle&#x2F;query_raffle_award_list</li>
-<li>随机抽奖接口；&#x2F;api&#x2F;v1&#x2F;raffle&#x2F;random_raffle</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/market/market5/" class="post-title-link" itemprop="url">【1开发】营销抽奖系统开发记录5 - Domain2_抽奖活动</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="抽奖活动-领域"><a href="#抽奖活动-领域" class="headerlink" title="抽奖活动 - 领域"></a>抽奖活动 - 领域</h2><p>用户抽奖的业务流程分为；给自己的活动账户添加额度（购买、兑换、打卡），领取活动（扣减互动账户额度）、执行抽奖策略、抽奖结果落库。</p>
-<p>前两天完成了“抽奖策略”部分的领域代码，那么在“计算用户能拿到什么奖品”前，还需要干两件事</p>
-<ul>
-<li>管理用户的账户抽奖额度</li>
-<li>领取抽奖活动，生成抽奖活动流水单，扣减账户额度</li>
-</ul>
-<p>所以“抽奖活动”领域主要做两个Service：账户额度，参与活动</p>
-<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240629171939807.png" alt="image-20240629171939807"></p>
-<h2 id="抽奖活动-库表设计"><a href="#抽奖活动-库表设计" class="headerlink" title="抽奖活动 - 库表设计"></a>抽奖活动 - 库表设计</h2><p>每个抽奖活动次数可以看成一个sku（活动id，策略id，库存），同时还需要定义用户的活动账号，以及订单库表</p>
-<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628213842268.png" alt="image-20240628213842268" style="zoom:33%;" />
-
-<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240628214241373.png" alt="image-20240628214241373" style="zoom:50%;" />
-
-<h3 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h3><p>对于用户账号信息，只分库；对于用户订单信息，分库分表</p>
-<h2 id="Service1-参与活动"><a href="#Service1-参与活动" class="headerlink" title="Service1 参与活动"></a>Service1 参与活动</h2><p>参与活动可以看作商品sku下单，只是这个sku是活动次数。</p>
-<p>所以，现在主要实现两个service</p>
-<ol>
-<li>下单规则校验（责任链设计模式实现）</li>
-<li>完成下单事务（这个单是抽奖活动次数sku）</li>
-</ol>
-<h3 id="Service1-接口1-下单规则校验"><a href="#Service1-接口1-下单规则校验" class="headerlink" title="Service1-接口1 下单规则校验"></a>Service1-接口1 下单规则校验</h3><p>校验库存，活动是否在有效期内，活动是否开启，采用责任链模式（不过这个比较简单，可能也用不着责任链模式），和之前的抽奖前置规则一样</p>
-<h3 id="Service1-接口2-用户点击抽奖按钮，创建抽奖订单（更新额度，写入用户抽奖订单）"><a href="#Service1-接口2-用户点击抽奖按钮，创建抽奖订单（更新额度，写入用户抽奖订单）" class="headerlink" title="Service1-接口2 用户点击抽奖按钮，创建抽奖订单（更新额度，写入用户抽奖订单）"></a>Service1-接口2 用户点击抽奖按钮，创建抽奖订单（更新额度，写入用户抽奖订单）</h3><p>更新 raffle_activity_account（账户抽奖次数）</p>
-<p>更新 user_raffle_order（用户抽奖订单）</p>
-<ul>
-<li>step1 构建订单聚合对象</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 用户ID</span><br><span class="line"> */</span><br><span class="line">private String userId;</span><br><span class="line">/**</span><br><span class="line"> * 活动ID</span><br><span class="line"> */</span><br><span class="line">private Long activityId;</span><br><span class="line">/**</span><br><span class="line"> * 账户总额度</span><br><span class="line"> */</span><br><span class="line">private ActivityAccountEntity activityAccountEntity;</span><br><span class="line">/**</span><br><span class="line"> * 账户月额度</span><br><span class="line"> */</span><br><span class="line">private ActivityAccountMonthEntity activityAccountMonthEntity;</span><br><span class="line">/**</span><br><span class="line"> * 账户日额度</span><br><span class="line"> */</span><br><span class="line">private ActivityAccountDayEntity activityAccountDayEntity;</span><br><span class="line">/**</span><br><span class="line"> * 抽奖单实体</span><br><span class="line"> */</span><br><span class="line">private UserRaffleOrderEntity userRaffleOrderEntity;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>step2 事务</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">// 统一切换路由，以下事务内的所有操作，都走一个路由</span></span><br><span class="line">    dbRouter.doRouter(userId);</span><br><span class="line">    transactionTemplate.execute(status -&gt; &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 1. 更新总账户</span></span><br><span class="line">            <span class="comment">// 2. 创建或更新月（日）账户，未更新成功则回滚</span></span><br><span class="line">            <span class="comment">// 3. 写入参与活动订单（UserRaffleOrder）</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (DuplicateKeyException e) &#123; <span class="comment">// 订单放重id，造成回滚</span></span><br><span class="line">            status.setRollbackOnly();</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">AppException</span>(ResponseCode.INDEX_DUP.getCode(), e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    dbRouter.clear();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Service2-抽奖活动账户额度"><a href="#Service2-抽奖活动账户额度" class="headerlink" title="Service2 抽奖活动账户额度"></a>Service2 抽奖活动账户额度</h2><p>用户通过某种行为（签到、积分），换取抽奖次数，那么主要干两件事</p>
-<h3 id="Service2-接口1-扣减活动“库存”"><a href="#Service2-接口1-扣减活动“库存”" class="headerlink" title="Service2-接口1 扣减活动“库存”"></a>Service2-接口1 扣减活动“库存”</h3><p>设计到库存，和之前的奖品库存扣减类似，用缓存进行decr，用setnx兜底，写入MQ趋势更新库存</p>
-<h3 id="Service2-接口2-每日签到送抽奖次数额度（后续加上积分）"><a href="#Service2-接口2-每日签到送抽奖次数额度（后续加上积分）" class="headerlink" title="Service2-接口2 每日签到送抽奖次数额度（后续加上积分）"></a>Service2-接口2 每日签到送抽奖次数额度（后续加上积分）</h3><p>直接更新活动账户里的抽奖次数额度，直接写入订单，如果存在唯一索引冲突，就回滚</p>
-<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240629173834767.png" alt="image-20240629173834767" style="zoom: 50%;" />
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/market/market6/" class="post-title-link" itemprop="url">【1开发】营销抽奖系统开发记录6 - Domain3_奖品</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="奖品-领域"><a href="#奖品-领域" class="headerlink" title="奖品 - 领域"></a>奖品 - 领域</h2><p>一整个抽奖过程先从活动账户额度充值、活动参与、抽奖执行【策略】，之后就是<strong>中奖记录写入和后续的发奖</strong>。</p>
-<p>所以奖品领域主要管理<strong>中奖记录写入和后续的发奖</strong>，当然还有奖品库存扣减、奖品列表查询等等。</p>
-<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240701143126949.png" alt="image-20240701143126949" style="zoom:50%;" />
-
-<h2 id="核心功能-saveUserAwardRecord"><a href="#核心功能-saveUserAwardRecord" class="headerlink" title="核心功能 - saveUserAwardRecord"></a>核心功能 - saveUserAwardRecord</h2><p>输入：奖品信息（已经执行完抽奖策略，得到了应得的奖品）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">        dbRouter.doRouter(userId);</span><br><span class="line">        transactionTemplate.execute(status -&gt; &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">// 写入记录</span></span><br><span class="line">                userAwardRecordDao.insert(userAwardRecord);</span><br><span class="line">                <span class="comment">// 写入任务</span></span><br><span class="line">                taskDao.insert(task);</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (DuplicateKeyException e) &#123;</span><br><span class="line">                status.setRollbackOnly();</span><br><span class="line">                log.error(<span class="string">&quot;写入中奖记录，唯一索引冲突 userId: &#123;&#125; activityId: &#123;&#125; awardId: &#123;&#125;&quot;</span>, userId, activityId, awardId, e);</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">AppException</span>(ResponseCode.INDEX_DUP.getCode(), e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        dbRouter.clear();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 发送消息【在事务外执行，如果失败还有任务补偿】</span></span><br><span class="line">        eventPublisher.publish(task.getTopic(), task.getMessage());</span><br><span class="line">        <span class="comment">// 更新数据库记录，task 任务表</span></span><br><span class="line">        taskDao.updateTaskSendMessageCompleted(task);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        log.error(<span class="string">&quot;写入中奖记录，发送MQ消息失败 userId: &#123;&#125; topic: &#123;&#125;&quot;</span>, userId, task.getTopic());</span><br><span class="line">        taskDao.updateTaskSendMessageFail(task);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>奖品记录和任务是一个事务下提交，提交完事务以后，顺序的执行发送奖品的 MQ 消息，消息发送完成后更新数据库记录。</li>
-<li>MQ部分需要保证消费成功，在 SendMessageTaskJob 任务补偿中会扫描库表的 task 表来发送 MQ 消息。</li>
-</ol>
-<p>消息监听（发奖的解藕）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">listener</span><span class="params">(String message)</span> &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    log.info(<span class="string">&quot;监听用户奖品发送消息，发奖开始 topic: &#123;&#125; message: &#123;&#125;&quot;</span>, topic, message);</span><br><span class="line">    BaseEvent.EventMessage&lt;SendAwardMessageEvent.SendAwardMessage&gt; eventMessage = JSON.parseObject(message, <span class="keyword">new</span> <span class="title class_">TypeReference</span>&lt;BaseEvent.EventMessage&lt;SendAwardMessageEvent.SendAwardMessage&gt;&gt;() &#123;</span><br><span class="line">    &#125;.getType());</span><br><span class="line">    SendAwardMessageEvent.<span class="type">SendAwardMessage</span> <span class="variable">sendAwardMessage</span> <span class="operator">=</span> eventMessage.getData();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 发放奖品</span></span><br><span class="line">    <span class="type">DistributeAwardEntity</span> <span class="variable">distributeAwardEntity</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DistributeAwardEntity</span>();</span><br><span class="line">    distributeAwardEntity.setUserId(sendAwardMessage.getUserId());</span><br><span class="line">    distributeAwardEntity.setOrderId(sendAwardMessage.getOrderId());</span><br><span class="line">    distributeAwardEntity.setAwardId(sendAwardMessage.getAwardId());</span><br><span class="line">    distributeAwardEntity.setAwardConfig(sendAwardMessage.getAwardConfig());</span><br><span class="line">    awardService.distributeAward(distributeAwardEntity);</span><br><span class="line"></span><br><span class="line">    log.info(<span class="string">&quot;监听用户奖品发送消息，发奖完成 topic: &#123;&#125; message: &#123;&#125;&quot;</span>, topic, message);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">    log.error(<span class="string">&quot;监听用户奖品发送消息，消费失败 topic: &#123;&#125; message: &#123;&#125;&quot;</span>, topic, message);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>定时任务扫描task表，重新发送MQ消息，确保MQ消息消费成功</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">exec</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 获取分库数量</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">dbCount</span> <span class="operator">=</span> dbRouter.dbCount();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 逐个库扫描表【每个库一个任务表】</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">dbIdx</span> <span class="operator">=</span> <span class="number">1</span>; dbIdx &lt;= dbCount; dbIdx++) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">finalDbIdx</span> <span class="operator">=</span> dbIdx;</span><br><span class="line">            executor.execute(() -&gt; &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    dbRouter.setDBKey(finalDbIdx);</span><br><span class="line">                    dbRouter.setTBKey(<span class="number">0</span>);</span><br><span class="line">                    List&lt;TaskEntity&gt; taskEntities = taskService.queryNoSendMessageTaskList();</span><br><span class="line">                    <span class="keyword">if</span> (taskEntities.isEmpty()) <span class="keyword">return</span>;</span><br><span class="line">                    <span class="comment">// 发送MQ消息</span></span><br><span class="line">                    <span class="keyword">for</span> (TaskEntity taskEntity : taskEntities) &#123;</span><br><span class="line">                        executor.execute(() -&gt; &#123;</span><br><span class="line">                            <span class="keyword">try</span> &#123;</span><br><span class="line">                                taskService.sendMessage(taskEntity);</span><br><span class="line">                                taskService.updateTaskSendMessageCompleted(taskEntity.getUserId(), taskEntity.getMessageId());</span><br><span class="line">                            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                                taskService.updateTaskSendMessageFail(taskEntity.getUserId(), taskEntity.getMessageId());</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    dbRouter.clear();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        log.error(<span class="string">&quot;定时任务，扫描MQ任务表发送消息失败。&quot;</span>, e);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        dbRouter.clear();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/market/market7/" class="post-title-link" itemprop="url">【1开发】营销抽奖系统开发记录7 - Domain4_返利</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="返利-领域"><a href="#返利-领域" class="headerlink" title="返利 - 领域"></a>返利 - 领域</h2><p>用户的行为动作返利，是一种日常的活动类型。比如；你在某个平台创建了新账号，就会给你发一堆的开户优惠券，这些都是日常的返利活动。</p>
-<p>日常的返利会根据用户所完成的行为动作来触达，这包括；打卡、签到、连签、支付、开户、交易、信贷、拉新等各类的动作（本项目中暂时只包含打卡）。</p>
-<h3 id="新增两个返利的库表，之前没有考虑到"><a href="#新增两个返利的库表，之前没有考虑到" class="headerlink" title="新增两个返利的库表，之前没有考虑到"></a>新增两个返利的库表，之前没有考虑到</h3><p>行为返利配置表（行为类型、返利类型、返利具体值等）</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `daily_behavior_rebate` (</span><br><span class="line">  `id` <span class="type">int</span> unsigned <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT COMMENT <span class="string">&#x27;自增ID&#x27;</span>,</span><br><span class="line">  `behavior_type` <span class="type">varchar</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;行为类型（sign 签到、openai_pay 支付）&#x27;</span>,</span><br><span class="line">  `rebate_desc` <span class="type">varchar</span>(<span class="number">128</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;返利描述&#x27;</span>,</span><br><span class="line">  `rebate_type` <span class="type">varchar</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;返利类型（sku 活动库存充值商品、integral 用户活动积分）&#x27;</span>,</span><br><span class="line">  `rebate_config` <span class="type">varchar</span>(<span class="number">32</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;返利配置&#x27;</span>,</span><br><span class="line">  `state` <span class="type">varchar</span>(<span class="number">12</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;状态（open 开启、close 关闭）&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `update_time` datetime <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="built_in">CURRENT_TIMESTAMP</span> COMMENT <span class="string">&#x27;更新时间&#x27;</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`id`),</span><br><span class="line">  KEY `idx_behavior_type` (`behavior_type`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB AUTO_INCREMENT<span class="operator">=</span><span class="number">3</span> <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4 <span class="keyword">COLLATE</span><span class="operator">=</span>utf8mb4_0900_ai_ci COMMENT<span class="operator">=</span><span class="string">&#x27;日常行为返利活动配置&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-<p>返利订单表</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `user_behavior_rebate_order_000` (</span><br><span class="line">  `id` <span class="type">int</span> unsigned <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT COMMENT <span class="string">&#x27;自增ID&#x27;</span>,</span><br><span class="line">  `user_id` <span class="type">varchar</span>(<span class="number">32</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;用户ID&#x27;</span>,</span><br><span class="line">  `order_id` <span class="type">varchar</span>(<span class="number">12</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;订单ID&#x27;</span>,</span><br><span class="line">  `behavior_type` <span class="type">varchar</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;行为类型（sign 签到）&#x27;</span>,</span><br><span class="line">  `rebate_desc` <span class="type">varchar</span>(<span class="number">128</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;返利描述&#x27;</span>,</span><br><span class="line">  `rebate_type` <span class="type">varchar</span>(<span class="number">16</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;返利类型（sku 活动库存充值商品、integral 用户活动积分）&#x27;</span>,</span><br><span class="line">  `rebate_config` <span class="type">varchar</span>(<span class="number">32</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;返利配置【sku值，积分值】&#x27;</span>,</span><br><span class="line">  `out_business_no` <span class="type">varchar</span>(<span class="number">64</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;业务仿重ID - 外部透传，方便查询使用&#x27;</span>,</span><br><span class="line">  `biz_id` <span class="type">varchar</span>(<span class="number">128</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;业务ID - 拼接的唯一值。拼接 out_business_no + 自身枚举&#x27;</span>,</span><br><span class="line">  `create_time` datetime <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> COMMENT <span class="string">&#x27;创建时间&#x27;</span>,</span><br><span class="line">  `update_time` datetime <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="built_in">CURRENT_TIMESTAMP</span> COMMENT <span class="string">&#x27;更新时间&#x27;</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`id`),</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `uq_order_id` (`order_id`),</span><br><span class="line">  <span class="keyword">UNIQUE</span> KEY `uq_biz_id` (`biz_id`),</span><br><span class="line">  KEY `idx_user_id` (`user_id`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4 <span class="keyword">COLLATE</span><span class="operator">=</span>utf8mb4_0900_ai_ci COMMENT<span class="operator">=</span><span class="string">&#x27;用户行为返利流水订单表&#x27;</span>;</span><br></pre></td></tr></table></figure>
-
-<h2 id="核心接口"><a href="#核心接口" class="headerlink" title="核心接口"></a>核心接口</h2><p>把用户的行为动作，根据配置，创建出聚合对象，之后写账入库即可。</p>
-<p>同时，发送MQ “send_rebate”：后续的积分增加，账户额度增加，调用“activity”和“credit”领域的服务接口即可</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/market/market8/" class="post-title-link" itemprop="url">【1开发】营销抽奖系统开发记录8 - Domain5_积分</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="积分-领域"><a href="#积分-领域" class="headerlink" title="积分 - 领域"></a>积分 - 领域</h2><p>积分在本项目中取代钱的作用，积分是衔接营销场景中各个功能模块的一个非常重要的手段，主要是打卡获得积分，抽奖获得积分，积分兑换抽奖次数sku。</p>
-<img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240701185132402.png" alt="image-20240701185132402" style="zoom:50%;" />
-
-<h3 id="核心接口1-交易策略"><a href="#核心接口1-交易策略" class="headerlink" title="核心接口1 交易策略"></a>核心接口1 交易策略</h3><p>这里的交易只有一种商品sku（抽奖额度sku）</p>
-<p>涉及到两种交易策略</p>
-<ul>
-<li>签到赠送积分 – 无支付 （较为简单，直接写入订单，修改抽奖额度，就结束了）</li>
-<li>积分兑换  – 有支付 （较为复杂，除了写入订单，修改抽奖额度，还需要考虑积分账户的扣减）</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">ITradePolicy</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">trade</span><span class="params">(CreateQuotaOrderAggregate createQuotaOrderAggregate)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service(&quot;credit_pay_trade&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CreditPayTradePolicy</span> <span class="keyword">implements</span> <span class="title class_">ITradePolicy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">trade</span><span class="params">(CreateQuotaOrderAggregate createQuotaOrderAggregate)</span> &#123;</span><br><span class="line">        createQuotaOrderAggregate.setOrderState(OrderStateVO.wait_pay);</span><br><span class="line">        activityRepository.doSaveCreditPayOrder(createQuotaOrderAggregate);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service(&quot;rebate_no_pay_trade&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RebateNoPayTradePolicy</span> <span class="keyword">implements</span> <span class="title class_">ITradePolicy</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">trade</span><span class="params">(CreateQuotaOrderAggregate createQuotaOrderAggregate)</span> &#123;</span><br><span class="line">        <span class="comment">// 不需要支付则修改订单金额为0，状态为完成，直接给用户账户充值</span></span><br><span class="line">        createQuotaOrderAggregate.setOrderState(OrderStateVO.completed);</span><br><span class="line">        createQuotaOrderAggregate.getActivityOrderEntity().setPayAmount(BigDecimal.ZERO);</span><br><span class="line">        activityRepository.doSaveNoPayOrder(createQuotaOrderAggregate);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="核心接口2-订单出货"><a href="#核心接口2-订单出货" class="headerlink" title="核心接口2 订单出货"></a>核心接口2 订单出货</h2><p>更新订单状态操作，是对订单从支付态更改为发货完成态。在数据库表更新的时候，有一个前置的判断，订单状态必须为 wait_pay 才能更新为 completed 否则不能更新。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IRaffleActivityAccountQuotaService</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 订单出货 - 积分充值</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> deliveryOrderEntity 出货单实体对象</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">updateOrder</span><span class="params">(DeliveryOrderEntity deliveryOrderEntity)</span>;</span><br><span class="line">    </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line">dbRouter.doRouter(deliveryOrderEntity.getUserId());</span><br><span class="line"><span class="comment">// 编程式事务</span></span><br><span class="line">transactionTemplate.execute(status -&gt; &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 1. 更新订单</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">updateCount</span> <span class="operator">=</span> raffleActivityOrderDao.updateOrderCompleted(raffleActivityOrderReq);</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">1</span> != updateCount) &#123;</span><br><span class="line">            status.setRollbackOnly();</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 2. 更新账户 - 总</span></span><br><span class="line">        <span class="type">RaffleActivityAccount</span> <span class="variable">raffleActivityAccountRes</span> <span class="operator">=</span> raffleActivityAccountDao.queryAccountByUserId(raffleActivityAccount);</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> == raffleActivityAccountRes) &#123;</span><br><span class="line">            raffleActivityAccountDao.insert(raffleActivityAccount);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            raffleActivityAccountDao.updateAccountQuota(raffleActivityAccount);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 4. 更新账户 - 月</span></span><br><span class="line">        raffleActivityAccountMonthDao.addAccountQuota(raffleActivityAccountMonth);</span><br><span class="line">        <span class="comment">// 5. 更新账户 - 日</span></span><br><span class="line">        raffleActivityAccountDayDao.addAccountQuota(raffleActivityAccountDay);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (DuplicateKeyException e) &#123;</span><br><span class="line">        status.setRollbackOnly();</span><br><span class="line">        log.error(<span class="string">&quot;更新订单记录，完成态，唯一索引冲突 userId: &#123;&#125; outBusinessNo: &#123;&#125;&quot;</span>, deliveryOrderEntity.getUserId(), deliveryOrderEntity.getOutBusinessNo(), e);</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">AppException</span>(ResponseCode.INDEX_DUP.getCode(), e);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="核心接口3-交易支付"><a href="#核心接口3-交易支付" class="headerlink" title="核心接口3 交易支付"></a>核心接口3 交易支付</h2><p>交易支付这部分，需要与发货解耦，不在交易中直接对另外的库表进行一个事务的处理。因为如果将来积分要拆分为独立系统的时候，太重的事务耦合就不好拆分了，而用 MQ 解耦流程，就可以很方便的完成系统模块的拆分。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line"><span class="comment">// 发送消息【在事务外执行，如果失败还有任务补偿】</span></span><br><span class="line">eventPublisher.publish(task.getTopic(), task.getMessage());</span><br><span class="line"><span class="comment">// 更新数据库记录，task 任务表</span></span><br><span class="line">taskDao.updateTaskSendMessageCompleted(task);</span><br><span class="line">log.info(<span class="string">&quot;调整账户积分记录，发送MQ消息完成 userId: &#123;&#125; orderId:&#123;&#125; topic: &#123;&#125;&quot;</span>, userId, creditOrderEntity.getOrderId(), task.getTopic());</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">log.error(<span class="string">&quot;调整账户积分记录，发送MQ消息失败 userId: &#123;&#125; topic: &#123;&#125;&quot;</span>, userId, task.getTopic());</span><br><span class="line">taskDao.updateTaskSendMessageFail(task);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>监听积分支付成功消息后，使用发货单实体对象为入参，调用订单变更操作，完成积分充值。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/market/market9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/kaifa/project/market/market9/" class="post-title-link" itemprop="url">【1开发】营销抽奖系统开发记录9 - 最终核心api</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/%E8%90%A5%E9%94%80%E6%8A%BD%E5%A5%96/" itemprop="url" rel="index"><span itemprop="name">营销抽奖</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>营销系统里主要包含五个领域：</p>
-<ul>
-<li>活动 activity</li>
-<li>奖品 award</li>
-<li>积分 credit</li>
-<li>返利 rebate</li>
-<li>策略 strategy</li>
-</ul>
-<p>包含的几个核心api如下：</p>
-<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240701193910631.png" alt="image-20240701193910631"></p>
 
       
     </div>
@@ -1247,7 +1888,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
