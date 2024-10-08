@@ -130,7 +130,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">47</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -321,13 +321,12 @@
 <ul>
 <li><strong>降低资源消耗</strong>：重复利用已创建的线程</li>
 <li><strong>提高响应速度</strong>：任务到达时，无需等待线程创建</li>
-<li><strong>提高线程的可管理性</strong>：线程是稀缺资源，使用线程进行统一的分配、调优和监控</li>
-<li><strong>提供更多更强大的功能</strong>：ScheduledThreadPoolExecutor</li>
+<li><strong>提高线程的可管理性</strong>：线程是稀缺资源，防止无限制地创建线程，造成大量的线程上下文切换</li>
 </ul>
 </li>
 <li><p>应用（大营销）</p>
 <ul>
-<li>项目背景：抽奖是高并发的，需要快速响应用户请求，（聚合查询奖品信息；风控、抽奖计算、实名验证并行计算；扫描task表）</li>
+<li>项目背景：抽奖是高并发的，需要快速响应用户请求，（聚合查询奖品信息；定时任务更新库存）</li>
 <li>核心线程数：cpu核的两倍，即云服务器4核 * 2&#x3D;8（有很多网络通信，数据库操作，所以是IO密集性任务，有较多的空闲线程）</li>
 <li>最大线程数：8 * 2 &#x3D;16 </li>
 <li>阻塞队列：SynchronousQueue（提交后立即交给等待的线程处理，提高响应速度）</li>

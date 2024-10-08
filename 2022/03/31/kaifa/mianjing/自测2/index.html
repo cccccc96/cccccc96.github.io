@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.2.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":true,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="这里暂时只放最最基本的面试题，汇总在这里，面试前看看，别最基础的也忘了。 Java，并发，Mysql，Redis，消息队列（Kafka）、网络  Java基础八种数据类型数：byte、short、int、long、float、double 字符：char 布尔：boolean 自动拆箱&#x2F;装箱装箱：将基本数据类型转换为包装类型（Integer.valueOf()） 拆箱：将包装类型转换为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【1开发】【八股】面经自测2">
+<meta property="og:url" content="http://example.com/2022/03/31/kaifa/mianjing/%E8%87%AA%E6%B5%8B2/index.html">
+<meta property="og:site_name" content="czh的学习小站">
+<meta property="og:description" content="这里暂时只放最最基本的面试题，汇总在这里，面试前看看，别最基础的也忘了。 Java，并发，Mysql，Redis，消息队列（Kafka）、网络  Java基础八种数据类型数：byte、short、int、long、float、double 字符：char 布尔：boolean 自动拆箱&#x2F;装箱装箱：将基本数据类型转换为包装类型（Integer.valueOf()） 拆箱：将包装类型转换为">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:modified_time" content="2022-03-31T11:01:35.000Z">
+<meta property="article:author" content="蔡正海">
+<meta property="article:tag" content="开发">
+<meta property="article:tag" content="八股">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2022/03/31/kaifa/mianjing/%E8%87%AA%E6%B5%8B2/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/03/31/kaifa/mianjing/%E8%87%AA%E6%B5%8B2/","path":"2022/03/31/kaifa/mianjing/自测2/","title":"【1开发】【八股】面经自测2"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>【1开发】【八股】面经自测2 | czh的学习小站</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">czh的学习小站</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">自律</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">Java基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E7%A7%8D%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">八种数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1-%E8%A3%85%E7%AE%B1"><span class="nav-number">1.2.</span> <span class="nav-text">自动拆箱&#x2F;装箱</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="nav-number">1.3.</span> <span class="nav-text">面向对象三大特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#final"><span class="nav-number">1.4.</span> <span class="nav-text">final</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String%E3%80%81StringBuilder%E3%80%81StringBuffer"><span class="nav-number">1.5.</span> <span class="nav-text">String、StringBuilder、StringBuffer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8"><span class="nav-number">1.6.</span> <span class="nav-text">异常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%B0%84"><span class="nav-number">1.7.</span> <span class="nav-text">反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SPI"><span class="nav-number">1.8.</span> <span class="nav-text">SPI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BIO-NIO"><span class="nav-number">1.9.</span> <span class="nav-text">BIO&#x2F;NIO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BIO"><span class="nav-number">1.9.1.</span> <span class="nav-text">BIO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NIO"><span class="nav-number">1.9.2.</span> <span class="nav-text">NIO</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C"><span class="nav-number">2.</span> <span class="nav-text">计算机网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E5%B1%82%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.1.</span> <span class="nav-text">四层模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%8E%E6%B5%8F%E8%A7%88%E5%99%A8%E5%9C%B0%E5%9D%80%E8%BE%93%E5%85%A5url%E5%88%B0%E6%98%BE%E7%A4%BA%E7%BD%91%E9%A1%B5%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="nav-number">2.2.</span> <span class="nav-text">从浏览器地址输入url到显示网页的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E7%A0%81"><span class="nav-number">2.3.</span> <span class="nav-text">状态码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP%E5%92%8CHTTPS"><span class="nav-number">2.4.</span> <span class="nav-text">HTTP和HTTPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP1-0-1-1-2-0-3-0"><span class="nav-number">2.5.</span> <span class="nav-text">HTTP1.0  1.1  2.0 3.0</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP%E6%8A%A5%E6%96%87"><span class="nav-number">2.6.</span> <span class="nav-text">HTTP报文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B2%98%E5%8C%85%E5%92%8C%E6%8B%86%E5%8C%85"><span class="nav-number">2.7.</span> <span class="nav-text">粘包和拆包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%EF%BC%8C%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="nav-number">2.8.</span> <span class="nav-text">TCP三次握手，四次挥手</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ARP"><span class="nav-number">2.9.</span> <span class="nav-text">ARP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3"><span class="nav-number">2.10.</span> <span class="nav-text">滑动窗口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6"><span class="nav-number">2.11.</span> <span class="nav-text">拥塞控制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UDP"><span class="nav-number">2.12.</span> <span class="nav-text">UDP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E9%9B%86%E5%90%88"><span class="nav-number">3.</span> <span class="nav-text">Java集合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%86%E8%A7%A3%E5%93%AA%E4%BA%9B%E9%9B%86%E5%90%88"><span class="nav-number">3.1.</span> <span class="nav-text">了解哪些集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashMap"><span class="nav-number">3.2.</span> <span class="nav-text">HashMap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#put%E6%B5%81%E7%A8%8B"><span class="nav-number">3.2.1.</span> <span class="nav-text">put流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A9%E5%AE%B9%E6%B5%81%E7%A8%8B"><span class="nav-number">3.2.2.</span> <span class="nav-text">扩容流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-number">3.3.</span> <span class="nav-text">ConcurrentHashMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CopyOnWriteArrayList"><span class="nav-number">3.4.</span> <span class="nav-text">CopyOnWriteArrayList</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JVM"><span class="nav-number">4.</span> <span class="nav-text">JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM%E7%9A%84%E7%BB%84%E7%BB%87%E7%BB%93%E6%9E%84"><span class="nav-number">4.1.</span> <span class="nav-text">JVM的组织结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-number">4.1.1.</span> <span class="nav-text">类加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA"><span class="nav-number">4.1.2.</span> <span class="nav-text">运行时数据区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8"><span class="nav-number">4.1.3.</span> <span class="nav-text">垃圾回收器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E8%BE%BE%E5%88%A4%E6%96%AD%EF%BC%9A"><span class="nav-number">4.1.3.1.</span> <span class="nav-text">不可达判断：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%AE%97%E6%B3%95%EF%BC%9A"><span class="nav-number">4.1.3.2.</span> <span class="nav-text">垃圾回收算法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1%EF%BC%9A"><span class="nav-number">4.1.3.3.</span> <span class="nav-text">G1：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="nav-number">4.2.</span> <span class="nav-text">对象创建的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E6%96%B9%E6%B3%95"><span class="nav-number">4.3.</span> <span class="nav-text">内存分配方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OOM"><span class="nav-number">4.4.</span> <span class="nav-text">OOM</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E5%B9%B6%E5%8F%91"><span class="nav-number">5.</span> <span class="nav-text">Java并发</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%8F%AF%E8%83%BD%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">5.1.</span> <span class="nav-text">多线程可能存在的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%9C%89%E5%87%A0%E7%A7%8D%E5%88%9B%E5%BB%BA%E6%96%B9%E5%BC%8F"><span class="nav-number">5.2.</span> <span class="nav-text">线程有几种创建方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B"><span class="nav-number">5.3.</span> <span class="nav-text">进程和线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="nav-number">5.4.</span> <span class="nav-text">线程上下文切换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-%E5%8D%95%E4%BE%8B"><span class="nav-number">5.5.</span> <span class="nav-text">线程安全使用场景-单例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JMM"><span class="nav-number">5.6.</span> <span class="nav-text">JMM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThreadLocal"><span class="nav-number">5.7.</span> <span class="nav-text">ThreadLocal</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">5.7.1.</span> <span class="nav-text">是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">5.7.2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">5.7.3.</span> <span class="nav-text">问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#volatile"><span class="nav-number">5.8.</span> <span class="nav-text">volatile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#synchronized"><span class="nav-number">5.9.</span> <span class="nav-text">synchronized</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E7%94%A8"><span class="nav-number">5.9.1.</span> <span class="nav-text">怎么用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86-1"><span class="nav-number">5.9.2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81%E5%8D%87%E7%BA%A7"><span class="nav-number">5.9.3.</span> <span class="nav-text">锁升级</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ReentrantLock-%EF%BC%88AQS%EF%BC%89"><span class="nav-number">5.10.</span> <span class="nav-text">ReentrantLock （AQS）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CAS"><span class="nav-number">5.11.</span> <span class="nav-text">CAS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%90%E8%A7%82%E9%94%81%E5%92%8C%E6%82%B2%E8%A7%82%E9%94%81%E7%9A%84%E9%80%89%E6%8B%A9"><span class="nav-number">5.12.</span> <span class="nav-text">乐观锁和悲观锁的选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%BB%E9%94%81"><span class="nav-number">5.13.</span> <span class="nav-text">死锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="nav-number">5.14.</span> <span class="nav-text">线程池</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%BD%E5%A4%84"><span class="nav-number">5.14.1.</span> <span class="nav-text">好处</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%EF%BC%88%E5%A4%A7%E8%90%A5%E9%94%80%EF%BC%89"><span class="nav-number">5.14.2.</span> <span class="nav-text">应用（大营销）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">5.14.3.</span> <span class="nav-text">线程池工作流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%92%E7%BB%9D%E7%AD%96%E7%95%A5"><span class="nav-number">5.14.4.</span> <span class="nav-text">拒绝策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%98%9F%E5%88%97"><span class="nav-number">5.14.5.</span> <span class="nav-text">队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0CompletableFuture"><span class="nav-number">5.14.6.</span> <span class="nav-text">线程池CompletableFuture</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MySQL"><span class="nav-number">6.</span> <span class="nav-text">MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E6%9D%A1%E6%9F%A5%E8%AF%A2%E8%AF%AD%E5%8F%A5"><span class="nav-number">6.1.</span> <span class="nav-text">一条查询语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E6%9D%A1%E6%9B%B4%E6%96%B0%E8%AF%AD%E5%8F%A5%E6%80%8E%E4%B9%88%E6%89%A7%E8%A1%8C"><span class="nav-number">6.2.</span> <span class="nav-text">一条更新语句怎么执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E8%AF%AD%E5%8F%A5%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%8Cupdate-table-set-age-13-where-name-%E2%80%9Dw%E2%80%9D"><span class="nav-number">6.3.</span> <span class="nav-text">一个语句的问题，update table set age&#x3D;13 where name&#x3D;”w”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Innodb%E5%92%8CMyISAM"><span class="nav-number">6.4.</span> <span class="nav-text">Innodb和MyISAM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E5%A4%A7%E6%97%A5%E5%BF%97"><span class="nav-number">6.5.</span> <span class="nav-text">三大日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%85%A2%E6%9F%A5%E8%AF%A2"><span class="nav-number">6.6.</span> <span class="nav-text">慢查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8%E7%B4%A2%E5%BC%95"><span class="nav-number">6.7.</span> <span class="nav-text">为什么要用索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-number">6.8.</span> <span class="nav-text">索引的分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SQL%E4%BC%98%E5%8C%96%E7%9A%84%E7%82%B9"><span class="nav-number">6.9.</span> <span class="nav-text">SQL优化的点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95%E6%B3%A8%E6%84%8F%E7%9A%84%E7%82%B9"><span class="nav-number">6.10.</span> <span class="nav-text">创建索引注意的点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">6.11.</span> <span class="nav-text">索引失效的情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-%E6%A0%91%E7%9A%84%E5%A5%BD%E5%A4%84"><span class="nav-number">6.12.</span> <span class="nav-text">B+树的好处</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-%E6%A0%91%E8%83%BD%E5%AD%98%E5%A4%9A%E5%B0%91%E6%9D%A1%E6%95%B0%E6%8D%AE"><span class="nav-number">6.13.</span> <span class="nav-text">B+树能存多少条数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%B0%E5%BD%95%E9%94%81%E3%80%81%E9%97%B4%E9%9A%99%E9%94%81%E3%80%81%E4%B8%B4%E9%94%AE%E9%94%81"><span class="nav-number">6.14.</span> <span class="nav-text">记录锁、间隙锁、临键锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E5%92%8C%E9%9D%9E%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95"><span class="nav-number">6.15.</span> <span class="nav-text">聚簇索引和非聚簇索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%B7%A6%E5%89%8D%E7%BC%80%E5%8C%B9%E9%85%8D"><span class="nav-number">6.16.</span> <span class="nav-text">最左前缀匹配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8"><span class="nav-number">6.17.</span> <span class="nav-text">索引下推</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL%E9%94%81"><span class="nav-number">6.18.</span> <span class="nav-text">MySQL锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ACID"><span class="nav-number">6.19.</span> <span class="nav-text">ACID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-number">6.20.</span> <span class="nav-text">事务的隔离级别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVCC"><span class="nav-number">6.21.</span> <span class="nav-text">MVCC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86"><span class="nav-number">6.22.</span> <span class="nav-text">主从复制原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%BA%93%E5%88%86%E8%A1%A8"><span class="nav-number">6.23.</span> <span class="nav-text">分库分表</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis"><span class="nav-number">7.</span> <span class="nav-text">Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis%E7%94%A8%E6%9D%A5%E5%B9%B2%E5%98%9B"><span class="nav-number">7.0.1.</span> <span class="nav-text">Redis用来干嘛</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BF%AB"><span class="nav-number">7.1.</span> <span class="nav-text">Redis为什么快</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Redis-%E7%9A%84%E6%8C%81%E4%B9%85%E5%8C%96%E6%96%B9%E5%BC%8F%EF%BC%9F"><span class="nav-number">7.1.1.</span> <span class="nav-text">Redis 的持久化方式？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RDB-%E5%92%8C-AOF-%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">7.2.</span> <span class="nav-text">RDB 和 AOF 的区别？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%EF%BC%88%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%EF%BC%89"><span class="nav-number">7.3.</span> <span class="nav-text">高可用（主从复制）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%EF%BC%88%E5%93%A8%E5%85%B5%EF%BC%89"><span class="nav-number">7.4.</span> <span class="nav-text">高可用（哨兵）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%EF%BC%88%E9%9B%86%E7%BE%A4%EF%BC%89"><span class="nav-number">7.5.</span> <span class="nav-text">高可用（集群）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BC%93%E5%AD%98%E5%87%BB%E7%A9%BF%E3%80%81%E7%BC%93%E5%AD%98%E7%A9%BF%E9%80%8F%E3%80%81%E7%BC%93%E5%AD%98%E9%9B%AA%E5%B4%A9"><span class="nav-number">7.6.</span> <span class="nav-text">什么是缓存击穿、缓存穿透、缓存雪崩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%A4%84%E7%90%86%E7%83%ADkey%E5%92%8C%E5%A4%A7key"><span class="nav-number">7.7.</span> <span class="nav-text">怎么处理热key和大key</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5"><span class="nav-number">7.8.</span> <span class="nav-text">内存淘汰策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%80%E8%87%B4%E6%80%A7%EF%BC%88%E6%97%81%E8%B7%AF%E7%BC%93%E5%AD%98%E6%A8%A1%E5%BC%8F%EF%BC%89"><span class="nav-number">7.9.</span> <span class="nav-text">缓存和数据库一致性（旁路缓存模式）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redisson%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-number">7.10.</span> <span class="nav-text">Redisson分布式锁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redisson%E5%BB%B6%E6%97%B6%E9%98%9F%E5%88%97"><span class="nav-number">7.11.</span> <span class="nav-text">Redisson延时队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redisson%E9%99%90%E6%B5%81"><span class="nav-number">7.12.</span> <span class="nav-text">Redisson限流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%B3%E8%A1%A8"><span class="nav-number">7.13.</span> <span class="nav-text">跳表</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring"><span class="nav-number">8.</span> <span class="nav-text">Spring</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IOC"><span class="nav-number">8.1.</span> <span class="nav-text">IOC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOP"><span class="nav-number">8.2.</span> <span class="nav-text">AOP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E5%88%B0%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">8.3.</span> <span class="nav-text">用到的设计模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%EF%BC%88%E6%80%8E%E4%B9%88%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5%E7%9A%84%EF%BC%89"><span class="nav-number">8.4.</span> <span class="nav-text">Bean生命周期（怎么依赖注入的）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">8.5.</span> <span class="nav-text">Bean的作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean%E7%9A%84%E6%B3%A8%E5%85%A5%E6%96%B9%E5%BC%8F"><span class="nav-number">8.6.</span> <span class="nav-text">Bean的注入方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean%E7%9A%84%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96"><span class="nav-number">8.7.</span> <span class="nav-text">Bean的循环依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%E4%BC%A0%E6%92%AD"><span class="nav-number">8.8.</span> <span class="nav-text">事务的传播</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Springboot-Starter%E4%BC%98%E7%82%B9"><span class="nav-number">8.9.</span> <span class="nav-text">Springboot Starter优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Springboot-%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86"><span class="nav-number">8.10.</span> <span class="nav-text">Springboot 自动配置原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring%E3%80%81SpringMVC%E3%80%81SpringBoot"><span class="nav-number">8.11.</span> <span class="nav-text">Spring、SpringMVC、SpringBoot</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-number">9.</span> <span class="nav-text">消息队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E4%B8%89%E4%B8%AA%E5%A5%BD%E5%A4%84"><span class="nav-number">9.0.1.</span> <span class="nav-text">消息队列的三个好处</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kafka%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F"><span class="nav-number">9.1.</span> <span class="nav-text">Kafka两种模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E6%8B%A9Kafka%EF%BC%88send%EF%BC%8CKafkaListener%EF%BC%89"><span class="nav-number">9.1.1.</span> <span class="nav-text">为什么选择Kafka（send，KafkaListener）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E8%AF%81Kafka%E7%9A%84%E6%B6%88%E8%B4%B9%E9%A1%BA%E5%BA%8F"><span class="nav-number">9.1.2.</span> <span class="nav-text">保证Kafka的消费顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E8%AF%81Kafka%E7%9A%84%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1"><span class="nav-number">9.1.3.</span> <span class="nav-text">保证Kafka的消息不丢失</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kafka%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E9%87%8D%E5%A4%8D%E6%B6%88%E8%B4%B9"><span class="nav-number">9.1.4.</span> <span class="nav-text">Kafka如何保证消息不重复消费</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%AF%95%E5%92%8C%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97"><span class="nav-number">9.2.</span> <span class="nav-text">重试和死信队列</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MyBatis"><span class="nav-number">10.</span> <span class="nav-text">MyBatis</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%92%8C"><span class="nav-number">10.1.</span> <span class="nav-text">#{}和${}</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#statement%E5%92%8Cpreparedstatement"><span class="nav-number">10.2.</span> <span class="nav-text">statement和preparedstatement</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">11.</span> <span class="nav-text">设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE-%E8%B4%A3%E4%BB%BB%E9%93%BE%E3%80%81%E7%BB%84%E5%90%88%E8%A7%84%E5%88%99%E6%A0%91"><span class="nav-number">11.1.</span> <span class="nav-text">项目-责任链、组合规则树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE-%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F"><span class="nav-number">11.2.</span> <span class="nav-text">项目-工厂模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE-%E6%A8%A1%E7%89%88%E6%A8%A1%E5%BC%8F"><span class="nav-number">11.3.</span> <span class="nav-text">项目-模版模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE-%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F"><span class="nav-number">11.4.</span> <span class="nav-text">项目-策略模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#spring-%E5%B7%A5%E5%8E%82%E3%80%81%E4%BB%A3%E7%90%86%E3%80%81%E5%8D%95%E4%BE%8B"><span class="nav-number">11.5.</span> <span class="nav-text">spring-工厂、代理、单例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MyBatis-%E5%B7%A5%E5%8E%82%E3%80%81%E5%8D%95%E4%BE%8B%E3%80%81%E4%BB%A3%E7%90%86%E3%80%81%E6%A8%A1%E7%89%88%E3%80%81%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F"><span class="nav-number">11.6.</span> <span class="nav-text">MyBatis-工厂、单例、代理、模版、策略模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB%E7%9A%84"><span class="nav-number">12.</span> <span class="nav-text">杂七杂八的</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DDD"><span class="nav-number">12.1.</span> <span class="nav-text">DDD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">12.2.</span> <span class="nav-text">项目-数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%AA%E8%8A%B1%E7%AE%97%E6%B3%95"><span class="nav-number">12.3.</span> <span class="nav-text">雪花算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#xxl-job"><span class="nav-number">12.4.</span> <span class="nav-text">xxl-job</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OkHttp3"><span class="nav-number">12.5.</span> <span class="nav-text">OkHttp3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%82%E7%AD%89%E6%80%A7%EF%BC%88%E4%B8%80%E9%94%81%E4%BA%8C%E5%88%A4%E4%B8%89%E6%9B%B4%E6%96%B0%EF%BC%89"><span class="nav-number">12.6.</span> <span class="nav-text">幂等性（一锁二判三更新）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E9%97%AE%E9%A2%98"><span class="nav-number">13.</span> <span class="nav-text">项目问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF%E8%AE%BE%E8%AE%A1%E9%A2%981-%E7%A7%92%E6%9D%80"><span class="nav-number">14.</span> <span class="nav-text">场景设计题1 - 秒杀</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E7%83%AD%E7%82%B9%E5%95%86%E5%93%81%E6%95%B0%E6%8D%AE"><span class="nav-number">14.1.</span> <span class="nav-text">缓存热点商品数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%93%E5%AD%98%E6%89%A3%E5%87%8F"><span class="nav-number">14.2.</span> <span class="nav-text">库存扣减</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A7%92%E6%9D%80-%E4%B8%8B%E5%8D%95%E6%94%AF%E4%BB%98-MQ%E5%BC%82%E6%AD%A5"><span class="nav-number">14.3.</span> <span class="nav-text">秒杀-下单支付 MQ异步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%90%E6%B5%81%EF%BC%88%E5%9F%BA%E4%BA%8E%E7%94%A8%E6%88%B7id%EF%BC%89"><span class="nav-number">14.4.</span> <span class="nav-text">限流（基于用户id）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF%E8%AE%BE%E8%AE%A1%E9%A2%982-%E7%9F%AD%E9%93%BE"><span class="nav-number">15.</span> <span class="nav-text">场景设计题2-短链</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF%E8%AE%BE%E8%AE%A1%E9%A2%983-%E6%8E%92%E8%A1%8C%E6%A6%9C"><span class="nav-number">16.</span> <span class="nav-text">场景设计题3 - 排行榜</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF%E8%AE%BE%E8%AE%A1%E9%A2%984-10%E4%BA%BF%E8%AE%A2%E5%8D%95%E5%8F%B7%E5%A6%82%E4%BD%95%E5%8E%BB%E9%87%8D"><span class="nav-number">17.</span> <span class="nav-text">场景设计题4 - 10亿订单号如何去重</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF%E8%AE%BE%E8%AE%A1%E9%A2%985-%E8%AE%A2%E5%8D%95%E8%B6%85%E6%97%B6%E8%87%AA%E5%8A%A8%E5%8F%96%E6%B6%88"><span class="nav-number">18.</span> <span class="nav-text">场景设计题5 - 订单超时自动取消</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%84%E7%A7%8D%E9%9D%A2%E7%BB%8F%E4%B8%8A%E7%9C%8B%E5%88%B0%E7%9A%84"><span class="nav-number">19.</span> <span class="nav-text">各种面经上看到的</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E7%B1%BB"><span class="nav-number">19.1.</span> <span class="nav-text">内部类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E6%88%91%E4%BB%8B%E7%BB%8D"><span class="nav-number">20.</span> <span class="nav-text">自我介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9D%A2%E8%AF%95%E8%AE%B0%E5%BD%95"><span class="nav-number">21.</span> <span class="nav-text">面试记录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%BA%E7%A8%8B"><span class="nav-number">21.1.</span> <span class="nav-text">携程</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="蔡正海"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">蔡正海</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/mianjing/%E8%87%AA%E6%B5%8B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="【1开发】【八股】面经自测2 | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【1开发】【八股】面经自测2
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E5%85%AB%E8%82%A1/" itemprop="url" rel="index"><span itemprop="name">八股</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><blockquote>
+<p>这里暂时只放最最基本的面试题，汇总在这里，面试前看看，别最基础的也忘了。</p>
+<p>Java，并发，Mysql，Redis，消息队列（Kafka）、网络</p>
+</blockquote>
+<h1 id="Java基础"><a href="#Java基础" class="headerlink" title="Java基础"></a>Java基础</h1><h2 id="八种数据类型"><a href="#八种数据类型" class="headerlink" title="八种数据类型"></a>八种数据类型</h2><p>数：byte、short、int、long、float、double</p>
+<p>字符：char</p>
+<p>布尔：boolean</p>
+<h2 id="自动拆箱-装箱"><a href="#自动拆箱-装箱" class="headerlink" title="自动拆箱&#x2F;装箱"></a>自动拆箱&#x2F;装箱</h2><p>装箱：将基本数据类型转换为包装类型（Integer.valueOf()）</p>
+<p>拆箱：将包装类型转换为基本数据类型（i.intValue()）</p>
+<h2 id="面向对象三大特性"><a href="#面向对象三大特性" class="headerlink" title="面向对象三大特性"></a>面向对象三大特性</h2><p>封装（将数据和行为捆绑在一起形成一个对象）、继承（extends，子类继承父类）、多态（重写）</p>
+<p>为什么Java里应该多组合少继承：因为继承是强耦合的，违背了开闭原则（不修改代码，而是添加新的代码）。组合模式更灵活</p>
+<h2 id="final"><a href="#final" class="headerlink" title="final"></a>final</h2><p>修饰类：不能被继承</p>
+<p>修饰方法：不能被重写</p>
+<p>修饰变量：不能被修改</p>
+<h2 id="String、StringBuilder、StringBuffer"><a href="#String、StringBuilder、StringBuffer" class="headerlink" title="String、StringBuilder、StringBuffer"></a>String、StringBuilder、StringBuffer</h2><p>String：会生成一个新的String对象</p>
+<p>StringBuilder：非线程安全</p>
+<p>StringBuffer：线程安全</p>
+<h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h2><p>Error：OOM；stack</p>
+<p>Exception：IOException；空指针；数组越界；类型转换</p>
+<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>想在运行时获取类的信息，调用类的方法。</p>
+<p>动态代理：通过反射创建代理类，method调用方法</p>
+<p>field：修改私有字段</p>
+<h2 id="SPI"><a href="#SPI" class="headerlink" title="SPI"></a>SPI</h2><p>系统里的各个模块，往往有不同的实现方案，我们不允许代码里涉及具体的实现类。所以，SPI就是提供了一个机制：为某个接口寻找服务实现。在运行时发现和使用这些接口。</p>
+<table>
+<thead>
+<tr>
+<th>Java SPI</th>
+<th>SpringFactories</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>配置文件：META-INF&#x2F;services&#x2F;全限定接口名<br />内容：全限定类名（一个类名一行）</td>
+<td>META-INF&#x2F;spring.factories<br />内容：key1&#x3D;value1,value2,……</td>
+</tr>
+<tr>
+<td>怎么拿实例：ServiceLoader，返回对象实例</td>
+<td>怎么拿实例：SpringFactoriesLoader，返回类名</td>
+</tr>
+</tbody></table>
+<h2 id="BIO-NIO"><a href="#BIO-NIO" class="headerlink" title="BIO&#x2F;NIO"></a>BIO&#x2F;NIO</h2><p>用户进程想要执行 IO 操作的话，必须通过 <strong>系统调用</strong>来间接访问内核空间</p>
+<h3 id="BIO"><a href="#BIO" class="headerlink" title="BIO"></a>BIO</h3><p>IO会阻塞当前线程，直到操作完成。所以需要一个线程一个IO。</p>
+<h3 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h3><p>IO多路复用，单线程维护所有IO</p>
+<ul>
+<li>Java NIO<ul>
+<li>buffer：缓冲区存储数据</li>
+<li>Channel：FileChannel&#x2F;SocketChannel，负责从文件&#x2F;网络中向buffer传输数据</li>
+<li>Selector：轮询注册在上面的Channel，是否有新的读写事件，加入就绪集合<ul>
+<li>epoll：事件驱动，当某个socket有事件发生时，通过回调函数将其加入<ul>
+<li>边缘触发：只苏醒一次，需要保证一次性读完</li>
+<li>水平触发：不断苏醒，直到缓冲区都读完</li>
+<li>零拷贝：减少用户空间和内核空间之间进行多次拷贝</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h1><h2 id="四层模型"><a href="#四层模型" class="headerlink" title="四层模型"></a>四层模型</h2><p>应用层（DNS）</p>
+<p>传输层（TCP）</p>
+<p>网络层（ARP）</p>
+<p>网络接口层（以太网、WIFI）</p>
+<h2 id="从浏览器地址输入url到显示网页的过程"><a href="#从浏览器地址输入url到显示网页的过程" class="headerlink" title="从浏览器地址输入url到显示网页的过程"></a>从浏览器地址输入url到显示网页的过程</h2><p>DNS解析：DNS查询IP地址（根、顶级域、权威域）</p>
+<p>TCP连接：建立TCP连接（三次握手）</p>
+<p>开始发送HTTP请求：浏览器发送HTTP请求报文，服务器处理后返回HTTP响应报文，浏览器解析里面的HTLM文件并渲染。</p>
+<p>TCP连接关闭：（四次挥手）</p>
+<h2 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h2><p>200: 请求成功</p>
+<p>3xx: 重定向（301永久，302临时）</p>
+<p>4xx：请求错误（400语法错误、401未认证）</p>
+<p>500：服务器内部错误</p>
+<h2 id="HTTP和HTTPS"><a href="#HTTP和HTTPS" class="headerlink" title="HTTP和HTTPS"></a>HTTP和HTTPS</h2><p>SSL&#x2F;TLS协议，是非对称加密的（服务端向客户端发送数字证书公钥，生成会话密钥，用密钥通信）。我们需要先向CA申请证书。</p>
+<p>端口号80&#x2F;443</p>
+<h2 id="HTTP1-0-1-1-2-0-3-0"><a href="#HTTP1-0-1-1-2-0-3-0" class="headerlink" title="HTTP1.0  1.1  2.0 3.0"></a>HTTP1.0  1.1  2.0 3.0</h2><p>短链接，长链接，多路复用，快速UDP链接</p>
+<h2 id="HTTP报文"><a href="#HTTP报文" class="headerlink" title="HTTP报文"></a>HTTP报文</h2><p>请求行：get&#x2F;post；url</p>
+<p>请求头：主机名；类型；浏览器类型</p>
+<p>消息正文：post请求里的表单数据</p>
+<h2 id="粘包和拆包"><a href="#粘包和拆包" class="headerlink" title="粘包和拆包"></a>粘包和拆包</h2><p>TCP是面向流的，它并不包含数据包的概念。一个完整的包可能会被 TCP 拆分成多个包进行发送，也有可能把多个小的包封装成一个大的数据包发送。</p>
+<p>解决方案：发送端将每个包都封装成固定的长度，不足之处可以补0</p>
+<h2 id="TCP三次握手，四次挥手"><a href="#TCP三次握手，四次挥手" class="headerlink" title="TCP三次握手，四次挥手"></a>TCP三次握手，四次挥手</h2><p>SYN（Synchronize，连接请求），seq（序列号），ack（应答）【SYN，SYN+ACK，ACK】</p>
+<p>（状态：close，syn_sent，establish；close，listen，syn_rcvd，establish）</p>
+<p>FIN（finish请求），多了一次等待数据完成，2MSL【FIN，ACK，FIN+ACK，ACK】</p>
+<ul>
+<li>为什么是2MSL：如果最后一个ACK，服务端重传</li>
+</ul>
+<p>（状态：establish，fin_wait1，fin_wait2, time_wait,close；establish，close_wait，last_ack，close）</p>
+<h2 id="ARP"><a href="#ARP" class="headerlink" title="ARP"></a>ARP</h2><p>本机维护一个ARP缓存，保存IP到MAC的地址。</p>
+<p>如果缓存中没有，向网络中广播一个ARP请求包，对应的主机会回复这个应答</p>
+<h2 id="滑动窗口"><a href="#滑动窗口" class="headerlink" title="滑动窗口"></a>滑动窗口</h2><p>不可能TCP收到一个应答才发送下一个数据，因此引入了缓存空间【滑动窗口】。</p>
+<p>流量控制： TCP告知对方还有多少容量，这样就可以控制发送的速度。</p>
+<p>发送窗口（四块）：已发送且是否收到ack，未发送能否发送</p>
+<p>接收窗口（三块）：是否接收到</p>
+<p>GBN：计时器超时，只接受了0，2，3，下一次会发送4号帧</p>
+<h2 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h2><p>避免发送方填满网络，拥塞窗口</p>
+<ul>
+<li>慢启动：从1开始，指数级增长</li>
+<li>拥塞发生：达到阈值后，线性增长</li>
+<li>快速恢复：拥塞窗口可能置为0，可能置为一半+3【根据是否能收到三个连续的ack，意味着网络没有那么差】</li>
+</ul>
+<h2 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h2><p>无连接，不可靠，数据包可能会丢失重复乱序；但是它是尽最大努力发送，所以速度快。</p>
+<p>常用于音视频通讯</p>
+<h1 id="Java集合"><a href="#Java集合" class="headerlink" title="Java集合"></a>Java集合</h1><h2 id="了解哪些集合"><a href="#了解哪些集合" class="headerlink" title="了解哪些集合"></a>了解哪些集合</h2><p>ArrayList，LinkedList（CopyOnWriteArrayList）；HashMap（ConcurrentHashMap）；HashSet</p>
+<h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><p>结构：数组+链表+红黑树</p>
+<h3 id="put流程"><a href="#put流程" class="headerlink" title="put流程"></a>put流程</h3><p>根据散列算法计算数组下标：高16位和低16位异或，再&amp;对应的容量</p>
+<p>散列到桶数组中，要么更新节点，要么插入链表尾节点或红黑树中。当链表&gt;8时，会转成红黑树</p>
+<h3 id="扩容流程"><a href="#扩容流程" class="headerlink" title="扩容流程"></a>扩容流程</h3><p>每次put，当容量到达75%，会发生扩容。</p>
+<p>由于容量是2的n次方，所以我们只需要判定最高位是否为1。如果是1的话，就移到原索引+原容量的位置；如果是0就不动。</p>
+<h2 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h2><p>HashMap 为什么不安全</p>
+<ul>
+<li>两个<strong>同时put</strong>，应该用链表的，会被覆盖</li>
+<li><strong>get和put</strong>同时，这时候rehash了，就get null了</li>
+</ul>
+<p>ConcurrentHashMap原理（<strong>synchronized</strong>锁桶数组上的节点）（<strong>自旋+CAS</strong>避免不必要的锁）</p>
+<ul>
+<li>get方法不用加锁，用volatile保证可见性</li>
+<li>初始化数组：CAS+自旋 </li>
+<li>散列到的数组下标是空：CAS+自旋 </li>
+<li>其它的写入情况：synchronized</li>
+<li>CAS+synchronized （进行扩容）</li>
+</ul>
+<h2 id="CopyOnWriteArrayList"><a href="#CopyOnWriteArrayList" class="headerlink" title="CopyOnWriteArrayList"></a>CopyOnWriteArrayList</h2><p>写时复制，在写操作时，复制一个新的数组</p>
+<h1 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h1><h2 id="JVM的组织结构"><a href="#JVM的组织结构" class="headerlink" title="JVM的组织结构"></a>JVM的组织结构</h2><p>从上到下：类加载器；运行时数据区；垃圾回收期</p>
+<h3 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h3><p>类加载的过程：</p>
+<ul>
+<li>加载（将.class文件加载到内存，并生成一个class对象）</li>
+<li>连接：校验（字节流是否符合规范）、准备（静态变量默认值）、解析（直接指定实际的内存地址）</li>
+<li>初始化：类变量的初始化</li>
+</ul>
+<p>双亲委派机制：</p>
+<ul>
+<li>启动、扩展、应用、自定义</li>
+<li>从下往上递归，尽可能让父类去加载，只有当父类找不到指定的类，才会让子类去执行</li>
+</ul>
+<h3 id="运行时数据区"><a href="#运行时数据区" class="headerlink" title="运行时数据区"></a>运行时数据区</h3><p>所有线程共享的数据区</p>
+<ul>
+<li>方法区：类信息、静态变量</li>
+<li>堆：所有的对象</li>
+</ul>
+<p>线程隔离的数据区</p>
+<ul>
+<li>程序计数器：指向当前线程执行的字节码的行号</li>
+<li>虚拟机栈：每执行一个方法都会开启一个栈帧（局部变量、操作数、出口）</li>
+</ul>
+<h3 id="垃圾回收器"><a href="#垃圾回收器" class="headerlink" title="垃圾回收器"></a>垃圾回收器</h3><h4 id="不可达判断："><a href="#不可达判断：" class="headerlink" title="不可达判断："></a>不可达判断：</h4><p>从一组GCROOTS的根对象（栈帧中的局部变量、类静态变量），进行递归搜索。</p>
+<h4 id="垃圾回收算法："><a href="#垃圾回收算法：" class="headerlink" title="垃圾回收算法："></a>垃圾回收算法：</h4><p>标记清除、标记复制、标记整理</p>
+<h4 id="G1："><a href="#G1：" class="headerlink" title="G1："></a>G1：</h4><p>将堆划分为大小相等的区，然后维护一个优先级列表，优先选择回收价值最大的进行回收。</p>
+<p>初始标记(STW)；并发标记；最终标记(STW)；筛选回收。</p>
+<p>可预测的停顿（停顿预测模型）：垃圾回收会STW，用户可以指定期望停顿时间、G1会尽可能在这个时间内完成垃圾回收</p>
+<p>如何确定GC对象：每个region有一个Rset记录了谁引用了我，有card table记录了我引用了谁；只要扫描RSet（记录了GC的要收集的对象集合）</p>
+<h2 id="对象创建的过程"><a href="#对象创建的过程" class="headerlink" title="对象创建的过程"></a>对象创建的过程</h2><p>分配内存，初始化零值，设置对象头（哪个类，哈希码），初始化</p>
+<h2 id="内存分配方法"><a href="#内存分配方法" class="headerlink" title="内存分配方法"></a>内存分配方法</h2><p>指针碰撞：维护一个指针，每次向后移动一段距离</p>
+<p>空闲列表：记录堆中所有未占用的内存块</p>
+<h2 id="OOM"><a href="#OOM" class="headerlink" title="OOM"></a>OOM</h2><p>没有足够的内存</p>
+<p>原因：创建的队列过大，线程池的任务队列无限队列，无线递归</p>
+<p>导出Heap Dump文件，用Jprofile文件</p>
+<h1 id="Java并发"><a href="#Java并发" class="headerlink" title="Java并发"></a>Java并发</h1><h2 id="多线程可能存在的问题"><a href="#多线程可能存在的问题" class="headerlink" title="多线程可能存在的问题"></a>多线程可能存在的问题</h2><p>内存泄漏、死锁、线程不安全</p>
+<h2 id="线程有几种创建方式"><a href="#线程有几种创建方式" class="headerlink" title="线程有几种创建方式"></a>线程有几种创建方式</h2><p>Runnable：重写run方法，void</p>
+<p>Callable：重写call方法，有返回值的</p>
+<h2 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h2><p>进程：系统中的一个个应用（比如JVM进程）</p>
+<p>线程：多个线程有独立的程序计数器、栈、本地方法栈；共用JVM进程的堆和方法区。</p>
+<p>如何启动一个线程：start（）；线程池</p>
+<h2 id="线程上下文切换"><a href="#线程上下文切换" class="headerlink" title="线程上下文切换"></a>线程上下文切换</h2><p>一个CPU处理多个线程，从用户的角度多个线程同时执行。</p>
+<ul>
+<li>采用时间片轮转，线程在时间片内占用cpu，用完后处于就绪状态让出cpu。</li>
+<li>wait、sleep主动让出cpu</li>
+<li>IO操作阻塞</li>
+</ul>
+<h2 id="线程安全使用场景-单例"><a href="#线程安全使用场景-单例" class="headerlink" title="线程安全使用场景-单例"></a>线程安全使用场景-单例</h2><p>饿汉式（直接在类加载时初始化）、懒汉式（双重校验锁、Enum、静态内部类）</p>
+<h2 id="JMM"><a href="#JMM" class="headerlink" title="JMM"></a>JMM</h2><p>主内存（共享变量）【主存】；</p>
+<p> 每个线程私有的本地内存（共享变量的副本）【cpu里的L1缓存】</p>
+<p>为什么要有本地内存：直接操作主内存会产生资源竞争；乱序更友好，让cpu有更大的自由度来乱序执行</p>
+<h2 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h2><h3 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h3><p>无法透传，把变量保存在线程中。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>ThreadLocal 本身并不存储任何值，它只是作为一个映射，来映射线程的局部变量。线程维护一个ThreadLocalMap：&lt;ThreadLocal对象，局部变量&gt;</p>
+<p>开放定值法，被占了直接找下一个就行</p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>内存泄漏：kv对中的value是强引用，它并不会被回收。</p>
+<p>解决方法：使用完记得remove</p>
+<h2 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h2><p>JMM中的主内存和线程本地内存</p>
+<p>可见性（你的修改能被其他线程可见）：（写）强制刷到主内存，使得其它线程的本地内存失效，需要从主内存重新读。</p>
+<ul>
+<li>MESI（Modified, Exclusive, Shared, Invalid）：修改时，S&#x2F;E转为M，并广播Invalid信号</li>
+</ul>
+<p>有序性（防止cpu乱序导致的问题）：禁止指令重排</p>
+<ul>
+<li>写内存屏障（Store Barrier &#x2F; Write Barrier）： 当线程写入 volatile 变量时，JMM 会在写操作前插入 StoreStore 屏障，确保在这次写操作之前的所有普通写操作都已完成。接着在写操作后插入 StoreLoad 屏障，强制所有后来的读写操作都在此次写操作完成之后执行，这就确保了其他线程能立即看到 volatile 变量的最新值。</li>
+<li>读内存屏障（Load Barrier &#x2F; Read Barrier）： 当线程读取 volatile 变量时，JMM 会在读操作前插入 LoadLoad 屏障，确保在此次读操作之前的所有读操作都已完成。而在读操作后插入 LoadStore 屏障，防止在此次读操作之后的写操作被重排序到读操作之前，这样就确保了对 volatile 变量的读取总是能看到之前对同一变量或其他相关变量的写入结果。</li>
+</ul>
+<h2 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h2><h3 id="怎么用"><a href="#怎么用" class="headerlink" title="怎么用"></a>怎么用</h3><p>修饰方法，修饰代码块</p>
+<h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><p>JVM底层实现（monitorenter。monitorexit），ObjectMonienter（enterSet，waitSet，owner）</p>
+<h3 id="锁升级"><a href="#锁升级" class="headerlink" title="锁升级"></a>锁升级</h3><p>无锁</p>
+<p>偏向锁（只有一个线程）：对象头存了线程id，同一线程再次请求就无需再次同步。</p>
+<p>轻量锁（多个线程，交替执行）：CAS修改对象头的MarkWord。自旋等待锁释放。</p>
+<p>重量级锁：ObjectMonienter，mutex，涉及上下文切换，最耗时。</p>
+<h2 id="ReentrantLock-（AQS）"><a href="#ReentrantLock-（AQS）" class="headerlink" title="ReentrantLock （AQS）"></a>ReentrantLock （AQS）</h2><p>通过AQS实现：volatile int变量（state）+ FIFO的双端队列</p>
+<p>线程尝试cas修改state，如果成功就代表获取到锁；如果失败就去队列尾部自旋等待。</p>
+<p>公平锁&#x2F;非公平锁【体现在竞争锁是否需要判断AQS中存在等待的线程】；lock&#x2F;trylock</p>
+<h2 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h2><p>乐观锁的实现方式：原子操作，Compare-and-Swap</p>
+<p>问题ABA：A改成了B，又改回了A【用时间戳解决】</p>
+<p>其它问题：一直自旋；只能保证一个变量</p>
+<h2 id="乐观锁和悲观锁的选择"><a href="#乐观锁和悲观锁的选择" class="headerlink" title="乐观锁和悲观锁的选择"></a>乐观锁和悲观锁的选择</h2><p>悲观锁：</p>
+<ul>
+<li><p>假设最坏的场景-共享数据会被修改</p>
+</li>
+<li><p>高并发写操作频繁，直接锁定数据保证强一致性，涉及多个表的复杂事务操作</p>
+</li>
+</ul>
+<p>乐观锁：</p>
+<ul>
+<li>假设最好的场景-共享数据没有被修改，但是在更新的时候会进行条件判断</li>
+<li>需要高并发的场景，redis库存扣减</li>
+</ul>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><p>互斥；持有并等待；不可剥夺；循环等待</p>
+<p>如何避免：互斥不能破坏；一次性请求所有资源；主动释放；排序申请资源</p>
+<p>Mysql事务死锁的例子：事务A获得第一条数据的行锁，事务B获得第二条数据的行锁，事务A抢第二条数据的行锁，事务B第一条数据的行锁。</p>
+<h2 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h2><h3 id="好处"><a href="#好处" class="headerlink" title="好处"></a>好处</h3><ul>
+<li>降低资源消耗，线程复用，频繁地创建和删除线程都是自愿开销</li>
+<li>提高响应速度，任务到达时，无需等待线程创建</li>
+<li>提高线程的可管理性，线程是稀缺资源，防止无限制地创建线程，造成大量的线程上下文切换</li>
+</ul>
+<h3 id="应用（大营销）"><a href="#应用（大营销）" class="headerlink" title="应用（大营销）"></a>应用（大营销）</h3><ul>
+<li>项目背景：抽奖是高并发的，需要快速响应用户请求，（聚合查询奖品信息；定时任务更新库存）</li>
+<li>核心线程数：cpu核的两倍，即云服务器4核 * 2&#x3D;8（有很多网络通信，数据库操作，所以是IO密集性任务，有较多的空闲线程）</li>
+<li>最大线程数：8 * 2 &#x3D;16 </li>
+<li>阻塞队列：SynchronousQueue（提交后立即交给等待的线程处理，提高响应速度）</li>
+<li>拒绝策略：CallerRunsPolicy（由调用线程来执行该任务，保证了任务能成功执行）</li>
+</ul>
+<h3 id="线程池工作流程"><a href="#线程池工作流程" class="headerlink" title="线程池工作流程"></a>线程池工作流程</h3><p>核心线程—&gt; 任务队列 —&gt; 非核心线程 —&gt;拒绝策略</p>
+<h3 id="拒绝策略"><a href="#拒绝策略" class="headerlink" title="拒绝策略"></a>拒绝策略</h3><p>抛异常；让提交的任务执行；丢弃最老的任务；直接丢弃这个任务</p>
+<h3 id="队列"><a href="#队列" class="headerlink" title="队列"></a>队列</h3><p>有界队列；无界队列；SynchronousQueue；延迟队列</p>
+<h3 id="线程池CompletableFuture"><a href="#线程池CompletableFuture" class="headerlink" title="线程池CompletableFuture"></a>线程池CompletableFuture</h3><ul>
+<li>添加任务：runAsync（参数：runnable，线程池）</li>
+<li>编排：thenCombine，thenAccept</li>
+<li>等待所有任务执行完毕：allof().join()</li>
+</ul>
+<h1 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h1><h2 id="一条查询语句"><a href="#一条查询语句" class="headerlink" title="一条查询语句"></a>一条查询语句</h2><p>连接器，处理请求的连接</p>
+<p>解析器，解析sql语句</p>
+<p>优化器，看使用哪些索引</p>
+<p>执行期调用Innodb引擎</p>
+<h2 id="一条更新语句怎么执行"><a href="#一条更新语句怎么执行" class="headerlink" title="一条更新语句怎么执行"></a>一条更新语句怎么执行</h2><p>先连接器、解析器、优化器。</p>
+<p>开始更新，执行器和Innodb引擎配合执行。</p>
+<ul>
+<li><p>执行器先找引擎获取对应的行，从磁盘中读取内存。</p>
+</li>
+<li><p>引擎把行数据返回执行器，修改成一条新的数据。</p>
+</li>
+<li><p>两阶段提交【保证redolog和binlog的数据一致性】：写入redolog并将状态更新为prepare，写入binlog，提交事务并将状态更新为commit</p>
+</li>
+</ul>
+<h2 id="一个语句的问题，update-table-set-age-13-where-name-”w”"><a href="#一个语句的问题，update-table-set-age-13-where-name-”w”" class="headerlink" title="一个语句的问题，update table set age&#x3D;13 where name&#x3D;”w”"></a>一个语句的问题，update table set age&#x3D;13 where name&#x3D;”w”</h2><p>因为name没有建索引，所以会全表扫描。有可能会造成全表的锁定，会有过多的IO消耗，直接导致了内存的消耗。</p>
+<h2 id="Innodb和MyISAM"><a href="#Innodb和MyISAM" class="headerlink" title="Innodb和MyISAM"></a>Innodb和MyISAM</h2><p>事务？行级锁？聚簇索引？</p>
+<h2 id="三大日志"><a href="#三大日志" class="headerlink" title="三大日志"></a>三大日志</h2><p>binlog：存储的是逻辑SQL语句</p>
+<p>redolog：物理页的修改操作</p>
+<p>undolog：版本链，事务回滚</p>
+<h2 id="慢查询"><a href="#慢查询" class="headerlink" title="慢查询"></a>慢查询</h2><p>慢查询日志（slow_query_log）定位慢sql</p>
+<p>Explain（看索引和要扫描的行数）：</p>
+<ul>
+<li>可能用到的索引possible_keys&#x2F;实际用到的索引key：优化器使用了错误的索引，没有用到覆盖索引</li>
+<li>执行要遍历的行数rows&#x2F;有效执行的行数filtered：扫描的行数过多，无用列太多</li>
+</ul>
+<p>Profile：查看实际的资源开销，包含耗时、IO、上下文切换、CPU等</p>
+<p>Optimizer Trace：更细节，真正优化器执行语句的解析优化的过程</p>
+<h2 id="为什么要用索引"><a href="#为什么要用索引" class="headerlink" title="为什么要用索引"></a>为什么要用索引</h2><p>磁盘IO非常耗时，因此需要索引减少磁盘IO，直接跳到索引所在的数据行。B+树查询的效率非常高。</p>
+<h2 id="索引的分类"><a href="#索引的分类" class="headerlink" title="索引的分类"></a>索引的分类</h2><p>功能：主键，唯一索引、普通索引</p>
+<p>数据结构：B+索引<br>存储位置：聚簇索引、非聚簇索引</p>
+<h2 id="SQL优化的点"><a href="#SQL优化的点" class="headerlink" title="SQL优化的点"></a>SQL优化的点</h2><p>避免使用select *。</p>
+<p>深分页用子查询或者延迟关联。</p>
+<ul>
+<li>SELECT * FROM t_order WHERE id &gt;&#x3D; (SELECT id FROM t_order limit 1000000, 1) LIMIT 10;</li>
+<li>SELECT t1.* FROM t_order t1 INNER JOIN (SELECT id FROM t_order limit 1000000, 10) t2 ON t1.id &#x3D; t2.id;</li>
+</ul>
+<p>join：小表驱动大表、适当增加冗余字段</p>
+<p>正确使用索引（如下）</p>
+<h2 id="创建索引注意的点"><a href="#创建索引注意的点" class="headerlink" title="创建索引注意的点"></a>创建索引注意的点</h2><p>选择合适的列作为索引：用经常作为查询、排序条件的；不用区分度低的、频繁更新、无序的（uuid）</p>
+<p>避免过多索引：</p>
+<p>合理运用联合索引</p>
+<h2 id="索引失效的情况"><a href="#索引失效的情况" class="headerlink" title="索引失效的情况"></a>索引失效的情况</h2><p>最左前缀匹配</p>
+<p>负向条件不能用索引，!&#x3D;、&lt;&gt;、not in、not exists、not like</p>
+<p>like，当%出现在左边时，索引会失效</p>
+<p>orderby，确保orderby的列被索引覆盖，或者与where的索引不匹配</p>
+<p>or，两边不一致且没有建立联合索引</p>
+<p>函数，索引列上有函数</p>
+<h2 id="B-树的好处"><a href="#B-树的好处" class="headerlink" title="B+树的好处"></a>B+树的好处</h2><p>B+树是一棵搜索树，非叶子节点只存索引，叶子节点是一个双向列表存储数据。</p>
+<p>矮胖型：更少的磁盘IO</p>
+<ol>
+<li><p>非叶子节点只存索引：能存的索引更多，高度更低</p>
+</li>
+<li><p>叶子节点是一个双向列表存储数据：范围查询更方便</p>
+</li>
+<li><p>查询效率更稳定：相同深度</p>
+</li>
+</ol>
+<h2 id="B-树能存多少条数据"><a href="#B-树能存多少条数据" class="headerlink" title="B+树能存多少条数据"></a>B+树能存多少条数据</h2><p>数据页16K，一个索引16字节，一个数据行1K字节</p>
+<p>3层可以存2000W条数据：1000（16K&#x2F;16） * 1000 * 16 (16K&#x2F;1K)</p>
+<h2 id="记录锁、间隙锁、临键锁"><a href="#记录锁、间隙锁、临键锁" class="headerlink" title="记录锁、间隙锁、临键锁"></a>记录锁、间隙锁、临键锁</h2><p>记录锁：必须为唯一索引且精准匹配</p>
+<p>间隙锁、临键锁：必须为非唯一索引</p>
+<h2 id="聚簇索引和非聚簇索引"><a href="#聚簇索引和非聚簇索引" class="headerlink" title="聚簇索引和非聚簇索引"></a>聚簇索引和非聚簇索引</h2><p>存的数据；只存指针和索引（需要回表）</p>
+<h2 id="最左前缀匹配"><a href="#最左前缀匹配" class="headerlink" title="最左前缀匹配"></a>最左前缀匹配</h2><p>联合索引，需要从最左列开始，不能跳过中间的列</p>
+<h2 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h2><p>没有覆盖索引，需要回表。索引下推就是直接在遍历的索引就进行条件判断，而不是回表之后再进行条件判断。</p>
+<h2 id="MySQL锁"><a href="#MySQL锁" class="headerlink" title="MySQL锁"></a>MySQL锁</h2><p>乐观锁、悲观锁：MVCC 和 行锁</p>
+<p>读写锁：读锁（加了读锁，其他还能读不能写）；写锁（加了写锁，其他读写都不行）</p>
+<p>行锁、表锁</p>
+<h2 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h2><p>A原子性：要么全部完成 、要么都不完成（undolog）</p>
+<p>I隔离性：事务之间互不干扰（MVCC）</p>
+<p>D持久性：redolog，undolog</p>
+<h2 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h2><p>读未提交：</p>
+<p>读已提交：脏读（读到未提交的数据）</p>
+<p>可重复读：可重复读（重复读的数据不一致）</p>
+<p>串行化：幻读（读取一个区间，由于另一个事务的插入，导致新增一条新纪录）</p>
+<h2 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h2><p>用于实现RC和RR</p>
+<p>实现方式：版本链+ReadView。</p>
+<ul>
+<li><p>版本链：数据行有两个隐式字段（事务ID和undolog指针），undolog指针构成了一条版本链记录之前的值。</p>
+</li>
+<li><p>ReadView：创建该事务的ID；活跃ID；最小ID；最大ID（那么小于最小的可以看到；大于最大的看不到；在两者之间的根据是否在活跃ID中判断，不在能看到）</p>
+</li>
+</ul>
+<p>RC和RR的实现区别：RC（在每次生成ReadView）；RR（在第一次生成ReadView）</p>
+<h2 id="主从复制原理"><a href="#主从复制原理" class="headerlink" title="主从复制原理"></a>主从复制原理</h2><ul>
+<li>对于主库<ul>
+<li>更新binlog</li>
+<li>dump线程向从库推送</li>
+</ul>
+</li>
+<li>对于从库<ul>
+<li>接收binlog，写入中继日志</li>
+<li>SQL线程读取并执行这些SQL语句</li>
+</ul>
+</li>
+</ul>
+<h2 id="分库分表"><a href="#分库分表" class="headerlink" title="分库分表"></a>分库分表</h2><p>负载均衡：单表单库数据量过大（分表），连接数量过大（分库），导致性能下降。</p>
+<p><strong>水平分库分表（根据用户id）</strong>（用户信息，发奖订单，积分订单，活动订单），垂直分库分表</p>
+<h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><h3 id="Redis用来干嘛"><a href="#Redis用来干嘛" class="headerlink" title="Redis用来干嘛"></a>Redis用来干嘛</h3><ul>
+<li>缓存<ul>
+<li>String：各种东西，比如奖品，验证码</li>
+<li>Hash：getMap，奖品概率查找表</li>
+<li>List：所有的线程池信息</li>
+</ul>
+</li>
+<li>延时队列（RDelayedQueue）</li>
+<li>限流器（RRateLimiter）</li>
+<li>分布式锁</li>
+<li>发布，订阅</li>
+</ul>
+<h2 id="Redis为什么快"><a href="#Redis为什么快" class="headerlink" title="Redis为什么快"></a>Redis为什么快</h2><p>基于内存的数据存储：避免了磁盘IO</p>
+<p>单线程模型：避免了线程切换和锁竞争</p>
+<p>IO多路复用：一个线程处理多个IO请求（IO请求是需要向内核请求系统调用的，select&#x2F;epoll通过维护多个套接字避免了阻塞）</p>
+<h3 id="Redis-的持久化方式？"><a href="#Redis-的持久化方式？" class="headerlink" title="Redis 的持久化方式？"></a>Redis 的持久化方式？</h3><p><strong>两个持久化方式</strong></p>
+<ul>
+<li>RDB（Redis DataBase）：异步创建数据集的快照，不会阻塞<ul>
+<li>bgsava</li>
+<li>redis.conf中配置命令，发生多少次变更，多少秒后触发一次RDB</li>
+</ul>
+</li>
+<li>AOF（Append only file）：追加每个写操作到AOF文件中<ul>
+<li>流程1:将所有写命令追加到AOF buffer中</li>
+<li>流程2:持久化sync<ul>
+<li>每条写指令&#x2F;每秒&#x2F;只在Redis关闭时执行</li>
+</ul>
+</li>
+<li>流程3:重写<ul>
+<li>直接将Redis重写成一系列写命令</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="RDB-和-AOF-的区别？"><a href="#RDB-和-AOF-的区别？" class="headerlink" title="RDB 和 AOF 的区别？"></a>RDB 和 AOF 的区别？</h2><p>RDB，文件小，对性能影响较小，但是容易造成数据丢失（性能是首要指标）</p>
+<p>AOF，文件大，实时性好，对性能影响较大（尽可能减少数据丢失）</p>
+<p>混合持久化：在AOF重写的同时，生成一份RDB快照，这份快照作为AOF文件的一部分，最后再附加新的写入命令。</p>
+<h2 id="高可用（主从复制）"><a href="#高可用（主从复制）" class="headerlink" title="高可用（主从复制）"></a>高可用（主从复制）</h2><p>主节点（写），从节点（读）</p>
+<h2 id="高可用（哨兵）"><a href="#高可用（哨兵）" class="headerlink" title="高可用（哨兵）"></a>高可用（哨兵）</h2><p>实现主从复制的高可用，故障（主节点宕机）的自动转移</p>
+<p>哨兵节点：监控数据节点</p>
+<ul>
+<li>定时监控：定时任务发送心跳包</li>
+<li>主观下线和客观下线：发现心跳包没有回复；询问其他哨兵节点</li>
+<li>故障转移：选出一个节点作为新的主节点，原来的主节点作为从节点</li>
+</ul>
+<h2 id="高可用（集群）"><a href="#高可用（集群）" class="headerlink" title="高可用（集群）"></a>高可用（集群）</h2><p>切片，把数据通过Key散列（CRC16 % 2^14）到哈希槽，再散列到不同的节点</p>
+<h2 id="什么是缓存击穿、缓存穿透、缓存雪崩"><a href="#什么是缓存击穿、缓存穿透、缓存雪崩" class="headerlink" title="什么是缓存击穿、缓存穿透、缓存雪崩"></a>什么是缓存击穿、缓存穿透、缓存雪崩</h2><p><strong>缓存击穿</strong></p>
+<p>热点数据不在缓存中，大量数据尽量，直达数据库。</p>
+<p>解决方案</p>
+<ul>
+<li><p>预热</p>
+</li>
+<li><p>过期问题：发现缓存中没有，对A这个数据加锁，拿到缓存再返回给用户</p>
+</li>
+</ul>
+<p><strong>缓存穿透</strong></p>
+<p>查询根本不存在的数据，那么也会直达数据库</p>
+<p>解决方案</p>
+<ul>
+<li>加一个布隆过滤器（适用海量数据的场景）<ul>
+<li>告诉我们key一定不存在或者可能存在</li>
+<li>也就是多个hash映射，只要有一个为0，就说明不存在</li>
+</ul>
+</li>
+<li>加一个null</li>
+</ul>
+<p><strong>缓存雪崩</strong></p>
+<p>缓存大量过期，或者缓存服务器宕机</p>
+<p>解决方案</p>
+<ul>
+<li>集群部署</li>
+<li>使用多级缓存（Redis不可用了，也可以用本地缓存）</li>
+<li>设置不同的过期时间</li>
+</ul>
+<h2 id="怎么处理热key和大key"><a href="#怎么处理热key和大key" class="headerlink" title="怎么处理热key和大key"></a>怎么处理热key和大key</h2><p>热（短时间大量访问）：使用主从复制，打散到不同服务器；以及缓存击穿的问题</p>
+<p>大：比如Hash过大，拆分</p>
+<h2 id="内存淘汰策略"><a href="#内存淘汰策略" class="headerlink" title="内存淘汰策略"></a>内存淘汰策略</h2><p>noeviction：默认策略，不进行任何数据淘汰，直接返回错误信息。适用于不能丢失数据的场景。</p>
+<p>volatile-lru：从设置了过期时间的键中，使用 LRU 算法淘汰最不常用的键。</p>
+<p>allkeys-lru：从所有键中，使用 LRU（最近最少使用）算法淘汰最不常用的键。适用于缓存场景，优先保留最近使用的数据。</p>
+<p>allkeys-random：从所有键中随机淘汰键。</p>
+<p>volatile-random：从设置了过期时间的键中随机淘汰键。</p>
+<p>volatile-ttl：从设置了过期时间的键中淘汰即将过期（TTL，Time To Live，存活时间）的键。</p>
+<p>allkeys-lfu：对所有的 key 使用 LFU 算法进行删除。</p>
+<p>volatile-lfu：对设置了过期时间的 key 使用 LFU 算法进行删除。</p>
+<h2 id="缓存和数据库一致性（旁路缓存模式）"><a href="#缓存和数据库一致性（旁路缓存模式）" class="headerlink" title="缓存和数据库一致性（旁路缓存模式）"></a>缓存和数据库一致性（旁路缓存模式）</h2><p>读：先读缓存，读不到了从数据库中读然后放入缓存</p>
+<p>写：先写数据库，再删缓存</p>
+<ul>
+<li>缓存删除失败怎么办：用消息队列删</li>
+</ul>
+<h2 id="Redisson分布式锁"><a href="#Redisson分布式锁" class="headerlink" title="Redisson分布式锁"></a>Redisson分布式锁</h2><p>一个简易版的分布式锁：setnx加锁，并设置过期时间；lua脚本（判断锁的值是否相等，再删除，防止删除别人的锁）删除锁</p>
+<p>锁续期：看门狗，只要线程还没执行完，看门狗会不断执行锁续期（lua脚本，判断是否为持锁线程，如果是就续期）。默认是定时任务每隔10s，将过期时间设置为30s</p>
+<h2 id="Redisson延时队列"><a href="#Redisson延时队列" class="headerlink" title="Redisson延时队列"></a>Redisson延时队列</h2><p>基于zset实现，根据相应的过期时间作为分数。扫描Sortset中的过期元素，加入就绪消息列表。</p>
+<h2 id="Redisson限流"><a href="#Redisson限流" class="headerlink" title="Redisson限流"></a>Redisson限流</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">RRateLimiter</span> <span class="variable">rateLimiter</span> <span class="operator">=</span> redissonClient.getRateLimiter(<span class="string">&quot;javaguide.limiter&quot;</span>);</span><br><span class="line"><span class="comment">// 尝试设置限流器的速率为每小时 100 次</span></span><br><span class="line"><span class="comment">// RateType 有两种，OVERALL是全局限流,ER_CLIENT是单Client限流（可以认为就是单机限流）</span></span><br><span class="line">rateLimiter.trySetRate(RateType.OVERALL, <span class="number">100</span>, <span class="number">1</span>, RateIntervalUnit.HOURS);</span><br><span class="line"><span class="comment">// 尝试在 5 秒内获取一个许可，如果成功则返回 true，否则返回 false</span></span><br><span class="line"><span class="comment">// tryAcquire()是同步方法，对应的异步方法：tryAcquireAsync()</span></span><br><span class="line"><span class="type">boolean</span> <span class="variable">res</span> <span class="operator">=</span> rateLimiter.tryAcquire(<span class="number">1</span>, <span class="number">5</span>, TimeUnit.SECONDS);</span><br></pre></td></tr></table></figure>
+
+<p>令牌桶算法：系统按照固定的速率向桶中添加令牌，只有拿到令牌才能执行</p>
+<p>lua脚本：使用zset保存请求信息，这样可以判断时间戳有没有超过一个周期。如果有的话就可以生成令牌了。最后，查看是否有令牌能拿到，能拿到就decyby 1.</p>
+<p>对比其他的，Sentinel，Spring Cloud Gateway</p>
+<h2 id="跳表"><a href="#跳表" class="headerlink" title="跳表"></a>跳表</h2><p>跳表，是一种实现了二分查找的链表。</p>
+<p>传统链表，查找算法是O（n）。跳表，增加了多级索引，查找的时间复杂度是O(log n)的。</p>
+<h1 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h1><h2 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h2><p>控制（成员变量的控制）翻转（配置文件+工厂）</p>
+<p>目的：解耦合</p>
+<p>实现方式：通过spring工厂读取配置文件，通过反射创建对象</p>
+<ul>
+<li>applicationContext.getBean()</li>
+<li>读取配置文件BeanDefinition</li>
+<li>通过反射创建对象</li>
+<li>属性赋值</li>
+</ul>
+<h2 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h2><p>面向切面编程，通过代理类为原始类增加共性的额外功能</p>
+<p>好处：便于原始类的维护</p>
+<p>实现方式：</p>
+<ul>
+<li>JDK动态代理：Proxy.newProxyInstance(类加载器，接口，InvocationHandler)</li>
+<li>cglib动态代理：Enhancer（类加载器，类，MethodInteceptor）</li>
+</ul>
+<p>实际使用</p>
+<ul>
+<li>aspect：切面</li>
+<li>pointcut：定义一个切点</li>
+<li>around：定义要做的具体操作</li>
+</ul>
+<h2 id="用到的设计模式"><a href="#用到的设计模式" class="headerlink" title="用到的设计模式"></a>用到的设计模式</h2><p>工厂、代理、单例</p>
+<h2 id="Bean生命周期（怎么依赖注入的）"><a href="#Bean生命周期（怎么依赖注入的）" class="headerlink" title="Bean生命周期（怎么依赖注入的）"></a>Bean生命周期（怎么依赖注入的）</h2><p>实例化（创建一个Bean的实例），属性赋值（执行setter方法），初始化（允许自定义执行的逻辑，比如init-method）、销毁（允许自定义的逻辑，比如destroy-method）</p>
+<h2 id="Bean的作用域"><a href="#Bean的作用域" class="headerlink" title="Bean的作用域"></a>Bean的作用域</h2><p>单例：存在线程安全问题，尽量不要用有状态的bean</p>
+<p>原型：每次请求都会创建一个实例，因此不存在线程安全问题</p>
+<h2 id="Bean的注入方式"><a href="#Bean的注入方式" class="headerlink" title="Bean的注入方式"></a>Bean的注入方式</h2><p>构造函数（更推荐，保证了依赖在对象创建时就被注入，且对象是不可变的）</p>
+<p>Setter</p>
+<p>autowird和resource</p>
+<h2 id="Bean的循环依赖"><a href="#Bean的循环依赖" class="headerlink" title="Bean的循环依赖"></a>Bean的循环依赖</h2><p>A依赖B，B依赖A，就出现了循环依赖。</p>
+<p>解决方式：三级缓存，这样可以直接去缓存里拿，而不是无限死循环</p>
+<ul>
+<li>一级缓存：完全实例化好的bean</li>
+<li>二级缓存：实例化完成，但还没注入的bean，</li>
+<li>三级缓存：bean工厂对象，用于提前标记对象</li>
+<li>为什么要有三级缓存（BeanPostProcessor代理的存在，会直接覆盖掉二级缓存中的普通对象）</li>
+</ul>
+<h2 id="事务的传播"><a href="#事务的传播" class="headerlink" title="事务的传播"></a>事务的传播</h2><p>一个事务被另一个事务调用，那么怎么回滚</p>
+<ul>
+<li>required（默认）：内部事务直接加入外部事务（任何一个方法报错都回滚）</li>
+<li>required_new：内部事务开一个独立的事务，并将当前事务挂起，独立的事务（互不干扰的）</li>
+<li>nest：在嵌套事务内执行（内部事务不会导致外部事务的回滚）</li>
+</ul>
+<h2 id="Springboot-Starter优点"><a href="#Springboot-Starter优点" class="headerlink" title="Springboot Starter优点"></a>Springboot Starter优点</h2><p>内置各种Tomcat容器。</p>
+<p>以前的spring开发需要大量的xml文件，导入jar。现在提供了一系列的Starter，可以直接从pom依赖中引入。</p>
+<h2 id="Springboot-自动配置原理"><a href="#Springboot-自动配置原理" class="headerlink" title="Springboot 自动配置原理"></a>Springboot 自动配置原理</h2><p>自动装配：对于外部引用的jar包，定义了一套SPI接口规范，扫描META-INF&#x2F;spring.factories文件，将里面的功能配置进SpringBoot。</p>
+<p>@SpringBootApplication-@EnableAutoConfiguration</p>
+<ul>
+<li>ImportSelector（手动配置）</li>
+<li>加载META-INF&#x2F;spring.factories文件中对应的条目</li>
+</ul>
+<h2 id="Spring、SpringMVC、SpringBoot"><a href="#Spring、SpringMVC、SpringBoot" class="headerlink" title="Spring、SpringMVC、SpringBoot"></a>Spring、SpringMVC、SpringBoot</h2><p>Spring是最基础的框架， 利用IOC和AOP，解决了应用组件的解藕，解决了面向切面编程。</p>
+<p>在此基础之上，开发了MVC框架，通过Model、View、Controller使得开发web应用变得很容易。</p>
+<p>在此基础之上，springboot它实现了自动配置，通过封装starter来简化各种xml的配置。</p>
+<p>springboot是承载者辅助简化 项目搭建流程，如果承载的是web项目，那么它承载的就是MVC框架。</p>
+<h1 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h1><h3 id="消息队列的三个好处"><a href="#消息队列的三个好处" class="headerlink" title="消息队列的三个好处"></a>消息队列的三个好处</h3><p><strong>异步处理，减少响应时间（以发奖为例）</strong></p>
+<p>请求在写入消息队列就立即返回给用户了</p>
+<p><strong>削峰，限流（以发奖为例）</strong></p>
+<p>把要做的事务存储在消息队列中（压力转嫁到MQ），然后后端再慢慢根据自己的能力去消费这些消息，避免直接把后端服务打掉。</p>
+<p><strong>解耦</strong></p>
+<p>新增业务，只要对该类消息感兴趣，只需订阅该消息</p>
+<h2 id="Kafka两种模式"><a href="#Kafka两种模式" class="headerlink" title="Kafka两种模式"></a>Kafka两种模式</h2><p>队列（点对点）：只发送给一个消费者</p>
+<p>发布订阅：消息发送给所有消费者</p>
+<h3 id="为什么选择Kafka（send，KafkaListener）"><a href="#为什么选择Kafka（send，KafkaListener）" class="headerlink" title="为什么选择Kafka（send，KafkaListener）"></a>为什么选择Kafka（send，KafkaListener）</h3><p>极致的性能，超高吞吐量（百万级）；可以实现高可用，可以做到0消息丢失的情况；生态系统的兼容性非常好</p>
+<p>缺点，<strong>消息重复消费</strong>，造成轻微的影响。</p>
+<h3 id="保证Kafka的消费顺序"><a href="#保证Kafka的消费顺序" class="headerlink" title="保证Kafka的消费顺序"></a>保证Kafka的消费顺序</h3><p>Kafka一个topic里包含多个partition，只保证partition分区中的消息有序。所以send的时候指定分区（或者使用对象id作为key）。</p>
+<h3 id="保证Kafka的消息不丢失"><a href="#保证Kafka的消息不丢失" class="headerlink" title="保证Kafka的消息不丢失"></a>保证Kafka的消息不丢失</h3><p><strong>生产者丢失消息</strong></p>
+<ol>
+<li>send函数的返回值是ListenableFuture，添加回调函数，判定消息结果。</li>
+<li>设置重试次数稍微大一点</li>
+<li>将消息发送之前，写入task表，如果发送失败，定时任务去补偿。</li>
+</ol>
+<p><strong>消费者丢失消息</strong></p>
+<p>偏移量，当消费者自动提交了偏移量，但是还没消费就挂掉了。改成手动提交偏移量。</p>
+<p><strong>Kafka丢失消息</strong></p>
+<p>Kafka挂掉，多副本机制，但消息还没有同步。</p>
+<p>使用acks&#x3D;all，最安全的，但是延迟会很高</p>
+<h3 id="Kafka如何保证消息不重复消费"><a href="#Kafka如何保证消息不重复消费" class="headerlink" title="Kafka如何保证消息不重复消费"></a>Kafka如何保证消息不重复消费</h3><ul>
+<li>mysql幂等校验</li>
+<li>最根本的原因，已经消费的数据没有成功提交offset，拉取到消息再提交</li>
+</ul>
+<h2 id="重试和死信队列"><a href="#重试和死信队列" class="headerlink" title="重试和死信队列"></a>重试和死信队列</h2><p>Kafka 消费者在默认配置下会进行最多 10 次 的重试，每次重试的时间间隔为 0，即立即进行重试。</p>
+<p>当重试全部失败后，不会永久丢弃，会加入死信队列“原topic.dlh”。</p>
+<h1 id="MyBatis"><a href="#MyBatis" class="headerlink" title="MyBatis"></a>MyBatis</h1><h2 id="和"><a href="#和" class="headerlink" title="#{}和${}"></a>#{}和${}</h2><p>#使用了预处理，利用?，能有效防止SQL注入；$会直接替换到SQL语句中，会产生SQL注入</p>
+<h2 id="statement和preparedstatement"><a href="#statement和preparedstatement" class="headerlink" title="statement和preparedstatement"></a>statement和preparedstatement</h2><p>这其实是#{}的体现。</p>
+<p>在<code>PreparedStatement</code>对象创建时就被发送到数据库进行预编译。然后，我们后面多次执行这条SQL语句，只需要执行set方法set方法就行</p>
+<h1 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h1><h2 id="项目-责任链、组合规则树"><a href="#项目-责任链、组合规则树" class="headerlink" title="项目-责任链、组合规则树"></a>项目-责任链、组合规则树</h2><p>对于串行连续的规则过滤，用责任链。</p>
+<p>好处：减少ifelse便于扩展；根据数据库的配置动态生成责任链。</p>
+<p>实现：实现了一个链表并且每次去遍历，只是这里的链表节点是bean对象</p>
+<h2 id="项目-工厂模式"><a href="#项目-工厂模式" class="headerlink" title="项目-工厂模式"></a>项目-工厂模式</h2><p>对于责任链和组合规则树的创建，采用简单工厂模式</p>
+<p>好处：解耦，将对象的创建和使用解耦，我不需要知道这个对象是怎么创建的</p>
+<h2 id="项目-模版模式"><a href="#项目-模版模式" class="headerlink" title="项目-模版模式"></a>项目-模版模式</h2><p>对于抽奖的整体流程，采用模版模式定义算法的骨架</p>
+<p>好处：提高代码的复用性和可扩展性，定义了算法的骨架，由不同的子类去实现。</p>
+<p>实现：抽象类定义算法的步骤，由子类具体实现</p>
+<h2 id="项目-策略模式"><a href="#项目-策略模式" class="headerlink" title="项目-策略模式"></a>项目-策略模式</h2><p>对于抽到奖品的计算，采用策略模式，要么去散列表里找，要么二分搜索。</p>
+<p>好处：减少if else</p>
+<p>实现：定义一个接口，不同策略实现不同的策略实现类。</p>
+<h2 id="spring-工厂、代理、单例"><a href="#spring-工厂、代理、单例" class="headerlink" title="spring-工厂、代理、单例"></a>spring-工厂、代理、单例</h2><h2 id="MyBatis-工厂、单例、代理、模版、策略模式"><a href="#MyBatis-工厂、单例、代理、模版、策略模式" class="headerlink" title="MyBatis-工厂、单例、代理、模版、策略模式"></a>MyBatis-工厂、单例、代理、模版、策略模式</h2><p>工厂（SqlSessionFactory）</p>
+<p>单例（Configuration）</p>
+<p>代理（DAO接口代理实现类）</p>
+<p>模版（BaseExecutor、CachingExecutor、SimpleExecutor，套娃）</p>
+<p>策略（TypeHandler、LongTypeHandler、StringTypeHandler）</p>
+<h1 id="杂七杂八的"><a href="#杂七杂八的" class="headerlink" title="杂七杂八的"></a>杂七杂八的</h1><h2 id="DDD"><a href="#DDD" class="headerlink" title="DDD"></a>DDD</h2><p>首先DDD最重要的就是解耦，相比MVC来说虽然DDD在前期的代码开发量更大，但是其防腐的设计让后期的维护和扩展成本更低，其核心在于domain和infrastructure层的解耦，原本我的业务直接去接触POJO，现在做了一层1：1的转换关系，我domain层可能很多个模块，比如策略、返利、活动，业务需求一旦改变，我只修改所属层的Entity，而不需要改POJO，就不会把POJO撑的非常大，但是这层1：1的对应也让代码开发量更大，综合来说还是得看项目的需求。</p>
+<ul>
+<li><p>值对象&#x2F;实体对象&#x2F;聚合对象</p>
+<ul>
+<li><p>不产生数据变化的，对数据库不产生影响的，不具备唯一id和标识性的信息，就定义为值对象。用于描述对象属性的值，比如订单状态有多个值，我们用枚举来描述，就可以创建一个订单状态枚举值对象，便于拓展和统一的管理。</p>
+</li>
+<li><p>实体对象就是对数据库会产生影响的，具有唯一值的，和PO对象一 一 对应的，这种就定义为实体对象。</p>
+</li>
+<li><p>聚合对象通常来说和事务相关，要拿综合的数据做一个完整的事务，在聚合内保证事务的统一，在领域外保证事务的最终一致性。</p>
+</li>
+</ul>
+</li>
+<li><p>抽奖、返利是核心域；奖品、抽奖策略、积分是支撑域。业务模型就说说每个领域的聚合&#x2F;实体&#x2F;值对象、服务、仓储。 </p>
+</li>
+<li><p>依赖倒置的目的是为了让， Domain层和基础层解藕，Domain层完全控制接口的设计。比如某天数据库换了也只用改基础层。 </p>
+</li>
+<li><p>每个领域只是一个分包模块，互相调用直接注入对应领域的服务。</p>
+</li>
+</ul>
+<h2 id="项目-数据库"><a href="#项目-数据库" class="headerlink" title="项目-数据库"></a>项目-数据库</h2><p>活动：活动表、活动商品sku（查询商品库存并扣减）、活动订单、用户活动账户（生成一笔订单，并更新用户活动账户）</p>
+<ul>
+<li><p>抽奖策略：（两个规则过滤，责任链和规则树）策略、策略奖品表、规则树模型（根节点、节点、边）</p>
+</li>
+<li><p>发奖：中奖记录表（最后发奖）</p>
+</li>
+</ul>
+<p>返利：返利配置表、用户积分账户表、用户积分兑换订单表（用户扣减积分，生成一笔积分兑换订单）、用户活动账户（抽奖次数额度）</p>
+<p>签到：返利配置表、用户积分账户表、用户返利订单表（用户增加积分，生成一笔返利订单）</p>
+<h2 id="雪花算法"><a href="#雪花算法" class="headerlink" title="雪花算法"></a>雪花算法</h2><p>相比UUID64位更小，时间戳也有一定的连续性</p>
+<p>分布式唯一ID（64位）hutool</p>
+<ul>
+<li>时间戳（41）</li>
+<li>机器表示（workid，datacenter）（10）</li>
+<li>自增序列（12）</li>
+</ul>
+<h2 id="xxl-job"><a href="#xxl-job" class="headerlink" title="xxl-job"></a>xxl-job</h2><p>流程：调度中心（xxl-job-admin）；执行器注册到调度中心；任务分配给适当的执行器节点执行。</p>
+<p>调度策略：轮循（交给任意一个节点执行任务）；分片广播（为每个节点注册一个index，每个节点根据index执行任务）</p>
+<h2 id="OkHttp3"><a href="#OkHttp3" class="headerlink" title="OkHttp3"></a>OkHttp3</h2><p>用他们来封装对http的调用。相比httpclient，OkHttp是一个现代的HTTP客户端，它提供了简洁的API更易用，性能类似（都很高效）。支持同步阻塞调用和异步调用。</p>
+<h2 id="幂等性（一锁二判三更新）"><a href="#幂等性（一锁二判三更新）" class="headerlink" title="幂等性（一锁二判三更新）"></a>幂等性（一锁二判三更新）</h2><p>为什么需要幂等性：创建订单重复调用创建两笔订单？；扣减库存重复调用是否会多扣一次？</p>
+<p>什么原因：消息重试，网络超时用户重新点击</p>
+<p>场景：高并发抢红包（重复点击多少次，都显示已经抢过了）；高并发下单（避免重复订单）；高并发支付（支付平台会生成唯一的支付连接）</p>
+<p>实现：先加分布式锁，再通过唯一性索引</p>
+<h1 id="项目问题"><a href="#项目问题" class="headerlink" title="项目问题"></a>项目问题</h1><ol>
+<li><p>如果100万个人抢100个库存</p>
+<ol>
+<li>可以看运气，直接把90万个人的请求丢弃</li>
+</ol>
+</li>
+<li><p>Redis扣减成功怎么保证MySQL一定会扣减成功</p>
+<ol>
+<li>mq补偿；定时任务扫描redis；定时任务扫描订单量，和库存消耗对比，以订单量为准</li>
+</ol>
+</li>
+<li><p>MySQL作为数据存储的关系数据库，怎么保证效率的</p>
+<ol>
+<li>创建有效的索引；连接池、减少创建和销毁连接的开销；</li>
+</ol>
+</li>
+<li><p>分库分表怎么扩容</p>
+<ol>
+<li>一般会迁移4库、8库、16库。类似HashMap，为每个库增加一个从库进行主从同步，同步好修改分片规则，然后解除同步关系并把冗余的字段清除</li>
+</ol>
+</li>
+<li><p>你分库分表了，怎么做一个汇总查询呢？</p>
+<ol>
+<li>使用 canal 通过 binlog 同步到 ES 提供聚合查询</li>
+</ol>
+</li>
+<li><p>分库分表，如何进行深读分页</p>
+<ol>
+<li>从0开始获取到limit的所有数据，而不是offset，将所有数据读到内存里然后去归并排序。</li>
+<li>禁止跳页，直接以上一页的最大值作为查询条件</li>
+<li>使用 canal 通过 binlog 同步到 ES 提供聚合查询<ol>
+<li>es倒排索引：检索文档进行分词得到多个词语和词条，然后将词语和文档ID进行关联</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>接口慢，如何排查</p>
+<ol>
+<li>Arthas（阿尔萨斯）trace追踪调用路径和时间，定位时间在哪个地方被消耗了。可能是mysql，redis或者逻辑实现，再针对性地优化。</li>
+</ol>
+</li>
+<li><p>线程池如何set的</p>
+<ol>
+<li>调用线程池自带的set方法。我看了一下里面的代码，如果设置的核心线程数小，就会进行interrupt操作，我理解它和stop的区别就是会等待线程执行而不是直接stop。如果设置的核心线程数大了，就直接设置参数就行。</li>
+</ol>
+</li>
+</ol>
+<h1 id="场景设计题1-秒杀"><a href="#场景设计题1-秒杀" class="headerlink" title="场景设计题1 - 秒杀"></a>场景设计题1 - 秒杀</h1><p>瞬时高并发，只有少部分用户能抢到</p>
+<h2 id="缓存热点商品数据"><a href="#缓存热点商品数据" class="headerlink" title="缓存热点商品数据"></a>缓存热点商品数据</h2><p>从缓存中查询商品，如果没有从数据库拿，再放入缓存。</p>
+<p>缓存击穿：提前预热；从数据库拿的时候加分布式锁</p>
+<p>缓存穿透：布隆过滤器；缓存null</p>
+<h2 id="库存扣减"><a href="#库存扣减" class="headerlink" title="库存扣减"></a>库存扣减</h2><p>先decr，再判断，再加分段库存锁。</p>
+<p>如果需要恢复库存？：因为dect并setnx没有办法简单的加一，可以换成incr。</p>
+<h2 id="秒杀-下单支付-MQ异步"><a href="#秒杀-下单支付-MQ异步" class="headerlink" title="秒杀-下单支付 MQ异步"></a>秒杀-下单支付 MQ异步</h2><p>处理消息丢失：写入消息发送表，再消费完之后再更新消息发送表的状态；定时任务重新发送</p>
+<p>重复消费：写入消息发送表<br>垃圾消息：定时任务重新发送消息的时候，先查一下消息发送表</p>
+<p>（未支付）延迟消费：下单的同时发送MQ消息到一个延迟队列，然后到一定时间消费消息去查看时候未支付</p>
+<h2 id="限流（基于用户id）"><a href="#限流（基于用户id）" class="headerlink" title="限流（基于用户id）"></a>限流（基于用户id）</h2><p>基于redisson的RRatelimiter的令牌桶算法进行限流，如果没有获得令牌就加入黑名单</p>
+<h1 id="场景设计题2-短链"><a href="#场景设计题2-短链" class="headerlink" title="场景设计题2-短链"></a>场景设计题2-短链</h1><p>核心：是要生成一个唯一的短链，然后在数据库中存下短链和长链的映射，302重定向到长链。</p>
+<p>生成流程：</p>
+<ul>
+<li><p>长链合法性校验：域名是否合法，参数是否合法</p>
+</li>
+<li><p>查询数据库是否有长链</p>
+<ul>
+<li>有就说明生成过了</li>
+</ul>
+</li>
+<li><p>没有就哈希算法计算短链</p>
+<ul>
+<li>如果有哈希冲突 ，可以在 尾部跟一个分布式ID</li>
+</ul>
+</li>
+<li><p>然后把短链和长链的映射存入数据库中</p>
+<ul>
+<li>数据库表结构：（id，长链，短链）</li>
+</ul>
+</li>
+</ul>
+<h1 id="场景设计题3-排行榜"><a href="#场景设计题3-排行榜" class="headerlink" title="场景设计题3 - 排行榜"></a>场景设计题3 - 排行榜</h1><p>集合+排序：Redis zset实现，我们需要做的就是指定score（如果有多个条件：拼接字符串）</p>
+<ul>
+<li>zrange：查看某个范围的排序</li>
+<li>zrank：查看用户的排序</li>
+<li>zscore：查看用户的分数</li>
+</ul>
+<p>如果数据量上亿，可以进行根据score进行分片</p>
+<h1 id="场景设计题4-10亿订单号如何去重"><a href="#场景设计题4-10亿订单号如何去重" class="headerlink" title="场景设计题4 - 10亿订单号如何去重"></a>场景设计题4 - 10亿订单号如何去重</h1><p>使用布隆过滤器</p>
+<h1 id="场景设计题5-订单超时自动取消"><a href="#场景设计题5-订单超时自动取消" class="headerlink" title="场景设计题5 - 订单超时自动取消"></a>场景设计题5 - 订单超时自动取消</h1><p>使用延时队列</p>
+<h1 id="各种面经上看到的"><a href="#各种面经上看到的" class="headerlink" title="各种面经上看到的"></a>各种面经上看到的</h1><h2 id="内部类"><a href="#内部类" class="headerlink" title="内部类"></a>内部类</h2><p>内部类看成外部类的一个成员，可以任意访问外部类的成员</p>
+<p>持有一个对外部类的引用（也就是内部类多了个成员变量 final OutterClass this$0;）</p>
+<h1 id="自我介绍"><a href="#自我介绍" class="headerlink" title="自我介绍"></a>自我介绍</h1><p>介绍学校、绩点。</p>
+<p>在科研方面，</p>
+<p>在大学期间，参与过多次的技术类赛事项目，获得了国家级奖项。并且能够熟练使用各类技术框架，开发一些项目，积累了丰富的开发经验。例如，我在简历中的第一个项目是抽奖项目，在其中能够熟练运用分库分表、redis和kafka等中间件处理高并发的场景。同时，我也学习着开发了一些简单的轮子组件，例如动态线程池。</p>
+<h1 id="面试记录"><a href="#面试记录" class="headerlink" title="面试记录"></a>面试记录</h1><h2 id="携程"><a href="#携程" class="headerlink" title="携程"></a>携程</h2><p>Q：如何手写一个简单的http server</p>
+<p>A：</p>
+<p>Q：当四次挥手进行到close_wait的时候服务器突然宕机，那么这个连接是中断还是保持，是中断的话用的什么机制让它中断的</p>
+<p>A：</p>
+<p>Q：场景：用户打开app，购买火车票的过程涉及到哪些网络连接</p>
+<p>A：</p>
+<p>Q：场景：有一张订单表（订单ID，订单状态，创建时间），你需要查询某月不同状态的订单量，当然这个表的数据量很大。toc 和 tob 分别怎么解决。</p>
+<p>A：tob，分片查，相当于按照日期依次查，多线程处理；toc，不要求强实时性和一致性，可以用redis记录订单量。</p>
+<p>Q：场景： crud 四个操作分别怎么做保证redis和mysql的强一致性</p>
+<p>A：说了先更新数据库再删缓存（面试官说这是课本知识，不能保证强一致性），提示用锁。</p>
+<p>计算机网络、IOCAOP底层实现、in、kafka模式</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BC%80%E5%8F%91/" rel="tag"># 开发</a>
+              <a href="/tags/%E5%85%AB%E8%82%A1/" rel="tag"># 八股</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/03/31/hello-world/" rel="prev" title="总 - 我的博客">
+                  <i class="fa fa-angle-left"></i> 总 - 我的博客
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/03/31/kaifa/mybatis%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/mybatis3/" rel="next" title="【1开发】【Mybatis源码学习笔记】03 - 如何得到一个sqlSession，流程梳理【读xml + 工厂创建sqlSession】">
+                  【1开发】【Mybatis源码学习笔记】03 - 如何得到一个sqlSession，流程梳理【读xml + 工厂创建sqlSession】 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2022 - 2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">蔡正海</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.31/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -123,7 +123,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">47</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -151,6 +151,149 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/kaifa/project/dbrouter/dbrouter1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="蔡正海">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | czh的学习小站">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/03/31/kaifa/project/dbrouter/dbrouter1/" class="post-title-link" itemprop="url">【1开发】数据库动态路由组件记录1 - 路由组件</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/" itemprop="url" rel="index"><span itemprop="name">项目</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91/%E9%A1%B9%E7%9B%AE/mysql%E5%8A%A8%E6%80%81%E8%B7%AF%E7%94%B1%E7%BB%84%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">mysql动态路由组件</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <blockquote>
+<p>参考学习：<a target="_blank" rel="noopener" href="https://shardingsphere.apache.org/index_zh.html">Apache ShardingSphere</a></p>
+</blockquote>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>动态路由组件的一个核心思路，就是分库和分表，所以我们核心要实现如下两件事</p>
+<ul>
+<li>分库：根据字段属性，动态切换数据源（改数据源）</li>
+<li>分表：根据字段属性，拦截修改sql语句（改from后面的那个表）</li>
+</ul>
+<p>所以可以简单设计动态路由的流程：</p>
+<ol>
+<li>根据字段计算hash值，存入threadlocal</li>
+<li>修改sql语句</li>
+<li>切换数据源</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/image-20240703105637622.png" alt="image-20240703105637622"></p>
+<h2 id="流程1-初始化加载配置"><a href="#流程1-初始化加载配置" class="headerlink" title="流程1 初始化加载配置"></a>流程1 初始化加载配置</h2><p>重写springboot中EnvironmentAware的setEnvironment方法</p>
+<p>通过environment.getProperty（）方法，我们可以直接拿到yml中的配置，也就是我们对于分库分表的配置信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mini-db-router:</span><br><span class="line">  jdbc:</span><br><span class="line">    datasource:</span><br><span class="line">      dbCount: 2</span><br><span class="line">      tbCount: 4</span><br><span class="line">      default: db00</span><br><span class="line">      routerKey: userId</span><br><span class="line">      list: db01,db02</span><br><span class="line">      db00:</span><br><span class="line">        driver-class-name: com.mysql.cj.jdbc.Driver</span><br><span class="line">        url: ??</span><br><span class="line">        username: root</span><br><span class="line">        password: ??</span><br><span class="line">        type-class-name: com.zaxxer.hikari.HikariDataSource</span><br><span class="line">        pool:</span><br><span class="line">          pool-name: Retail_HikariCP</span><br><span class="line">          ...</span><br><span class="line">      db01:  ...</span><br><span class="line">      db02:  ...</span><br></pre></td></tr></table></figure>
+
+<p>实现EnvironmentAware，就可以拿上面的这些信息了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DataSourceAutoConfig</span> <span class="keyword">implements</span> <span class="title class_">EnvironmentAware</span> &#123;</span><br><span class="line"> <span class="meta">@Override</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setEnvironment</span><span class="params">(Environment environment)</span> &#123;</span><br><span class="line">       <span class="type">String</span> <span class="variable">prefix</span> <span class="operator">=</span> <span class="string">&quot;mini-db-router.jdbc.datasource.&quot;</span>;</span><br><span class="line"></span><br><span class="line">       dbCount = Integer.valueOf(environment.getProperty(prefix + <span class="string">&quot;dbCount&quot;</span>));</span><br><span class="line">       tbCount = Integer.valueOf(environment.getProperty(prefix + <span class="string">&quot;tbCount&quot;</span>));</span><br><span class="line">       routerKey = environment.getProperty(prefix + <span class="string">&quot;routerKey&quot;</span>);</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 分库分表数据源</span></span><br><span class="line">       <span class="type">String</span> <span class="variable">dataSources</span> <span class="operator">=</span> environment.getProperty(prefix + <span class="string">&quot;list&quot;</span>);</span><br><span class="line">       <span class="keyword">assert</span> dataSources != <span class="literal">null</span>;</span><br><span class="line">       <span class="keyword">for</span> (String dbInfo : dataSources.split(<span class="string">&quot;,&quot;</span>)) &#123;</span><br><span class="line">           Map&lt;String, Object&gt; dataSourceProps = PropertyUtil.handle(environment, prefix + dbInfo, Map.class);</span><br><span class="line">           dataSourceMap.put(dbInfo, dataSourceProps);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="comment">// 默认数据源</span></span><br><span class="line">       <span class="type">String</span> <span class="variable">defaultData</span> <span class="operator">=</span> environment.getProperty(prefix + <span class="string">&quot;default&quot;</span>);</span><br><span class="line">       defaultDataSourceConfig = PropertyUtil.handle(environment, prefix + defaultData, Map.class);</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="流程2-AOP切面-通过注解-获取入参字段，并进行路由计算"><a href="#流程2-AOP切面-通过注解-获取入参字段，并进行路由计算" class="headerlink" title="流程2 AOP切面 通过注解 获取入参字段，并进行路由计算"></a>流程2 AOP切面 通过注解 获取入参字段，并进行路由计算</h2><p>既然要进行分库分表，我们首先要把用来分库分表的字段，以及其对应的值拿到手。</p>
+<p>那么第一步，用注解拿到对应的参数，并拿到对应的值。</p>
+<p>复习一下注解</p>
+<ul>
+<li><p>interface</p>
+<ul>
+<li><p>Retention(RetentionPolicy.RUNTIME) 运行时的注解</p>
+</li>
+<li><p>Target({ElementType.METHOD,ElementType.TYPE}) 修饰在方法或着类型上</p>
+</li>
+<li><p>String key() default “”;  注解的参数例如：DBRouter(key&#x3D;”userId”)</p>
+</li>
+</ul>
+</li>
+<li><p>Aspect - JoinPoint</p>
+<ul>
+<li>Pointcut 切点 （标记对应的注解）</li>
+<li>@Around(“aopPoint() &amp;&amp; @annotation(dbRouter)”)  （在该切点处运行）</li>
+<li>Around方法内些具体要做的事（拿字段参数，和对应的值）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.METHOD,ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> DBRouter &#123;</span><br><span class="line">    <span class="comment">/** 分库分表字段 */</span></span><br><span class="line">    String <span class="title function_">key</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DBRouterJoinPoint</span> &#123;</span><br><span class="line">     <span class="meta">@Pointcut(&quot;@annotation(cn.czh.middleware.db.router.annotation.DBRouter)&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">aopPoint</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Around(&quot;aopPoint() &amp;&amp; @annotation(dbRouter)&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">doRouter</span><span class="params">(ProceedingJoinPoint jp, DBRouter dbRouter)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">dbKey</span> <span class="operator">=</span> dbRouter.key();</span><br><span class="line">				</span><br><span class="line">        <span class="comment">// 拿到参数的值，如果就是字段变量，直接拿；如果是对象，BeanUtils.getProperty拿</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">dbKeyAttr</span> <span class="operator">=</span> getAttrValue(dbKey, jp.getArgs());</span><br><span class="line">        dbRouterStrategy.doRouter(dbKeyAttr);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> jp.proceed();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            dbRouterStrategy.clear();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>拿到了值就可以调用doRouter函数，进行hash散列的计算。</p>
+<p>计算好的hash值存入threadlocal中</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DBContextHolder</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;String&gt; dbKey = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;String&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;String&gt; tbKey = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;String&gt;();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doRouter</span><span class="params">(String dbKeyAttr)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">size</span> <span class="operator">=</span> dbRouterConfig.getDbCount()*dbRouterConfig.getTbCount();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 扰动函数；在 JDK 的 HashMap 中，对于一个元素的存放，需要进行哈希散列。而为了让散列更加均匀，所以添加了扰动函数。</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">idx</span> <span class="operator">=</span> (size - <span class="number">1</span>) &amp; (dbKeyAttr.hashCode() ^ (dbKeyAttr.hashCode() &gt;&gt;&gt; <span class="number">16</span>));</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> <span class="variable">dbIdx</span> <span class="operator">=</span> idx / dbRouterConfig.getTbCount()+<span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">tbIdx</span> <span class="operator">=</span> idx - dbRouterConfig.getTbCount() * (dbIdx - <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        DBContextHolder.setDBKey(String.format(<span class="string">&quot;%02d&quot;</span>, dbIdx));</span><br><span class="line">        DBContextHolder.setTBKey(String.format(<span class="string">&quot;%03d&quot;</span>, tbIdx));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="流程3-替换表名-（ibatis-plugin-Interceptor）"><a href="#流程3-替换表名-（ibatis-plugin-Interceptor）" class="headerlink" title="流程3 替换表名 （ibatis.plugin.Interceptor）"></a>流程3 替换表名 （ibatis.plugin.Interceptor）</h2><p>到了这个流程我们可以开始进行分表的操作。</p>
+<p>我们其实是用mybatis plugin去对sql语句做一个拦截。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Intercepts(&#123;@Signature(type = StatementHandler.class, method = &quot;prepare&quot;, args = &#123;Connection.class, Integer.class&#125;)&#125;)</span><br><span class="line">public class DynamicMybatisPlugin implements Interceptor &#123;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们重写Interceptor中的intercept函数，拦截sql语句并修改</p>
+<ol>
+<li>invocation.getTarget().getBoundSql()拿到sql语句</li>
+<li>利用Pattern进行替换sql语句中对应的表名</li>
+<li>通过反射修改SQL语句</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">    public Object intercept(Invocation invocation) throws Throwable &#123;</span><br><span class="line">        // 获取StatementHandler</span><br><span class="line">        StatementHandler statementHandler = (StatementHandler) invocation.getTarget();</span><br><span class="line">				。。。。。。</span><br><span class="line">        // 获取sql 并替换</span><br><span class="line">        BoundSql boundSql = statementHandler.getBoundSql();</span><br><span class="line">        String sql = boundSql.getSql();</span><br><span class="line">				。。。。。。</span><br><span class="line">        String replaceSql = matcher.replaceAll(tableName + &quot;_&quot; + DBContextHolder.getTBKey());</span><br><span class="line"></span><br><span class="line">        // 通过反射修改SQL语句</span><br><span class="line">        Field field = boundSql.getClass().getDeclaredField(&quot;sql&quot;);</span><br><span class="line">        field.setAccessible(true);</span><br><span class="line">        field.set(boundSql, replaceSql);</span><br><span class="line">        field.setAccessible(false);</span><br><span class="line"></span><br><span class="line">        return invocation.proceed();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="流程4-切换数据源-（jdbc-datasource-lookup-AbstractRoutingDataSource）"><a href="#流程4-切换数据源-（jdbc-datasource-lookup-AbstractRoutingDataSource）" class="headerlink" title="流程4 切换数据源 （jdbc.datasource.lookup.AbstractRoutingDataSource）"></a>流程4 切换数据源 （jdbc.datasource.lookup.AbstractRoutingDataSource）</h2><p>根据yml里拿到的那几个数据源，使用AbstractRoutingDataSource替换默认数据源</p>
+<p>重写determineCurrentLookupKey，AbstractRoutingDataSource能够帮助我们根据threadlocal里的值动态切换数据源</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DynamicDataSource</span> <span class="keyword">extends</span> <span class="title class_">AbstractRoutingDataSource</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Object <span class="title function_">determineCurrentLookupKey</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;db&quot;</span> + DBContextHolder.getDBKey();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="keyword">public</span> DataSource <span class="title function_">dataSource</span><span class="params">()</span> &#123;</span><br><span class="line"><span class="comment">// 创建数据源</span></span><br><span class="line">Map&lt;Object, Object&gt; targetDataSources = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"><span class="keyword">for</span> (String dbInfo : dataSourceMap.keySet()) &#123;</span><br><span class="line">Map&lt;String, Object&gt; objMap = dataSourceMap.get(dbInfo);</span><br><span class="line">targetDataSources.put(dbInfo, <span class="keyword">new</span> <span class="title class_">DriverManagerDataSource</span>(objMap.get(<span class="string">&quot;url&quot;</span>).toString(), objMap.get(<span class="string">&quot;username&quot;</span>).toString(), objMap.get(<span class="string">&quot;password&quot;</span>).toString()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置数据源</span></span><br><span class="line"><span class="type">DynamicDataSource</span> <span class="variable">dynamicDataSource</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DynamicDataSource</span>();</span><br><span class="line">dynamicDataSource.setTargetDataSources(targetDataSources);</span><br><span class="line">dynamicDataSource.setDefaultTargetDataSource(<span class="keyword">new</span> <span class="title class_">DriverManagerDataSource</span>(defaultDataSourceConfig.get(<span class="string">&quot;url&quot;</span>).toString(), defaultDataSourceConfig.get(<span class="string">&quot;username&quot;</span>).toString(), defaultDataSourceConfig.get(<span class="string">&quot;password&quot;</span>).toString()));</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> dynamicDataSource;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1079,122 +1222,6 @@
 <p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/%E8%90%A5%E9%94%80.png" alt="营销"></p>
 <p>库表设计：</p>
 <p><img src="https://raw.githubusercontent.com/cccccc96/cloudimg/main/%E8%90%A5%E9%94%80%E5%BA%93%E8%A1%A8.png" alt="营销库表"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/31/keyan/STE%20&%20SVA%20c7ffe06c60e64d2785d19e5636448aa9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="蔡正海">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | czh的学习小站">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/31/keyan/STE%20&%20SVA%20c7ffe06c60e64d2785d19e5636448aa9/" class="post-title-link" itemprop="url">【Research】STE & SVA</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%A7%91%E7%A0%94/" itemprop="url" rel="index"><span itemprop="name">科研</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="STE-SVA"><a href="#STE-SVA" class="headerlink" title="STE &amp; SVA"></a>STE &amp; SVA</h1><h2 id="如何写STE-assert-A⇒C-？"><a href="#如何写STE-assert-A⇒C-？" class="headerlink" title="如何写STE assert (A⇒C)？"></a>如何写STE assert (A⇒C)？</h2><p>以下面这种格式（轨迹公式）描述STE assert：</p>
-<p><img src="/STE%20&%20SVA%20c7ffe06c60e64d2785d19e5636448aa9/Untitled.png" alt="Untitled"></p>
-<p>前四行（电路中的各个节点在某一时刻是1或是0）很好理解，重点在于最后一行（guard蕴含式）。</p>
-<p>例如：“x → n is 1”（x是一个布尔变量，n是一个电路节点）， 意思就是当x成立时，n的值为1。换句话说，可以理解为表达的是“n is x”，即用布尔变量x指代n</p>
-<h2 id="FIFO"><a href="#FIFO" class="headerlink" title="FIFO"></a>FIFO</h2><h3 id="我们要说明FIFO应该满足什么性质？"><a href="#我们要说明FIFO应该满足什么性质？" class="headerlink" title="我们要说明FIFO应该满足什么性质？"></a>我们要说明FIFO应该满足什么性质？</h3><p>我们往FIFO里依次push数据1和数据2，那么pop的时候也应该按照数据1和数据2的顺序返回。</p>
-<h3 id="如何用STE-assert写？"><a href="#如何用STE-assert写？" class="headerlink" title="如何用STE assert写？"></a>如何用STE assert写？</h3><p>首先，我们定义几个布尔变量表达我们要push的数据</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;dataIn&lt;0&gt;0@2,dataIn&lt;1&gt;0@2&gt;,&lt;dataIn&lt;0&gt;0@4,dataIn&lt;1&gt;0@4&gt;</span><br></pre></td></tr></table></figure>
-
-<p>其中A⇒C的A相当于输入的约束：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rst0 is 1 and </span><br><span class="line">N N ( push0 is 1 and dataIn&lt;0&gt; is dataIn&lt;0&gt;0@2 and dataIn&lt;1&gt; is dataIn&lt;1&gt;0@2) and</span><br><span class="line">N N N N ( push0 is 1 and dataIn&lt;0&gt; is dataIn&lt;0&gt;0@4 and dataIn&lt;1&gt; is dataIn&lt;1&gt;0@4) and</span><br><span class="line">N N N N N (push0 is 0 and pop0 is 1) and </span><br><span class="line">N N N N N N N (push0 is 0 and pop0 is 1)</span><br></pre></td></tr></table></figure>
-
-<p>A⇒C的C相当于预期结果的约束：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">N N N N N N ( dataOut&lt;0&gt; is dataOut&lt;0&gt;0@2 and dataOut&lt;1&gt; is dataIn&lt;1&gt;0@2) and</span><br><span class="line">N N N N N N N N( dataOut&lt;0&gt; is dataOut&lt;0&gt;0@4 and dataOut&lt;1&gt; is dataIn&lt;1&gt;0@4)</span><br></pre></td></tr></table></figure>
-
-<h2 id="如何运行STE-？"><a href="#如何运行STE-？" class="headerlink" title="如何运行STE ？"></a>如何运行STE ？</h2><p>我们已经有了A⇒C</p>
-<p>那么根据A（前提条件），对这个电路进行三值模拟，那么会得到实际的结果，然后将其与C（预期结果）进行比对。</p>
-<h3 id="得到的波形图（forte追踪的结果）"><a href="#得到的波形图（forte追踪的结果）" class="headerlink" title="得到的波形图（forte追踪的结果）"></a>得到的波形图（forte追踪的结果）</h3><p>可以看到和一般的波形图有几个很明显的区别（区别是因为STE执行的是三值模拟，而不是01模拟）</p>
-<p>除了0和1，还有两种元素:</p>
-<ul>
-<li>X，代表可有可无，这些信息就可以不考虑进去了，也就为模拟减少了负担</li>
-<li>布尔变量，相当于我可以给某个电路节点给一个对应的布尔变量。</li>
-</ul>
-<p><img src="/STE%20&%20SVA%20c7ffe06c60e64d2785d19e5636448aa9/Untitled%201.png" alt="Untitled"></p>
-<h1 id="SVA"><a href="#SVA" class="headerlink" title="SVA"></a>SVA</h1><p>接下来使用 SVA 来对于 上述 STE 中描述的性质进行描述，即：我们往FIFO里依次push数据1和数据2，那么pop的时候也应该按照数据1和数据2的顺序返回。</p>
-<blockquote>
-<p>我们往 FIFO 里依次 push 数据 1 和数据 2，那么 pop 的时候也应该按照数据 1 和数据 2 的顺序返回。</p>
-</blockquote>
-<p>具体一下为：</p>
-<p>往 FIFO buffer 中依次 push 变量 data，那么后续发生 pop 数据时，会得到数据 data</p>
-<h2 id="SVA-中语法"><a href="#SVA-中语法" class="headerlink" title="SVA 中语法"></a>SVA 中语法</h2><p>对于描述该性质，那么涉及到更高级的时序上的语法。</p>
-<ul>
-<li>sequence [<em>]:  表达前面的条件成立若干次，(The [</em>] is an abbreviation for [*0:$])</li>
-<li>→: 蕴含</li>
-<li>变量</li>
-</ul>
-<h2 id="SVA-对该性质的定义"><a href="#SVA-对该性质的定义" class="headerlink" title="SVA 对该性质的定义"></a>SVA 对该性质的定义</h2><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">sequence</span> a2c;</span><br><span class="line">	<span class="keyword">int</span> v;</span><br><span class="line">	(push == <span class="number">1</span>, v = dataIn) -&gt; ((push == <span class="number">0</span>) &amp;&amp; (pop == <span class="number">0</span>))[*] ##<span class="number">1</span> ((push == <span class="number">0</span>) &amp;&amp; (pop == <span class="number">1</span>)) ##<span class="number">1</span> (dataOut == v);</span><br><span class="line"><span class="keyword">endsequence</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">assert</span> <span class="keyword">property</span> (</span><br><span class="line">	@(<span class="keyword">posedge</span> clk) a;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<p>其含义为：</p>
-<p>当 push 为 1 时，捕获 dataIn 的值给 v，同时蕴含之后若干时刻 push 和 pop 都是 0，当 pop 为 1 的下一个时刻 dataOut &#x3D;&#x3D; v</p>
-<h1 id="Peek-and-Poke"><a href="#Peek-and-Poke" class="headerlink" title="Peek and Poke"></a>Peek and Poke</h1><p>Peek Poke 可以理解为测试</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">poke(dut.io.dataIn, <span class="number">3.</span><span class="type">U</span>)</span><br><span class="line">poke(dut.io.push, <span class="number">1.</span><span class="type">U</span>)</span><br><span class="line">step(<span class="number">1</span>)</span><br><span class="line">poke(dut.io.push, <span class="number">0.</span><span class="type">U</span>)</span><br><span class="line">poke(dut.io.pop, <span class="number">0.</span><span class="type">U</span>)</span><br><span class="line">step(<span class="number">1</span>)</span><br><span class="line">poke(dut.io.push, <span class="number">0.</span><span class="type">U</span>)</span><br><span class="line">poke(dut.io.pop, <span class="number">0.</span><span class="type">U</span>)</span><br><span class="line">step(<span class="number">1</span>)</span><br><span class="line">poke(dut.io.push, <span class="number">0.</span><span class="type">U</span>)</span><br><span class="line">poke(dut.io.pop, <span class="number">1.</span><span class="type">U</span>)</span><br><span class="line">step(<span class="number">1</span>)</span><br><span class="line">expect(dut.io.dataOut, <span class="number">3.</span><span class="type">U</span>)</span><br></pre></td></tr></table></figure>
-
-<p>需要构造一组测试序列。</p>
-<h1 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h1><p>抽象层次 PeekPoke &lt; STE ≤ SVA</p>
-<p>其中可以看到，由于 STE 中需要利用到三值模拟，因此其处于在 Bit-Level，同时其对于时序上的性质描述，对于时间不能做到任意，需要指定经过的时间，但是其对于每一位弹数据时 Symbol 的。</p>
-<p>在 SVA 中，更加抽象，对于数据可以用变量来描述，同时对于时序上的描述能力更强。</p>
-<p>但是这里的 STE 是可以利用工具进行求解的，但是这里 SVA 可能需要更强大的工具（收费软件？）</p>
 
       
     </div>
